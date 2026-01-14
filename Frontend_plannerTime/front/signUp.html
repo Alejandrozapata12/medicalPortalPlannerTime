@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MedPortal Registration</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-50 transition-colors duration-200">
+<div class="relative flex min-h-screen w-full flex-row overflow-hidden font-display">
+<!-- Left Side: Hero Image -->
+<div class="hidden lg:flex w-1/2 relative bg-slate-900">
+<div class="absolute inset-0 w-full h-full bg-cover bg-center opacity-80" data-alt="Friendly healthcare professional smiling in a modern medical office" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCnv53UZxegCsA4BsKZ3H4WG-k2qPROJaptIakeJHqTHMlDyXj4CYl-Oe1RGWzLGsTgX5KsGhx0HCUb0eiSxRYsJm-xfjOsbhOb5fb0POYM4AeQDOHqgfV8ZorHVgvXVfxKEbdCriqSqfM5AK4Lk0dKfZOYigqLpf1q1CCG_Jejy9EblkclOK1mTOc8kdc34yMqK-fMFt3ynpjT-Qca0vKlFDmC8jnPcwfdwswOdxCeH6JrCvEmEEyvi4or4ZrAdwrAmOyZNsj_aUFB");'>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent"></div>
+<div class="relative z-10 flex flex-col justify-between p-12 w-full h-full text-white">
+<div class="flex items-center gap-3">
+<div class="size-8 flex items-center justify-center rounded-lg bg-primary/20 text-primary backdrop-blur-sm">
+<span class="material-symbols-outlined text-2xl">local_hospital</span>
+</div>
+<h2 class="text-xl font-bold tracking-wide">PlannerTime</h2>
+</div>
+<div class="max-w-md space-y-6">
+<div class="flex gap-1 text-primary">
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+</div>
+<blockquote class="text-3xl font-medium leading-snug">
+                        "PlannerTime has revolutionized how we manage patient appointments. It's secure, fast, and incredibly easy to use."
+                    </blockquote>
+<div class="flex flex-col gap-1">
+<span class="font-bold text-lg">Dr. Sarah Jenkins</span>
+<span class="text-slate-300">Chief of Cardiology, City Hospital</span>
+</div>
+</div>
+<div class="flex items-center gap-2 text-sm text-slate-400">
+<span class="material-symbols-outlined text-lg">verified_user</span>
+<span>Compliant &amp; Secure Platform</span>
+</div>
+</div>
+</div>
+<!-- Right Side: Registration Form -->
+<div class="flex w-full lg:w-1/2 flex-col justify-center bg-background-light dark:bg-background-dark px-6 py-12 lg:px-20 xl:px-24 h-screen overflow-y-auto">
+<!-- Mobile Header Logo (Only visible on small screens) -->
+<div class="lg:hidden flex items-center gap-2 mb-8 text-slate-900 dark:text-white">
+<div class="size-8 flex items-center justify-center rounded-lg bg-primary/10 text-primary">
+<span class="material-symbols-outlined text-2xl">local_hospital</span>
+</div>
+<h2 class="text-xl font-bold">PlannerTime</h2>
+</div>
+<div class="w-full max-w-[480px] mx-auto flex flex-col gap-8">
+<!-- Page Heading -->
+<div class="flex flex-col gap-2">
+<h1 class="text-3xl lg:text-4xl font-black tracking-tight text-slate-900 dark:text-white">Create an account</h1>
+<p class="text-slate-500 dark:text-slate-400">Enter your details to register for free.</p>
+</div>
+<!-- User Type Segmented Buttons -->
+<div class="w-full">
+<div class="grid grid-cols-2 gap-1 p-1 rounded-xl bg-slate-200 dark:bg-slate-800">
+<label class="cursor-pointer">
+<input checked="" class="peer sr-only" name="user_type" type="radio" value="patient"/>
+<div class="flex items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-medium text-slate-500 dark:text-slate-400 transition-all peer-checked:bg-white dark:peer-checked:bg-slate-700 peer-checked:text-primary peer-checked:shadow-sm">
+<span class="material-symbols-outlined text-[20px]">person</span>
+                                Patient
+                            </div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" name="user_type" type="radio" value="doctor"/>
+<div class="flex items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-medium text-slate-500 dark:text-slate-400 transition-all peer-checked:bg-white dark:peer-checked:bg-slate-700 peer-checked:text-primary peer-checked:shadow-sm">
+<span class="material-symbols-outlined text-[20px]">stethoscope</span>
+                                Provider
+                            </div>
+</label>
+</div>
+</div>
+<!-- Form Fields -->
+<form class="flex flex-col gap-5">
+<div class="flex flex-col gap-1.5">
+<label class="text-sm font-medium text-slate-900 dark:text-slate-200" for="fullname">Full Name</label>
+<div class="relative">
+<input class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 pl-11 text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-primary focus:ring-1 focus:ring-primary transition-colors outline-none" id="fullname" placeholder="John Doe" required="" type="text"/>
+<span class="material-symbols-outlined absolute left-3 top-3.5 text-slate-400">badge</span>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-sm font-medium text-slate-900 dark:text-slate-200" for="email">Email Address</label>
+<div class="relative">
+<input class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 pl-11 text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-primary focus:ring-1 focus:ring-primary transition-colors outline-none" id="email" placeholder="name@example.com" required="" type="email"/>
+<span class="material-symbols-outlined absolute left-3 top-3.5 text-slate-400">mail</span>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-sm font-medium text-slate-900 dark:text-slate-200" for="phone">Phone Number</label>
+<div class="relative">
+<input class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 pl-11 text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-primary focus:ring-1 focus:ring-primary transition-colors outline-none" id="phone" placeholder="(555) 000-0000" required="" type="tel"/>
+<span class="material-symbols-outlined absolute left-3 top-3.5 text-slate-400">call</span>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-sm font-medium text-slate-900 dark:text-slate-200" for="password">Password</label>
+<div class="relative">
+<input class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 pl-11 text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-primary focus:ring-1 focus:ring-primary transition-colors outline-none" id="password" placeholder="••••••••" required="" type="password"/>
+<span class="material-symbols-outlined absolute left-3 top-3.5 text-slate-400">lock</span>
+<button class="absolute right-3 top-3.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+<p class="text-xs text-slate-500 mt-1">Must be at least 8 characters long.</p>
+</div>
+<!-- Terms Checkbox -->
+<label class="flex items-start gap-3 mt-2 cursor-pointer group">
+<div class="relative flex items-center">
+<input class="peer h-5 w-5 cursor-pointer appearance-none rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 checked:border-primary checked:bg-primary transition-all" type="checkbox"/>
+<span class="material-symbols-outlined absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[16px] text-white opacity-0 peer-checked:opacity-100 pointer-events-none">check</span>
+</div>
+<span class="text-sm text-slate-600 dark:text-slate-400 leading-snug">
+                            I agree to the <a class="text-primary hover:underline underline-offset-2 font-medium" href="#">Terms of Service</a> and <a class="text-primary hover:underline underline-offset-2 font-medium" href="#">Privacy Policy</a>.
+                        </span>
+</label>
+<!-- Submit Button -->
+<button class="mt-4 flex w-full items-center justify-center rounded-lg bg-primary py-3.5 px-4 text-sm font-bold text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-slate-900 transition-all active:scale-[0.98]" type="button">
+                        Create Account
+                    </button>
+</form>
+<!-- Footer Link -->
+<div class="text-center text-sm text-slate-600 dark:text-slate-400">
+                    Already have an account? 
+                    <a class="font-bold text-primary hover:text-blue-600 dark:hover:text-blue-400 transition-colors" href="./Login.html">Log in instead</a>
+</div>
+</div>
+</div>
+</div>
+</body></html>
