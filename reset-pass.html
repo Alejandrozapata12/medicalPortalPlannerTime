@@ -1,30 +1,34 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Reset Password - PlannerTime Portal</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="assets/css/variables.css">
   <link rel="stylesheet" href="assets/css/base.css">
   <link rel="stylesheet" href="assets/css/components.css">
   <link rel="stylesheet" href="assets/css/auth.css">
 </head>
-<body style="min-height: 100vh; display: flex; flex-direction: column;">
 
-  <header style="width: 100%; padding: var(--space-6) var(--space-10);">
-    <div style="max-width: 80rem; margin: 0 auto;">
+<body style="min-height:100vh; display: flex; flex-direction: column;">
+  <header style="width: 100%; padding: var(--space-5) var(--space-5);">
+    <div style="max-width: 80rem; margin: 0 auto; display:flex; align-items:center; justify-content:space-between;">
       <a href="index.html" class="logo">
-        <div class="logo-icon">
-          <span class="material-symbols-outlined">local_hospital</span>
-        </div>
+        <div class="logo-icon"><span class="material-symbols-outlined">local_hospital</span></div>
         <span class="logo-text">PlannerTime Portal</span>
       </a>
+      <button type="button" class="theme-toggle" data-theme-toggle aria-label="Toggle dark/light mode">
+        <span class="material-symbols-outlined">light_mode</span>
+      </button>
     </div>
   </header>
 
-  <main style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: var(--space-4) var(--space-6);">
+  <main
+    style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: var(--space-4) var(--space-5) var(--space-10);">
     <div class="card reset-card">
       <div class="card-body">
         <a href="index.html" class="reset-back-link">
@@ -42,24 +46,27 @@
             <label class="form-label" for="reset-email">Email Address</label>
             <div class="form-input-wrapper">
               <span class="material-symbols-outlined input-icon">mail</span>
-              <input class="form-input form-input-icon" type="email" id="reset-email" placeholder="name@example.com" required>
+              <input class="form-input form-input-icon" type="email" id="reset-email" placeholder="name@example.com"
+                required autocomplete="email">
             </div>
-            <span class="form-hint form-error" id="reset-email-error" style="display:none; color: var(--color-danger);"></span>
+            <span class="form-hint form-error" id="reset-email-error"></span>
           </div>
 
-          <button type="submit" class="btn btn-primary btn-full" id="reset-btn" style="margin-top: var(--space-4);">
-            <span class="btn-text">Send Reset Link</span>
-          </button>
+          <button type="submit" class="btn btn-primary btn-full" id="reset-btn"
+            style="margin-top: var(--space-4);"><span class="btn-text">Send Reset Link</span></button>
         </form>
 
-        <!-- Success message (hidden by default) -->
         <div id="reset-success" style="display: none; text-align: center; padding: var(--space-8) 0;">
-          <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--color-success-light); display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-4);">
-            <span class="material-symbols-outlined" style="font-size: 32px; color: var(--color-success);">check_circle</span>
+          <div
+            style="width:64px; height:64px; border-radius:50%; background:var(--color-success-light);display:flex;align-items:center;justify-content:center;margin:0 auto var(--space-4);">
+            <span class="material-symbols-outlined"
+              style="font-size:32px;color:var(--color-success);">check_circle</span>
           </div>
-          <h3 style="font-size: 18px; font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-2);">Email Sent!</h3>
-          <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: var(--space-6);">Check your inbox for the password reset link.</p>
-          <a href="index.html" class="btn btn-primary">Back to Login</a>
+          <h3 style="font-size:1.125rem;font-weight:600;color:var(--text-primary);margin-bottom:var(--space-2);">Email
+            Sent!</h3>
+          <p style="font-size:0.875rem;color:var(--text-secondary);margin-bottom:var(--space-6);">Check your inbox for
+            the password reset link.</p>
+          <a href="index.html" class="btn btn-primary btn-full">Back to Login</a>
         </div>
 
         <a href="#" class="reset-help-link" id="reset-help">
@@ -68,12 +75,11 @@
         </a>
       </div>
     </div>
-
-    <div style="position: fixed; bottom: 0; left: 0; width: 100%; height: 33%; background: linear-gradient(to top, var(--bg-tertiary), transparent); pointer-events: none; z-index: -1;"></div>
   </main>
 
   <script src="assets/js/theme.js"></script>
   <script src="assets/js/utils.js"></script>
+  <script src="assets/js/auth.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const form = document.getElementById('reset-form');
@@ -85,16 +91,20 @@
         e.preventDefault();
         const emailError = document.getElementById('reset-email-error');
         const email = document.getElementById('reset-email').value.trim();
+
         emailError.style.display = 'none';
+        emailError.classList.remove('form-error');
 
         if (!email) {
           emailError.textContent = 'Email is required';
           emailError.style.display = 'block';
+          emailError.classList.add('form-error');
           return;
         }
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
           emailError.textContent = 'Enter a valid email address';
           emailError.style.display = 'block';
+          emailError.classList.add('form-error');
           return;
         }
 
@@ -111,4 +121,5 @@
     });
   </script>
 </body>
+
 </html>

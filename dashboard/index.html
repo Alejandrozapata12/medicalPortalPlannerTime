@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
   <style>
     :root {
-      --c-pri: #0c0e0f;
+      --c-pri: #137fec;
       --c-pri-h: #0d6ebd;
       --c-pri-l: rgba(19, 127, 236, .1);
       --c-pri-20: rgba(19, 127, 236, .2);
@@ -163,62 +163,62 @@
       }
     }
 
-    @keyframes slideDown {
-      from {
-        opacity: 0;
-        transform: translateY(-8px)
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0)
-      }
-    }
-
-    @keyframes scaleIn {
-      from {
-        opacity: 0;
-        transform: scale(.95)
-      }
-
-      to {
-        opacity: 1;
-        transform: scale(1)
-      }
-    }
-
     .dash-layout {
       display: flex;
       height: 100vh;
       overflow: hidden
     }
 
+    /* ===== SIDEBAR - CORREGIDO PARA MOBILE ===== */
     .sidebar-ov {
       display: none;
       position: fixed;
       inset: 0;
       background: rgba(0, 0, 0, .5);
-      z-index: 35
+      z-index: 35;
+      opacity: 0;
+      transition: opacity var(--ts)
     }
 
     .sidebar-ov.active {
-      display: block
+      display: block;
+      opacity: 1
     }
 
-    .sidebar {
-      display: none;
-      width: var(--sb-w);
-      height: 100%;
-      background: var(--bg2);
-      border-right: 1px solid var(--b1);
-      flex-direction: column;
-      z-index: 40;
-      transition: transform var(--ts)
-    }
-
+    /* Desktop: sidebar siempre visible */
     @media(min-width:768px) {
       .sidebar {
-        display: flex
+        width: var(--sb-w);
+        height: 100%;
+        background: var(--bg2);
+        border-right: 1px solid var(--b1);
+        display: flex;
+        flex-direction: column;
+        z-index: 40;
+        transition: transform var(--ts)
+      }
+    }
+
+    /* Mobile: sidebar oculto por defecto, visible con .open */
+    @media(max-width:767px) {
+      .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: var(--sb-w);
+        height: 100%;
+        background: var(--bg2);
+        border-right: 1px solid var(--b1);
+        display: flex;
+        flex-direction: column;
+        z-index: 40;
+        transform: translateX(-100%);
+        transition: transform var(--ts);
+        box-shadow: var(--sh-xl)
+      }
+
+      .sidebar.open {
+        transform: translateX(0)
       }
     }
 
@@ -296,25 +296,13 @@
       color: var(--t2);
       font-size: .875rem;
       font-weight: 500;
-      transition: all var(--tf)
+      transition: all var(--tf);
+      cursor: pointer;
     }
 
     .nav-logout:hover {
       background: var(--c-err-l);
       color: var(--c-err)
-    }
-
-    @media(max-width:767px) {
-      .sidebar {
-        position: fixed;
-        left: 0;
-        top: 0;
-        transform: translateX(-100%)
-      }
-
-      .sidebar.open {
-        transform: translateX(0)
-      }
     }
 
     .main-wrap {
@@ -437,7 +425,6 @@
       background: var(--b1)
     }
 
-    /* User dropdown */
     .user-menu {
       position: relative
     }
@@ -575,7 +562,6 @@
       margin: .375rem 0
     }
 
-    /* Content */
     .content-area {
       flex: 1;
       overflow-y: auto;
@@ -597,7 +583,6 @@
       animation: fadeIn .2s ease
     }
 
-    /* Components */
     .logo {
       display: flex;
       align-items: center;
@@ -876,7 +861,6 @@
       justify-content: center
     }
 
-    /* Collapsible */
     .collapsible-header {
       display: flex;
       align-items: center;
@@ -911,7 +895,6 @@
       padding-bottom: 0
     }
 
-    /* Page */
     .page-header {
       display: flex;
       flex-direction: column;
@@ -992,7 +975,6 @@
       text-decoration: underline
     }
 
-    /* Appointment card */
     .appt-card {
       display: flex;
       flex-direction: column;
@@ -1070,7 +1052,6 @@
       font-size: 14px
     }
 
-    /* Activity */
     .act-list {
       display: flex;
       flex-direction: column
@@ -1166,7 +1147,6 @@
       color: var(--t1)
     }
 
-    /* Vitals */
     .vital-card {
       padding: 1rem;
       position: relative;
@@ -1275,7 +1255,6 @@
       color: var(--t3)
     }
 
-    /* Quick actions */
     .qa {
       display: flex;
       align-items: center;
@@ -1318,7 +1297,6 @@
       color: var(--t3)
     }
 
-    /* Table */
     .table-wrap {
       overflow-x: auto
     }
@@ -1435,7 +1413,6 @@
       font-weight: 500
     }
 
-    /* Tabs */
     .tabs {
       display: flex;
       gap: 2rem;
@@ -1472,7 +1449,6 @@
       border-radius: var(--r-f) var(--r-f) 0 0
     }
 
-    /* Filter */
     .filter-bar {
       display: flex;
       flex-direction: column;
@@ -1523,7 +1499,6 @@
       pointer-events: none
     }
 
-    /* Modal */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -1605,7 +1580,6 @@
       gap: .75rem
     }
 
-    /* Notification item */
     .notif-item {
       display: flex;
       gap: .75rem;
@@ -1660,7 +1634,6 @@
       flex-shrink: 0
     }
 
-    /* Stat cards */
     .stat-card {
       padding: 1.25rem
     }
@@ -1678,7 +1651,6 @@
       color: var(--t1)
     }
 
-    /* Empty state */
     .empty-state {
       display: flex;
       flex-direction: column;
@@ -1718,7 +1690,6 @@
       margin-bottom: 1.5rem
     }
 
-    /* Select */
     .form-select {
       width: 100%;
       height: 48px;
@@ -2017,23 +1988,18 @@
 
   <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
   <script>
-    /* ===== NOTYF INIT ===== */
     const notyf = new Notyf({ duration: 3000, position: { x: 'right', y: 'bottom' }, types: [{ type: 'info', background: '#3b82f6', icon: { className: 'material-symbols-outlined', tagName: 'i', color: '#fff' } }, { type: 'warning', background: '#f59e0b', icon: { className: 'material-symbols-outlined', tagName: 'i', color: '#fff' } }] });
 
-    /* ===== THEME ===== */
     const Theme = { KEY: 'pt-theme', init() { this.set(localStorage.getItem(this.KEY) || (window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light')); }, set(t) { document.documentElement.setAttribute('data-theme', t); localStorage.setItem(this.KEY, t); const i = document.querySelector('#themeBtn .material-symbols-outlined'); if (i) i.textContent = t === 'dark' ? 'light_mode' : 'dark_mode'; }, toggle() { this.set(this.current === 'dark' ? 'light' : 'dark'); }, get current() { return document.documentElement.getAttribute('data-theme') || 'light'; } };
 
-    /* ===== DEBOUNCE ===== */
     function debounce(fn, d = 300) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), d); }; }
 
-    /* ===== LOCAL STORAGE HELPERS ===== */
     const DB = {
       get(k, def = []) { try { return JSON.parse(localStorage.getItem('pt_' + k)) || def; } catch { return def; } },
       set(k, v) { localStorage.setItem('pt_' + k, JSON.stringify(v)); },
       genId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 6); }
     };
 
-    /* ===== DEFAULT DATA ===== */
     function initDefaults() {
       if (!localStorage.getItem('pt_inited')) {
         DB.set('user', { firstName: 'Sarah', lastName: 'Connor', email: 'sarah.connor@email.com', phone: '(555) 123-4567', dob: '1985-06-15', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face' });
@@ -2064,58 +2030,47 @@
       }
     }
 
-    /* ===== MODAL HELPERS ===== */
     function openModal(id) { document.getElementById(id).classList.add('open'); if (id === 'profileModal') loadProfile(); if (id === 'notifModal') renderNotifications(); }
     function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-    function showConfirm(title, msg, onOk) { document.getElementById('confirmTitle').textContent = title; document.getElementById('confirmMsg').textContent = msg; const btn = document.getElementById('confirmOkBtn'); btn.onclick = () => { closeModal('confirmModal'); onOk(); }; openModal('confirmModal'); }
+    function showConfirm(title, msg, onOk) { document.getElementById('confirmTitle').textContent = title; document.getElementById('confirmMsg').textContent = msg; document.getElementById('confirmOkBtn').onclick = () => { closeModal('confirmModal'); onOk(); }; openModal('confirmModal'); }
 
-    /* ===== USER DROPDOWN ===== */
     let ddOpen = false;
     function toggleDd() { ddOpen = !ddOpen; document.getElementById('userDropdown').classList.toggle('open', ddOpen); }
     document.addEventListener('click', e => { const um = document.getElementById('userMenu'); if (ddOpen && !um.contains(e.target)) { ddOpen = false; document.getElementById('userDropdown').classList.remove('open'); } });
 
-    /* ===== PROFILE ===== */
     function loadProfile() { const u = DB.get('user', {}); document.getElementById('profFirst').value = u.firstName || ''; document.getElementById('profLast').value = u.lastName || ''; document.getElementById('profEmail').value = u.email || ''; document.getElementById('profPhone').value = u.phone || ''; document.getElementById('profDob').value = u.dob || ''; }
     function saveProfile() { const u = DB.get('user', {}); u.firstName = document.getElementById('profFirst').value.trim(); u.lastName = document.getElementById('profLast').value.trim(); u.email = document.getElementById('profEmail').value.trim(); u.phone = document.getElementById('profPhone').value.trim(); u.dob = document.getElementById('profDob').value; DB.set('user', u); updateUserUI(); closeModal('profileModal'); notyf.success('Profile updated successfully'); }
     function changePassword() { const cur = document.getElementById('passCur').value, nw = document.getElementById('passNew').value, cf = document.getElementById('passConf').value; let ok = true;['passCurErr', 'passNewErr', 'passConfErr'].forEach(id => { document.getElementById(id).classList.remove('show'); document.getElementById(id).textContent = ''; }); if (!cur) { document.getElementById('passCurErr').textContent = 'Required'; document.getElementById('passCurErr').classList.add('show'); ok = false; } if (nw.length < 8) { document.getElementById('passNewErr').textContent = 'Min 8 characters'; document.getElementById('passNewErr').classList.add('show'); ok = false; } if (nw !== cf) { document.getElementById('passConfErr').textContent = 'Passwords do not match'; document.getElementById('passConfErr').classList.add('show'); ok = false; } if (!ok) return; DB.set('password', nw); closeModal('passwordModal'); document.getElementById('passForm').reset(); notyf.success('Password changed successfully'); }
     function updateUserUI() { const u = DB.get('user', {}); const name = (u.firstName || '') + ' ' + (u.lastName || ''); document.getElementById('userDisplayName').textContent = name; document.getElementById('udName').textContent = name; document.getElementById('udEmail').textContent = u.email || ''; }
 
-    /* ===== NOTIFICATIONS ===== */
     function renderNotifications() { const list = DB.get('notifications', []); const el = document.getElementById('notifList'); if (!list.length) { el.innerHTML = '<div class="empty-state" style="padding:2rem"><div class="empty-icon" style="width:48px;height:48px;margin-bottom:.75rem"><span class="material-symbols-outlined" style="font-size:24px">notifications_off</span></div><p style="color:var(--t3);font-size:.875rem">No notifications</p></div>'; return; } el.innerHTML = list.map(n => `<div class="notif-item ${n.read ? '' : 'unread'}" onclick="markNotifRead('${n.id}')"><div class="notif-dot-ind ${n.read ? 'read' : ''}"></div><div style="flex:1;min-width:0"><div class="notif-title">${n.title}</div><div class="notif-desc">${n.desc}</div></div><span class="notif-time">${timeAgo(n.time)}</span></div>`).join(''); }
     function markNotifRead(id) { const list = DB.get('notifications', []); const n = list.find(x => x.id === id); if (n) { n.read = true; DB.set('notifications', list); renderNotifications(); updateNotifDot(); } }
     function markAllRead() { const list = DB.get('notifications', []).map(n => ({ ...n, read: true })); DB.set('notifications', list); renderNotifications(); updateNotifDot(); notyf.success('All notifications marked as read'); }
     function updateNotifDot() { const unread = DB.get('notifications', []).filter(n => !n.read).length; document.getElementById('notifDot').style.display = unread ? '' : 'none'; }
     function addNotification(title, desc) { const list = DB.get('notifications', []); list.unshift({ id: DB.genId(), title, desc, time: new Date().toISOString(), read: false }); DB.set('notifications', list); updateNotifDot(); }
 
-    /* ===== TIME AGO ===== */
     function timeAgo(iso) { const s = Math.floor((Date.now() - new Date(iso).getTime()) / 1000); if (s < 60) return 'Just now'; if (s < 3600) return Math.floor(s / 60) + 'm ago'; if (s < 86400) return Math.floor(s / 3600) + 'h ago'; if (s < 604800) return Math.floor(s / 86400) + 'd ago'; return new Date(iso).toLocaleDateString(); }
     function fmtDate(d) { return new Date(d + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }
     function fmtTime(t) { const [h, m] = t.split(':'); const hr = parseInt(h); return (hr % 12 || 12) + ':' + m + ' ' + (hr >= 12 ? 'PM' : 'AM'); }
 
-    /* ===== APPOINTMENTS CRUD ===== */
     const specMap = { 'Dr. Sarah Jenkins': 'Cardiologist', 'Dr. Mark Lee': 'Dermatologist', 'Dr. Emily Chen': 'Pediatrician', 'Dr. James Wilson': 'Orthopedist', 'Dr. Richard Lee': 'Cardiologist' };
     function openApptModal(id) { const m = id ? DB.get('appointments', []).find(a => a.id === id) : null; document.getElementById('apptModalTitle').textContent = m ? 'Edit Appointment' : 'New Appointment'; document.getElementById('apptSaveBtn').innerHTML = m ? 'Save Changes' : 'Book Appointment'; document.getElementById('apptId').value = m ? m.id : ''; document.getElementById('apptDoctor').value = m ? m.doctor : ''; document.getElementById('apptSpec').value = m ? m.specialty : ''; document.getElementById('apptDate').value = m ? m.date : ''; document.getElementById('apptTime').value = m ? m.time : ''; document.getElementById('apptNotes').value = m ? (m.notes || '') : '';['apptDocErr', 'apptDateErr', 'apptTimeErr'].forEach(e => { document.getElementById(e).classList.remove('show'); document.getElementById(e).textContent = ''; }); openModal('apptModal'); }
-    function saveAppt() { const doc = document.getElementById('apptDoctor').value, date = document.getElementById('apptDate').value, time = document.getElementById('apptTime').value; let ok = true;['apptDocErr', 'apptDateErr', 'apptTimeErr'].forEach(e => { document.getElementById(e).classList.remove('show'); document.getElementById(e).textContent = ''; }); if (!doc) { document.getElementById('apptDocErr').textContent = 'Select a doctor'; document.getElementById('apptDocErr').classList.add('show'); ok = false; } if (!date) { document.getElementById('apptDateErr').textContent = 'Select a date'; document.getElementById('apptDateErr').classList.add('show'); ok = false; } if (!time) { document.getElementById('apptTimeErr').textContent = 'Select a time'; document.getElementById('apptTimeErr').classList.add('show'); ok = false; } if (!ok) return; const list = DB.get('appointments', []); const id = document.getElementById('apptId').value; if (id) { const i = list.findIndex(a => a.id === id); if (i > -1) { list[i] = { ...list[i], doctor: doc, specialty: specMap[doc] || '', date, time, notes: document.getElementById('apptNotes').value }; } notyf.success('Appointment updated'); } else { list.push({ id: DB.genId(), doctor: doc, specialty: specMap[doc] || '', date, time, status: 'pending', notes: document.getElementById('apptNotes').value }); addNotification('Appointment Booked', `New appointment with ${doc} on ${fmtDate(date)}`); notyf.success('Appointment booked successfully'); } DB.set('appointments', list); closeModal('apptModal'); render(); }
-    function deleteAppt(id) { showConfirm('Cancel Appointment', 'Are you sure you want to cancel this appointment? This action cannot be undone.', () => { const list = DB.get('appointments', []).filter(a => a.id !== id); DB.set('appointments', list); notyf.success('Appointment cancelled'); addNotification('Appointment Cancelled', 'An appointment has been cancelled'); render(); }); }
+    function saveAppt() { const doc = document.getElementById('apptDoctor').value, date = document.getElementById('apptDate').value, time = document.getElementById('apptTime').value; let ok = true;['apptDocErr', 'apptDateErr', 'apptTimeErr'].forEach(e => { document.getElementById(e).classList.remove('show'); document.getElementById(e).textContent = ''; }); if (!doc) { document.getElementById('apptDocErr').textContent = 'Select a doctor'; document.getElementById('apptDocErr').classList.add('show'); ok = false; } if (!date) { document.getElementById('apptDateErr').textContent = 'Select a date'; document.getElementById('apptDateErr').classList.add('show'); ok = false; } if (!time) { document.getElementById('apptTimeErr').textContent = 'Select a time'; document.getElementById('apptTimeErr').classList.add('show'); ok = false; } if (!ok) return; const list = DB.get('appointments', []); const id = document.getElementById('apptId').value; if (id) { const i = list.findIndex(a => a.id === id); if (i > -1) list[i] = { ...list[i], doctor: doc, specialty: specMap[doc] || '', date, time, notes: document.getElementById('apptNotes').value }; notyf.success('Appointment updated'); } else { list.push({ id: DB.genId(), doctor: doc, specialty: specMap[doc] || '', date, time, status: 'pending', notes: document.getElementById('apptNotes').value }); addNotification('Appointment Booked', `New appointment with ${doc} on ${fmtDate(date)}`); notyf.success('Appointment booked successfully'); } DB.set('appointments', list); closeModal('apptModal'); render(); }
+    function deleteAppt(id) { showConfirm('Cancel Appointment', 'Are you sure you want to cancel this appointment?', () => { DB.set('appointments', DB.get('appointments', []).filter(a => a.id !== id)); notyf.success('Appointment cancelled'); addNotification('Appointment Cancelled', 'An appointment has been cancelled'); render(); }); }
 
-    /* ===== MESSAGES CRUD ===== */
     function openMsgModal(id) { const m = id ? DB.get('messages', []).find(x => x.id === id) : null; document.getElementById('msgModalTitle').textContent = m ? 'Reply' : 'New Message'; document.getElementById('msgSaveBtn').textContent = m ? 'Send Reply' : 'Send Message'; document.getElementById('msgId').value = m ? m.id : ''; document.getElementById('msgTo').value = m ? m.from : ''; document.getElementById('msgSubject').value = m ? 'Re: ' + m.subject : ''; document.getElementById('msgBody').value = '';['msgToErr', 'msgSubErr', 'msgBodyErr'].forEach(e => { document.getElementById(e).classList.remove('show'); document.getElementById(e).textContent = ''; }); openModal('msgModal'); }
     function saveMsg() { const to = document.getElementById('msgTo').value, sub = document.getElementById('msgSubject').value.trim(), body = document.getElementById('msgBody').value.trim(); let ok = true;['msgToErr', 'msgSubErr', 'msgBodyErr'].forEach(e => { document.getElementById(e).classList.remove('show'); document.getElementById(e).textContent = ''; }); if (!to) { document.getElementById('msgToErr').textContent = 'Select a doctor'; document.getElementById('msgToErr').classList.add('show'); ok = false; } if (!sub) { document.getElementById('msgSubErr').textContent = 'Enter a subject'; document.getElementById('msgSubErr').classList.add('show'); ok = false; } if (!body) { document.getElementById('msgBodyErr').textContent = 'Enter a message'; document.getElementById('msgBodyErr').classList.add('show'); ok = false; } if (!ok) return; const list = DB.get('messages', []); list.unshift({ id: DB.genId(), from: to, subject: sub, body, date: new Date().toISOString(), read: true, sent: true }); DB.set('messages', list); closeModal('msgModal'); notyf.success('Message sent'); render(); }
     function deleteMsg(id) { showConfirm('Delete Message', 'Are you sure you want to delete this message?', () => { DB.set('messages', DB.get('messages', []).filter(m => m.id !== id)); notyf.success('Message deleted'); render(); }); }
     function markMsgRead(id) { const list = DB.get('messages', []); const m = list.find(x => x.id === id); if (m && !m.read) { m.read = true; DB.set('messages', list); updateMsgBadge(); render(); } }
 
-    /* ===== RECORDS CRUD ===== */
     function openRecModal() { document.getElementById('recForm').reset();['recTypeErr', 'recTitleErr', 'recDocErr'].forEach(e => { document.getElementById(e).classList.remove('show'); document.getElementById(e).textContent = ''; }); openModal('recModal'); }
     function saveRec() { const type = document.getElementById('recType').value, title = document.getElementById('recTitle').value.trim(), doc = document.getElementById('recDoctor').value; let ok = true;['recTypeErr', 'recTitleErr', 'recDocErr'].forEach(e => { document.getElementById(e).classList.remove('show'); document.getElementById(e).textContent = ''; }); if (!type) { document.getElementById('recTypeErr').textContent = 'Select a type'; document.getElementById('recTypeErr').classList.add('show'); ok = false; } if (!title) { document.getElementById('recTitleErr').textContent = 'Enter a title'; document.getElementById('recTitleErr').classList.add('show'); ok = false; } if (!doc) { document.getElementById('recDocErr').textContent = 'Select a doctor'; document.getElementById('recDocErr').classList.add('show'); ok = false; } if (!ok) return; const list = DB.get('records', []); list.unshift({ id: DB.genId(), type, title, doctor: doc, date: new Date().toISOString().split('T')[0], notes: document.getElementById('recNotes').value }); DB.set('records', list); closeModal('recModal'); notyf.success('Document uploaded'); addNotification('New Document', `"${title}" has been added to your records`); render(); }
     function deleteRec(id) { showConfirm('Delete Record', 'Are you sure you want to delete this record?', () => { DB.set('records', DB.get('records', []).filter(r => r.id !== id)); notyf.success('Record deleted'); render(); }); }
 
-    /* ===== UPDATE BADGES ===== */
     function updateMsgBadge() { const unread = DB.get('messages', []).filter(m => !m.read && !m.sent).length; const b = document.getElementById('msgBadge'); b.textContent = unread; b.style.display = unread ? '' : 'none'; }
 
-    /* ===== DOCTOR AVATARS ===== */
     const docAvatars = { 'Dr. Sarah Jenkins': 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=80&h=80&fit=crop&crop=face', 'Dr. Mark Lee': 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=80&h=80&fit=crop&crop=face', 'Dr. Emily Chen': 'https://images.unsplash.com/photo-1594824476967-48c8b964ac31?w=80&h=80&fit=crop&crop=face', 'Dr. James Wilson': 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=80&h=80&fit=crop&crop=face', 'Dr. Richard Lee': 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=80&h=80&fit=crop&crop=face' };
 
-    /* ===== TEMPLATES ===== */
     const V = {};
 
     V['/'] = () => {
@@ -2219,7 +2174,6 @@
     };
     function initSettingsTheme() { const b = document.getElementById('setThemeBtn'); if (!b) return; const i = b.querySelector('.material-symbols-outlined'); const l = b.querySelector('.theme-lbl'); if (i) i.textContent = Theme.current === 'dark' ? 'light_mode' : 'dark_mode'; if (l) l.textContent = (Theme.current === 'dark' ? 'Disable' : 'Enable') + ' Dark Mode'; }
 
-    /* ===== ROUTER ===== */
     let curRoute = null;
     const app = document.getElementById('app');
     function go(path) { window.location.hash = path; }
@@ -2239,10 +2193,8 @@
       if (h === '/records') { const s = document.getElementById('recSearch'); if (s) s.addEventListener('input', debounce(e => { const q = e.target.value.toLowerCase(); document.querySelectorAll('#recList .act-item').forEach(r => { r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none'; }); })); }
     }
 
-    /* ===== LOGOUT ===== */
     function doLogout() { showConfirm('Log Out', 'Are you sure you want to log out?', () => { notyf.success('Logged out successfully'); setTimeout(() => window.location.href = '../index.html', 800); }); }
 
-    /* ===== INIT ===== */
     document.addEventListener('DOMContentLoaded', () => {
       initDefaults();
       Theme.init();
@@ -2250,35 +2202,52 @@
       updateNotifDot();
       updateMsgBadge();
 
-      // Mobile menu
-      const sb = document.getElementById('sidebar'), ov = document.getElementById('overlay');
-      function closeSb() { sb.classList.remove('open'); ov.classList.remove('active'); document.body.style.overflow = ''; }
-      document.getElementById('menuBtn').onclick = () => { sb.classList.add('open'); ov.classList.add('active'); document.body.style.overflow = 'hidden'; };
-      ov.onclick = closeSb;
-      sb.querySelectorAll('.nav-item').forEach(n => n.addEventListener('click', closeSb));
+      /* ===== MOBILE MENU - CORREGIDO ===== */
+      const sb = document.getElementById('sidebar');
+      const ov = document.getElementById('overlay');
 
-      // Header
+      function openSb() {
+        sb.classList.add('open');
+        ov.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeSb() {
+        sb.classList.remove('open');
+        ov.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      document.getElementById('menuBtn').addEventListener('click', openSb);
+      ov.addEventListener('click', closeSb);
+
+      // Cerrar al hacer clic en cualquier nav item en mobile
+      sb.querySelectorAll('.nav-item, .nav-logout').forEach(item => {
+        item.addEventListener('click', () => {
+          if (window.innerWidth < 768) {
+            closeSb();
+          }
+        });
+      });
+
+      // Cerrar sidebar al cambiar hash (navegación)
+      window.addEventListener('hashchange', () => {
+        if (window.innerWidth < 768) {
+          closeSb();
+        }
+      });
+
       document.getElementById('themeBtn').onclick = () => Theme.toggle();
       document.getElementById('notifBtn').onclick = () => openModal('notifModal');
       document.getElementById('userTrigger').onclick = (e) => { e.stopPropagation(); toggleDd(); };
       document.getElementById('logoutBtn').onclick = doLogout;
       document.getElementById('logoutBtn2').onclick = () => { toggleDd(); doLogout(); };
-
-      // Doctor auto-fill specialty
       document.getElementById('apptDoctor').addEventListener('change', function () { document.getElementById('apptSpec').value = specMap[this.value] || ''; });
-
-      // Save buttons
       document.getElementById('apptSaveBtn').onclick = saveAppt;
       document.getElementById('msgSaveBtn').onclick = saveMsg;
       document.getElementById('recSaveBtn').onclick = saveRec;
-
-      // Search
-      document.getElementById('globalSearch').onkeydown = e => { if (e.key === 'Enter' && e.target.value.trim()) { notyf.info('Search: "' + e.target.value.trim() + '"'); } };
-
-      // Nav
+      document.getElementById('globalSearch').onkeydown = e => { if (e.key === 'Enter' && e.target.value.trim()) notyf.info('Search: "' + e.target.value.trim() + '"'); };
       document.querySelectorAll('.nav-item[data-route]').forEach(n => n.addEventListener('click', e => { e.preventDefault(); go(n.dataset.route); }));
-
-      // Router
       window.addEventListener('hashchange', render);
       render();
     });
