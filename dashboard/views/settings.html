@@ -1,0 +1,166 @@
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Settings</h1>
+    <p class="page-subtitle" style="color: var(--text-secondary);">Manage your account preferences.</p>
+  </div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: var(--space-6); max-width: 700px;">
+
+  <!-- Profile Section -->
+  <div class="card">
+    <div class="card-body">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-6);">
+        <h3 style="font-size: 18px; font-weight: 600; color: var(--text-primary);">Profile Information</h3>
+      </div>
+      
+      <form id="profile-form" style="display: flex; flex-direction: column; gap: var(--space-5);">
+        <div style="display: flex; align-items: center; gap: var(--space-5); margin-bottom: var(--space-4);">
+          <div class="avatar avatar-xl" style="background-image: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&fit=crop&crop=face');"></div>
+          <div>
+            <button type="button" class="btn btn-sm btn-secondary" onclick="Utils.showToast('Photo upload coming soon', 'info')">Change Photo</button>
+            <p style="font-size: 12px; color: var(--text-tertiary); margin-top: var(--space-1);">JPG, PNG or GIF. Max 5MB.</p>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4);">
+          <div class="form-group">
+            <label class="form-label">First Name</label>
+            <input class="form-input" type="text" value="Sarah">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last Name</label>
+            <input class="form-input" type="text" value="Connor">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input class="form-input" type="email" value="sarah.connor@email.com">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input class="form-input" type="tel" value="(555) 123-4567">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Date of Birth</label>
+          <input class="form-input" type="date" value="1985-06-15">
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; padding-top: var(--space-2);">
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Appearance Section -->
+  <div class="card">
+    <div class="card-body">
+      <h3 style="font-size: 18px; font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-6);">Appearance</h3>
+      
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: var(--space-4) 0; border-bottom: 1px solid var(--border-primary);">
+        <div>
+          <p style="font-weight: 500; color: var(--text-primary);">Dark Mode</p>
+          <p style="font-size: 14px; color: var(--text-secondary);">Toggle between light and dark themes</p>
+        </div>
+        <button class="btn btn-secondary btn-sm" id="settings-theme-btn">
+          <span class="material-symbols-outlined" style="font-size: 18px;">dark_mode</span>
+          <span class="theme-label">Enable Dark Mode</span>
+        </button>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: var(--space-4) 0;">
+        <div>
+          <p style="font-weight: 500; color: var(--text-primary);">Compact Mode</p>
+          <p style="font-size: 14px; color: var(--text-secondary);">Reduce spacing for more content on screen</p>
+        </div>
+        <button class="btn btn-secondary btn-sm" onclick="Utils.showToast('Compact mode coming soon', 'info')">
+          <span class="material-symbols-outlined" style="font-size: 18px;">density_small</span>
+          Enable
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notifications Section -->
+  <div class="card">
+    <div class="card-body">
+      <h3 style="font-size: 18px; font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-6);">Notifications</h3>
+      
+      <div style="display: flex; flex-direction: column; gap: var(--space-4);">
+        <label class="checkbox-wrapper">
+          <input type="checkbox" class="checkbox-input" checked>
+          <span class="checkbox-label">
+            <span style="font-weight: 500; color: var(--text-primary); display: block;">Email Notifications</span>
+            <span style="font-size: 13px; color: var(--text-tertiary);">Receive appointment reminders and updates via email</span>
+          </span>
+        </label>
+
+        <label class="checkbox-wrapper">
+          <input type="checkbox" class="checkbox-input" checked>
+          <span class="checkbox-label">
+            <span style="font-weight: 500; color: var(--text-primary); display: block;">SMS Notifications</span>
+            <span style="font-size: 13px; color: var(--text-tertiary);">Get text messages for urgent notifications</span>
+          </span>
+        </label>
+
+        <label class="checkbox-wrapper">
+          <input type="checkbox" class="checkbox-input">
+          <span class="checkbox-label">
+            <span style="font-weight: 500; color: var(--text-primary); display: block;">Marketing Emails</span>
+            <span style="font-size: 13px; color: var(--text-tertiary);">Receive health tips and platform updates</span>
+          </span>
+        </label>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; padding-top: var(--space-6);">
+        <button class="btn btn-primary" id="settings-save-btn">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Danger Zone -->
+  <div class="card" style="border-color: var(--color-danger);">
+    <div class="card-body">
+      <h3 style="font-size: 18px; font-weight: 600; color: var(--color-danger); margin-bottom: var(--space-2);">Danger Zone</h3>
+      <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: var(--space-4);">Irreversible actions for your account.</p>
+      
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: var(--space-4); background: var(--color-danger-light); border-radius: var(--radius-md);">
+        <div>
+          <p style="font-weight: 500; color: var(--text-primary);">Delete Account</p>
+          <p style="font-size: 13px; color: var(--text-secondary);">Permanently delete your account and all data</p>
+        </div>
+        <button class="btn btn-sm btn-danger" id="settings-delete-btn">
+          <span class="material-symbols-outlined" style="font-size: 18px;">delete</span>
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  (function() {
+    const btn = document.getElementById('settings-theme-btn');
+    if (!btn) return;
+    const label = btn.querySelector('.theme-label');
+    const icon = btn.querySelector('.material-symbols-outlined');
+    
+    function update() {
+      const isDark = ThemeManager.current === 'dark';
+      if (label) label.textContent = isDark ? 'Disable Dark Mode' : 'Enable Dark Mode';
+      if (icon) icon.textContent = isDark ? 'light_mode' : 'dark_mode';
+    }
+    
+    update();
+    
+    btn.addEventListener('click', () => {
+      ThemeManager.toggle();
+      update();
+    });
+  })();
+</script>

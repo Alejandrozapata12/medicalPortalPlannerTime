@@ -1,0 +1,207 @@
+/**
+ * Home View - Dashboard Main Page
+ */
+
+// View HTML template
+const homeTemplate = `
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Good Morning, Sarah</h1>
+      <p class="page-subtitle">
+        <span class="material-symbols-outlined" style="font-size: 18px;">calendar_today</span>
+        Tuesday, Oct 24, 2023
+      </p>
+    </div>
+    <button class="btn btn-primary" onclick="router.navigate('/appointments')">
+      <span class="material-symbols-outlined">add</span>
+      Book New Appointment
+    </button>
+  </div>
+
+  <div class="dashboard-grid">
+    <div class="dashboard-main">
+      
+      <!-- Next Appointment -->
+      <section>
+        <div class="section-header">
+          <h2 class="section-title">Next Appointment</h2>
+          <a class="section-link" href="#/appointments">View all</a>
+        </div>
+        <div class="card card-hover">
+          <div class="appointment-card">
+            <div class="appointment-doctor">
+              <div class="avatar avatar-xl" style="background-image: url('https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=120&h=120&fit=crop&crop=face');"></div>
+              <div class="appointment-video-badge">
+                <span class="material-symbols-outlined">videocam</span>
+              </div>
+            </div>
+            <div class="appointment-info">
+              <div>
+                <h3 class="appointment-doctor-name">Dr. Richard Lee</h3>
+                <p class="appointment-specialty">Cardiologist • Heart Center</p>
+              </div>
+              <div class="appointment-meta">
+                <div class="appointment-meta-item">
+                  <span class="material-symbols-outlined">schedule</span>
+                  10:00 AM - 10:30 AM
+                </div>
+                <div class="appointment-meta-item">
+                  <span class="material-symbols-outlined">calendar_month</span>
+                  Today
+                </div>
+              </div>
+            </div>
+            <div class="appointment-action">
+              <button class="btn btn-secondary">
+                <span class="material-symbols-outlined">videocam</span>
+                Join Video Call
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Recent Activity -->
+      <section>
+        <h2 class="section-title">Recent Activity</h2>
+        <div class="card">
+          <div class="activity-list">
+            <div class="activity-item">
+              <div class="activity-icon activity-icon-blue">
+                <span class="material-symbols-outlined">biotech</span>
+              </div>
+              <div class="activity-content">
+                <div class="activity-header">
+                  <span class="activity-title">Lab Results Available</span>
+                  <span class="activity-time">2 hrs ago</span>
+                </div>
+                <p class="activity-description">Comprehensive Metabolic Panel (CMP)</p>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon activity-icon-green">
+                <span class="material-symbols-outlined">prescriptions</span>
+              </div>
+              <div class="activity-content">
+                <div class="activity-header">
+                  <span class="activity-title">Prescription Refilled</span>
+                  <span class="activity-time">Yesterday</span>
+                </div>
+                <p class="activity-description">Atorvastatin 20mg sent to CVS Pharmacy</p>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon activity-icon-orange">
+                <span class="material-symbols-outlined">check_circle</span>
+              </div>
+              <div class="activity-content">
+                <div class="activity-header">
+                  <span class="activity-title">Appointment Confirmed</span>
+                  <span class="activity-time">Oct 21</span>
+                </div>
+                <p class="activity-description">With Dr. Sarah Jenning for Annual Physical</p>
+              </div>
+            </div>
+          </div>
+          <div class="activity-footer">
+            <button>View Full History</button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <div class="dashboard-sidebar">
+      
+      <!-- Vitals -->
+      <section>
+        <div class="section-header">
+          <h2 class="section-title">Vitals</h2>
+          <span class="badge badge-secondary" style="font-size: 11px;">Last checked: Today</span>
+        </div>
+        
+        <div class="card vital-card">
+          <div class="vital-card-bg" style="color: var(--color-danger);">
+            <span class="material-symbols-outlined">favorite</span>
+          </div>
+          <div class="vital-header">
+            <div class="vital-icon" style="background-color: var(--color-danger-light); color: var(--color-danger);">
+              <span class="material-symbols-outlined">favorite</span>
+            </div>
+            <span class="vital-label">Heart Rate</span>
+          </div>
+          <div class="vital-value">
+            72 <span class="vital-unit">bpm</span>
+            <span class="vital-change vital-change-down">
+              <span class="material-symbols-outlined" style="font-size: 14px;">arrow_drop_down</span>
+              2%
+            </span>
+          </div>
+          <div class="vital-progress">
+            <div class="vital-progress-bar" style="width: 60%; background-color: var(--color-danger);"></div>
+          </div>
+        </div>
+
+        <div class="card vital-card" style="margin-top: var(--space-4);">
+          <div class="vital-card-bg" style="color: var(--color-primary);">
+            <span class="material-symbols-outlined">monitor_heart</span>
+          </div>
+          <div class="vital-header">
+            <div class="vital-icon" style="background-color: var(--color-info-light); color: var(--color-primary);">
+              <span class="material-symbols-outlined">monitor_heart</span>
+            </div>
+            <span class="vital-label">Blood Pressure</span>
+          </div>
+          <div class="vital-value">
+            120/80 <span class="vital-unit">mmHg</span>
+          </div>
+          <div class="vital-status">
+            <span class="vital-status-dot"></span>
+            <span class="vital-status-text">Normal status</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quick Actions -->
+      <section>
+        <h2 class="section-title">Quick Actions</h2>
+        <div class="card" style="padding: var(--space-4);">
+          <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+            <button class="quick-action">
+              <div class="quick-action-left">
+                <span class="material-symbols-outlined">medication</span>
+                <span class="quick-action-text">Request Refill</span>
+              </div>
+              <span class="material-symbols-outlined chevron">chevron_right</span>
+            </button>
+            <button class="quick-action">
+              <div class="quick-action-left">
+                <span class="material-symbols-outlined">mail</span>
+                <span class="quick-action-text">Message Doctor</span>
+              </div>
+              <span class="material-symbols-outlined chevron">chevron_right</span>
+            </button>
+            <button class="quick-action">
+              <div class="quick-action-left">
+                <span class="material-symbols-outlined">description</span>
+                <span class="quick-action-text">Download Records</span>
+              </div>
+              <span class="material-symbols-outlined chevron">chevron_right</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+`;
+
+// Export view
+export default function() {
+  return homeTemplate;
+}
+
+// Optional init function
+export function init() {
+  console.log('Home view initialized');
+}

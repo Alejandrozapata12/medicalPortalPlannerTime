@@ -1,0 +1,136 @@
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Medical Records</h1>
+    <p class="page-subtitle" style="color: var(--text-secondary);">Access your health documents and lab results.</p>
+  </div>
+  <button class="btn btn-primary" onclick="Utils.showToast('Upload coming soon', 'info')">
+    <span class="material-symbols-outlined">upload</span>
+    Upload Document
+  </button>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-8);">
+  <div class="card" style="padding: var(--space-5);">
+    <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-3);">
+      <div class="vital-icon" style="background-color: var(--color-info-light); color: var(--color-info);">
+        <span class="material-symbols-outlined">description</span>
+      </div>
+      <span class="vital-label">Total Records</span>
+    </div>
+    <span style="font-size: var(--font-size-2xl); font-weight: 700; color: var(--text-primary);">24</span>
+  </div>
+  <div class="card" style="padding: var(--space-5);">
+    <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-3);">
+      <div class="vital-icon" style="background-color: var(--color-success-light); color: var(--color-success);">
+        <span class="material-symbols-outlined">biotech</span>
+      </div>
+      <span class="vital-label">Lab Results</span>
+    </div>
+    <span style="font-size: var(--font-size-2xl); font-weight: 700; color: var(--text-primary);">12</span>
+  </div>
+  <div class="card" style="padding: var(--space-5);">
+    <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-3);">
+      <div class="vital-icon" style="background-color: var(--color-warning-light); color: var(--color-warning);">
+        <span class="material-symbols-outlined">prescriptions</span>
+      </div>
+      <span class="vital-label">Prescriptions</span>
+    </div>
+    <span style="font-size: var(--font-size-2xl); font-weight: 700; color: var(--text-primary);">8</span>
+  </div>
+  <div class="card" style="padding: var(--space-5);">
+    <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-3);">
+      <div class="vital-icon" style="background-color: var(--color-danger-light); color: var(--color-danger);">
+        <span class="material-symbols-outlined">image</span>
+      </div>
+      <span class="vital-label">Imaging</span>
+    </div>
+    <span style="font-size: var(--font-size-2xl); font-weight: 700; color: var(--text-primary);">4</span>
+  </div>
+</div>
+
+<div class="filter-bar" style="margin-bottom: var(--space-6); max-width: 400px;">
+  <div class="filter-input" style="flex: 1;">
+    <span class="material-symbols-outlined">search</span>
+    <input type="text" placeholder="Search records..." id="records-search">
+  </div>
+</div>
+
+<div class="card">
+  <div class="activity-list">
+    <div class="activity-item">
+      <div class="activity-icon activity-icon-blue">
+        <span class="material-symbols-outlined">biotech</span>
+      </div>
+      <div class="activity-content">
+        <div class="activity-header">
+          <span class="activity-title">Comprehensive Metabolic Panel</span>
+          <span class="activity-time">Oct 22, 2023</span>
+        </div>
+        <p class="activity-description">Lab Results • Dr. Richard Lee</p>
+      </div>
+      <button class="btn btn-sm btn-ghost" style="flex-shrink: 0;" onclick="event.stopPropagation(); Utils.showToast('Downloading...', 'success')">
+        <span class="material-symbols-outlined" style="font-size: 18px;">download</span>
+      </button>
+    </div>
+    <div class="activity-item">
+      <div class="activity-icon activity-icon-green">
+        <span class="material-symbols-outlined">prescriptions</span>
+      </div>
+      <div class="activity-content">
+        <div class="activity-header">
+          <span class="activity-title">Atorvastatin 20mg</span>
+          <span class="activity-time">Oct 20, 2023</span>
+        </div>
+        <p class="activity-description">Prescription • Dr. Richard Lee</p>
+      </div>
+      <button class="btn btn-sm btn-ghost" style="flex-shrink: 0;" onclick="event.stopPropagation(); Utils.showToast('Downloading...', 'success')">
+        <span class="material-symbols-outlined" style="font-size: 18px;">download</span>
+      </button>
+    </div>
+    <div class="activity-item">
+      <div class="activity-icon activity-icon-orange">
+        <span class="material-symbols-outlined">image</span>
+      </div>
+      <div class="activity-content">
+        <div class="activity-header">
+          <span class="activity-title">Chest X-Ray</span>
+          <span class="activity-time">Oct 15, 2023</span>
+        </div>
+        <p class="activity-description">Imaging • Heart Center</p>
+      </div>
+      <button class="btn btn-sm btn-ghost" style="flex-shrink: 0;" onclick="event.stopPropagation(); Utils.showToast('Downloading...', 'success')">
+        <span class="material-symbols-outlined" style="font-size: 18px;">download</span>
+      </button>
+    </div>
+    <div class="activity-item">
+      <div class="activity-icon activity-icon-blue">
+        <span class="material-symbols-outlined">description</span>
+      </div>
+      <div class="activity-content">
+        <div class="activity-header">
+          <span class="activity-title">Annual Physical Summary</span>
+          <span class="activity-time">Oct 10, 2023</span>
+        </div>
+        <p class="activity-description">Clinical Note • Dr. Sarah Jenning</p>
+      </div>
+      <button class="btn btn-sm btn-ghost" style="flex-shrink: 0;" onclick="event.stopPropagation(); Utils.showToast('Downloading...', 'success')">
+        <span class="material-symbols-outlined" style="font-size: 18px;">download</span>
+      </button>
+    </div>
+    <div class="activity-item">
+      <div class="activity-icon activity-icon-green">
+        <span class="material-symbols-outlined">biotech</span>
+      </div>
+      <div class="activity-content">
+        <div class="activity-header">
+          <span class="activity-title">Lipid Panel</span>
+          <span class="activity-time">Oct 05, 2023</span>
+        </div>
+        <p class="activity-description">Lab Results • Dr. Richard Lee</p>
+      </div>
+      <button class="btn btn-sm btn-ghost" style="flex-shrink: 0;" onclick="event.stopPropagation(); Utils.showToast('Downloading...', 'success')">
+        <span class="material-symbols-outlined" style="font-size: 18px;">download</span>
+      </button>
+    </div>
+  </div>
+</div>

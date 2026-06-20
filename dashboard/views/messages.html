@@ -1,0 +1,90 @@
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Messages</h1>
+    <p class="page-subtitle" style="color: var(--text-secondary);">Communicate with your healthcare team.</p>
+  </div>
+  <button class="btn btn-primary" id="btn-new-message">
+    <span class="material-symbols-outlined">edit</span>
+    New Message
+  </button>
+</div>
+
+<div class="card" style="overflow: hidden;">
+  <div style="padding: var(--space-4) var(--space-6); border-bottom: 1px solid var(--border-primary); display: flex; align-items: center; justify-content: space-between;">
+    <span style="font-size: var(--font-size-sm); color: var(--text-secondary);"><strong style="color: var(--text-primary);">2</strong> unread messages</span>
+    <div style="display: flex; gap: var(--space-2);">
+      <button class="btn btn-sm btn-ghost" style="font-size: 12px;">Mark all read</button>
+    </div>
+  </div>
+
+  <div style="min-height: 400px;">
+    
+    <div class="activity-item message-item" style="cursor: pointer; background-color: var(--color-primary-light);" onclick="Utils.showToast('Opening conversation with Dr. Richard Lee...', 'info')">
+      <div class="avatar" style="background-image: url('https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=80&h=80&fit=crop&crop=face'); position: relative;">
+        <span style="position: absolute; top: -2px; right: -2px; width: 10px; height: 10px; background: var(--color-primary); border-radius: 50%; border: 2px solid var(--color-primary-light);"></span>
+      </div>
+      <div class="activity-content">
+        <div class="activity-header">
+          <div style="display: flex; align-items: center; gap: var(--space-2);">
+            <span class="activity-title" style="font-weight: 600;">Dr. Richard Lee</span>
+            <span class="badge badge-primary" style="font-size: 10px; padding: 1px 8px;">New</span>
+          </div>
+          <span class="activity-time">2 hrs ago</span>
+        </div>
+        <p class="activity-description" style="font-weight: 500; color: var(--text-primary);">Your lab results look great! Let's discuss them during our appointment tomorrow...</p>
+      </div>
+    </div>
+
+    <div class="activity-item message-item" style="cursor: pointer; background-color: var(--color-primary-light);" onclick="Utils.showToast('Opening conversation with Dr. Emily Chen...', 'info')">
+      <div class="avatar" style="background-image: url('https://images.unsplash.com/photo-1594824476967-48c8b964ac31?w=80&h=80&fit=crop&crop=face'); position: relative;">
+        <span style="position: absolute; top: -2px; right: -2px; width: 10px; height: 10px; background: var(--color-primary); border-radius: 50%; border: 2px solid var(--color-primary-light);"></span>
+      </div>
+      <div class="activity-content">
+        <div class="activity-header">
+          <div style="display: flex; align-items: center; gap: var(--space-2);">
+            <span class="activity-title" style="font-weight: 600;">Dr. Emily Chen</span>
+            <span class="badge badge-primary" style="font-size: 10px; padding: 1px 8px;">New</span>
+          </div>
+          <span class="activity-time">Yesterday</span>
+        </div>
+        <p class="activity-description" style="font-weight: 500; color: var(--text-primary);">I've reviewed the vaccination schedule for your child. Here are my recommendations...</p>
+      </div>
+    </div>
+
+    <div class="activity-item message-item" style="cursor: pointer;" onclick="Utils.showToast('Opening conversation with Dr. Sarah Jenkins...', 'info')">
+      <div class="avatar" style="background-image: url('https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=80&h=80&fit=crop&crop=face');"></div>
+      <div class="activity-content">
+        <div class="activity-header">
+          <span class="activity-title">Dr. Sarah Jenkins</span>
+          <span class="activity-time">Oct 20</span>
+        </div>
+        <p class="activity-description">The prescription refill has been processed and sent to your pharmacy.</p>
+      </div>
+    </div>
+
+    <div class="activity-item message-item" style="cursor: pointer;" onclick="Utils.showToast('Opening conversation with Dr. James Wilson...', 'info')">
+      <div class="avatar" style="background-image: url('https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=80&h=80&fit=crop&crop=face');"></div>
+      <div class="activity-content">
+        <div class="activity-header">
+          <span class="activity-title">Dr. James Wilson</span>
+          <span class="activity-time">Oct 18</span>
+        </div>
+        <p class="activity-description">The MRI results are in. Everything looks normal. No follow-up needed at this time.</p>
+      </div>
+    </div>
+
+    <div class="activity-item message-item" style="cursor: pointer;" onclick="Utils.showToast('Opening conversation with Support Team...', 'info')">
+      <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <span class="material-symbols-outlined" style="font-size: 20px; color: var(--text-tertiary);">support_agent</span>
+      </div>
+      <div class="activity-content">
+        <div class="activity-header">
+          <span class="activity-title">Support Team</span>
+          <span class="activity-time">Oct 15</span>
+        </div>
+        <p class="activity-description">Your account has been verified successfully. Welcome to PlannerTime!</p>
+      </div>
+    </div>
+
+  </div>
+</div>
