@@ -77,62 +77,71 @@
             Provider
           </label>
         </div>
-
+ 
         <form class="auth-form" id="signup-form" novalidate>
-          <div class="form-group">
-            <label class="form-label" for="signup-name">Full Name</label>
-            <div class="form-input-wrapper">
-              <span class="material-symbols-outlined input-icon">badge</span>
-              <input class="form-input form-input-icon" type="text" id="signup-name" placeholder="John Doe" required
-                autocomplete="name">
-            </div>
-            <span class="form-hint form-error" id="signup-name-error"></span>
-          </div>
+  <div class="form-group">
+    <label class="form-label" for="signup-name">Full Name</label>
+    <div class="form-input-wrapper">
+      <span class="material-symbols-outlined input-icon">badge</span>
+      <input class="form-input form-input-icon" type="text" id="signup-name" placeholder="John Doe" required autocomplete="name">
+    </div>
+    <span class="form-hint form-error" id="signup-name-error"></span>
+  </div>
 
-          <div class="form-group">
-            <label class="form-label" for="signup-email">Email Address</label>
-            <div class="form-input-wrapper">
-              <span class="material-symbols-outlined input-icon">mail</span>
-              <input class="form-input form-input-icon" type="email" id="signup-email" placeholder="name@example.com"
-                required autocomplete="email">
-            </div>
-            <span class="form-hint form-error" id="signup-email-error"></span>
-          </div>
+  <div class="form-group">
+    <label class="form-label" for="signup-email">Email Address</label>
+    <div class="form-input-wrapper">
+      <span class="material-symbols-outlined input-icon">mail</span>
+      <input class="form-input form-input-icon" type="email" id="signup-email" placeholder="name@example.com" required autocomplete="email">
+    </div>
+    <span class="form-hint form-error" id="signup-email-error"></span>
+  </div>
 
-          <div class="form-group">
-            <label class="form-label" for="signup-phone">Phone Number</label>
-            <div class="form-input-wrapper">
-              <span class="material-symbols-outlined input-icon">call</span>
-              <input class="form-input form-input-icon" type="tel" id="signup-phone" placeholder="(555) 000-0000"
-                required autocomplete="tel">
-            </div>
-            <span class="form-hint form-error" id="signup-phone-error"></span>
-          </div>
+  <!-- CAMPOS EXTRA PARA PROVIDER (Oculto por defecto) -->
+  <div class="form-group" id="provider-fields" style="display: none;">
+    <label class="form-label" for="signup-license">Medical License Number</label>
+    <div class="form-input-wrapper">
+      <span class="material-symbols-outlined input-icon">medical_services</span>
+      <input class="form-input form-input-icon" type="text" id="signup-license" placeholder="Ej. MD-12345-USD">
+    </div>
+  </div>
 
-          <div class="form-group">
-            <label class="form-label" for="signup-password">Password</label>
-            <div class="form-input-wrapper">
-              <span class="material-symbols-outlined input-icon">lock</span>
-              <input class="form-input form-input-icon" type="password" id="signup-password" placeholder="••••••••••"
-                required minlength="8" autocomplete="new-password">
-              <button type="button" class="input-action" data-password-toggle aria-label="Toggle password visibility">
-                <span class="material-symbols-outlined" style="font-size:20px;">visibility</span>
-              </button>
-            </div>
-            <span class="form-hint">Must be at least 8 characters long.</span>
-            <span class="form-hint form-error" id="signup-password-error"></span>
-          </div>
+  <div class="form-group">
+    <label class="form-label" for="signup-phone">Phone Number</label>
+    <div class="form-input-wrapper">
+      <span class="material-symbols-outlined input-icon">call</span>
+      <input class="form-input form-input-icon" type="tel" id="signup-phone" placeholder="(555) 000-0000" required autocomplete="tel">
+    </div>
+    <span class="form-hint form-error" id="signup-phone-error"></span>
+  </div>
 
-          <label class="checkbox-wrapper">
-            <input type="checkbox" class="checkbox-input" id="signup-terms" required>
-            <span class="checkbox-label">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy
-                Policy</a>.</span>
-          </label>
-          <span class="form-hint form-error" id="signup-terms-error"></span>
+  <div class="form-group">
+    <label class="form-label" for="signup-password">Password</label>
+    <div class="form-input-wrapper">
+      <span class="material-symbols-outlined input-icon">lock</span>
+      <input class="form-input form-input-icon" type="password" id="signup-password" placeholder="••••••••••" required minlength="8" autocomplete="new-password">
+      <button type="button" class="input-action" data-password-toggle aria-label="Toggle password visibility">
+        <span class="material-symbols-outlined" style="font-size:20px;">visibility</span>
+      </button>
+    </div>
+    <!-- Medidor de fortaleza -->
+    <div style="display: flex; gap: 4px; margin-top: 8px;">
+      <div id="strength-bar-1" style="height: 4px; flex: 1; background: var(--bg-tertiary); border-radius: 2px; transition: background 0.3s;"></div>
+      <div id="strength-bar-2" style="height: 4px; flex: 1; background: var(--bg-tertiary); border-radius: 2px; transition: background 0.3s;"></div>
+      <div id="strength-bar-3" style="height: 4px; flex: 1; background: var(--bg-tertiary); border-radius: 2px; transition: background 0.3s;"></div>
+    </div>
+    <span class="form-hint" id="password-strength-text">Must be at least 8 characters long.</span>
+    <span class="form-hint form-error" id="signup-password-error"></span>
+  </div>
 
-          <button type="submit" class="btn btn-primary btn-full" id="signup-btn"
-            style="margin-top: var(--space-4);">Create Account</button>
-        </form>
+  <label class="checkbox-wrapper">
+    <input type="checkbox" class="checkbox-input" id="signup-terms" required>
+    <span class="checkbox-label">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</span>
+  </label>
+  <span class="form-hint form-error" id="signup-terms-error"></span>
+
+  <button type="submit" class="btn btn-primary btn-full" id="signup-btn" style="margin-top: var(--space-4);">Create Account</button>
+</form>
 
         <div class="auth-footer">
           Already have an account? <a href="index.html">Log in instead</a>
@@ -198,6 +207,45 @@
         }, 1500);
       });
     });
+
+  // Toggle de Tipo de Usuario
+  document.querySelectorAll('input[name="user_type"]').forEach(radio => {
+    radio.addEventListener('change', (e) => {
+      const providerFields = document.getElementById('provider-fields');
+      if (e.target.value === 'doctor') {
+        providerFields.style.display = 'block';
+      } else {
+        providerFields.style.display = 'none';
+      }
+    });
+  });
+
+  // Medidor de Fortaleza de Contraseña
+  const passInput = document.getElementById('signup-password');
+  passInput.addEventListener('input', () => {
+    const val = passInput.value;
+    let strength = 0;
+    if (val.length >= 8) strength++;
+    if (val.match(/[A-Z]/)) strength++;
+    if (val.match(/[0-9]/) || val.match(/[^a-zA-Z0-9]/)) strength++;
+
+    const bars = [
+      document.getElementById('strength-bar-1'),
+      document.getElementById('strength-bar-2'),
+      document.getElementById('strength-bar-3')
+    ];
+    const text = document.getElementById('password-strength-text');
+    
+    const colors = ['var(--c-err)', 'var(--c-warn)', 'var(--c-ok)'];
+    const labels = ['Weak', 'Medium', 'Strong'];
+    
+    bars.forEach((bar, i) => {
+      bar.style.background = i < strength ? colors[strength-1] : 'var(--bg-tertiary)';
+    });
+
+    if (val.length === 0) text.textContent = 'Must be at least 8 characters long.';
+    else if (strength > 0) text.textContent = `Password strength: ${labels[strength-1]}`;
+  });
   </script>
 </body>
 

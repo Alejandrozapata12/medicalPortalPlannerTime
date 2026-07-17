@@ -9,6 +9,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+  <script>
+  // Prevenir flash de tema
+  (function() {
+    const t = localStorage.getItem('pt-theme') || (window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
   <style>
     :root {
       --c-pri: #137fec;
@@ -1711,6 +1718,64 @@
       border-color: var(--c-pri);
       box-shadow: 0 0 0 3px var(--c-pri-l)
     }
+
+    /* === NUEVAS MEJORAS UI === */
+/* Glassmorphism Header */
+.top-header { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+[data-theme="dark"] .top-header { background: rgba(30, 41, 59, 0.8); }
+
+/* Skeleton Loader */
+.skeleton { background: linear-gradient(90deg, var(--bg3) 25%, var(--bg-h) 37%, var(--bg3) 63%); background-size: 400% 100%; animation: shimmer 1.4s ease infinite; border-radius: var(--r-md); }
+@keyframes shimmer { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
+
+/* Toggle Switch */
+.switch { position: relative; display: inline-block; width: 44px; height: 24px; flex-shrink: 0; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; inset: 0; background: var(--bg3); transition: .4s; border-radius: 34px; }
+.slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background: white; transition: .4s; border-radius: 50%; }
+input:checked + .slider { background: var(--c-pri); }
+input:checked + .slider:before { transform: translateX(20px); }
+
+/* Chips Filter */
+.chips-bar { display: flex; gap: .5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.chip { padding: .375rem .875rem; background: var(--bg2); border: 1px solid var(--b1); border-radius: var(--r-f); font-size: .8125rem; font-weight: 500; color: var(--t2); cursor: pointer; transition: all .2s; display: flex; align-items: center; gap: .375rem; }
+.chip:hover { border-color: var(--c-pri); color: var(--c-pri); }
+.chip.active { background: var(--c-pri-l); color: var(--c-pri); border-color: var(--c-pri); }
+
+/* Command Palette */
+.cmd-palette { position: fixed; top: 20%; left: 50%; transform: translateX(-50%); width: 90%; max-width: 500px; background: var(--bg2); border: 1px solid var(--b1); border-radius: var(--r-lg); box-shadow: var(--sh-xl); z-index: 200; overflow: hidden; display: none; }
+.cmd-palette.open { display: block; }
+.cmd-input { width: 100%; padding: 1rem 1.25rem; border: none; border-bottom: 1px solid var(--b1); background: transparent; color: var(--t1); font-size: 1rem; outline: none; }
+.cmd-item { padding: .75rem 1.25rem; display: flex; align-items: center; gap: .75rem; cursor: pointer; color: var(--t2); }
+.cmd-item:hover, .cmd-item.selected { background: var(--bg3); color: var(--t1); }
+
+/* Chat Layout */
+.chat-layout { display: grid; grid-template-columns: 320px 1fr; height: 600px; border-radius: var(--r-lg); overflow: hidden; border: 1px solid var(--b1); }
+@media (max-width: 768px) { .chat-layout { grid-template-columns: 1fr; } .chat-main { display: none; } .chat-layout.mobile-view .chat-main { display: flex; } .chat-layout.mobile-view .chat-sidebar { display: none; } }
+.chat-sidebar { border-right: 1px solid var(--b1); overflow-y: auto; background: var(--bg2); }
+.chat-main { display: flex; flex-direction: column; background: var(--bg1); }
+.chat-header { padding: 1rem; border-bottom: 1px solid var(--b1); display: flex; align-items: center; gap: .75rem; background: var(--bg2); }
+.chat-messages { flex: 1; padding: 1.5rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1rem; }
+.chat-bubble { max-width: 70%; padding: .75rem 1rem; border-radius: var(--r-lg); font-size: .875rem; line-height: 1.4; }
+.chat-bubble.them { background: var(--bg2); border: 1px solid var(--b1); border-bottom-left-radius: 4px; align-self: flex-start; }
+.chat-bubble.me { background: var(--c-pri); color: white; border-bottom-right-radius: 4px; align-self: flex-end; }
+.chat-input-area { padding: 1rem; border-top: 1px solid var(--b1); display: flex; gap: .75rem; background: var(--bg2); }
+
+/* Settings Vertical Tabs */
+.settings-layout { display: grid; grid-template-columns: 220px 1fr; gap: 2rem; }
+@media (max-width: 768px) { .settings-layout { grid-template-columns: 1fr; } }
+.settings-nav { display: flex; flex-direction: column; gap: .25rem; }
+.settings-nav-item { padding: .75rem 1rem; border-radius: var(--r-md); color: var(--t2); font-weight: 500; cursor: pointer; border-left: 3px solid transparent; }
+.settings-nav-item.active { background: var(--c-pri-l); color: var(--c-pri); border-left-color: var(--c-pri); }
+.settings-content { max-width: 600px; }
+
+/* Calendar Grid */
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background: var(--b1); border: 1px solid var(--b1); border-radius: var(--r-md); overflow: hidden; }
+.cal-day-head { background: var(--bg3); padding: .5rem; text-align: center; font-size: .75rem; font-weight: 600; color: var(--t3); }
+.cal-day { background: var(--bg2); min-height: 80px; padding: .5rem; font-size: .75rem; color: var(--t2); }
+.cal-day.empty { background: var(--bg3); }
+.cal-day.today { background: var(--c-pri-l); color: var(--c-pri); font-weight: 700; }
+.cal-event { background: var(--c-pri); color: white; padding: 2px 4px; border-radius: 2px; font-size: 10px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   </style>
 </head>
 
@@ -1796,6 +1861,16 @@
         <div class="content-box" id="app"></div>
       </main>
     </div>
+    <div class="cmd-palette" id="cmdPalette">
+  <input type="text" class="cmd-input" placeholder="Search pages..." id="cmdInput" autocomplete="off">
+  <div id="cmdResults" style="max-height: 300px; overflow-y: auto;">
+    <div class="cmd-item" onclick="go('/')"><span class="material-symbols-outlined">grid_view</span>Dashboard</div>
+    <div class="cmd-item" onclick="go('/appointments')"><span class="material-symbols-outlined">calendar_month</span>Appointments</div>
+    <div class="cmd-item" onclick="go('/records')"><span class="material-symbols-outlined">folder_open</span>Records</div>
+    <div class="cmd-item" onclick="go('/messages')"><span class="material-symbols-outlined">chat_bubble</span>Messages</div>
+    <div class="cmd-item" onclick="go('/settings')"><span class="material-symbols-outlined">settings</span>Settings</div>
+  </div>
+</div>
   </div>
 
   <!-- Notification Modal -->
@@ -2071,108 +2146,158 @@
 
     const docAvatars = { 'Dr. Sarah Jenkins': 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=80&h=80&fit=crop&crop=face', 'Dr. Mark Lee': 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=80&h=80&fit=crop&crop=face', 'Dr. Emily Chen': 'https://images.unsplash.com/photo-1594824476967-48c8b964ac31?w=80&h=80&fit=crop&crop=face', 'Dr. James Wilson': 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=80&h=80&fit=crop&crop=face', 'Dr. Richard Lee': 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=80&h=80&fit=crop&crop=face' };
 
-    const V = {};
+    // ================= VISTAS ACTUALIZADAS =================
+const V = {};
 
-    V['/'] = () => {
-      const appts = DB.get('appointments', []).filter(a => a.status !== 'cancelled').sort((a, b) => a.date.localeCompare(b.date));
-      const next = appts[0];
-      const isToday = next && next.date === new Date().toISOString().split('T')[0];
-      return `
-<div class="page-header"><div><h1 class="page-title">Good Morning, ${DB.get('user', {}).firstName || 'Sarah'}</h1><p class="page-sub"><span class="material-symbols-outlined" style="font-size:18px">calendar_today</span>${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' })}</p></div><button class="btn btn-primary" onclick="openApptModal()"><span class="material-symbols-outlined">add</span>Book New Appointment</button></div>
-<div class="dash-grid"><div class="dash-main">
-  <section><div class="sec-header"><h2 class="sec-title">Next Appointment</h2><a class="sec-link" href="#/appointments">View all</a></div>
-  ${next ? `<div class="card card-hover"><div class="collapsible-header" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('collapsed')"><h3 style="font-size:1rem;font-weight:600;color:var(--t1)">${next.doctor} • ${isToday ? 'Today' : fmtDate(next.date)}</h3><span class="material-symbols-outlined collapsible-chevron">expand_more</span></div><div class="collapsible-body"><div class="appt-card"><div class="appt-doc"><div class="avatar avatar-xl" style="background-image:url('${docAvatars[next.doctor] || ''}')"></div><div class="appt-vid"><span class="material-symbols-outlined">videocam</span></div></div><div class="appt-info"><div><h3 class="appt-name">${next.doctor}</h3><p class="appt-spec">${next.specialty}</p></div><div class="appt-meta"><div class="appt-meta-item"><span class="material-symbols-outlined">schedule</span>${fmtTime(next.time)}</div><div class="appt-meta-item"><span class="material-symbols-outlined">calendar_month</span>${isToday ? 'Today' : fmtDate(next.date)}</div></div></div><div style="width:100%"><button class="btn btn-secondary btn-full" onclick="notyf.success('Joining video call...')"><span class="material-symbols-outlined">videocam</span>Join Video Call</button></div></div></div></div>` : '<div class="card card-body" style="text-align:center;padding:2rem;color:var(--t3)"><span class="material-symbols-outlined" style="font-size:40px;margin-bottom:.5rem">event_available</span><p>No upcoming appointments</p></div>'}
-  </section>
-  <section><h2 class="sec-title">Recent Activity</h2><div class="card"><div class="act-list">
-    <div class="act-item" onclick="go('/records')"><div class="act-icon act-icon-blue"><span class="material-symbols-outlined">biotech</span></div><div class="act-content"><div class="act-header"><span class="act-title">Lab Results Available</span><span class="act-time">2 hrs ago</span></div><p class="act-desc">Comprehensive Metabolic Panel (CMP)</p></div></div>
-    <div class="act-item" onclick="go('/records')"><div class="act-icon act-icon-green"><span class="material-symbols-outlined">prescriptions</span></div><div class="act-content"><div class="act-header"><span class="act-title">Prescription Refilled</span><span class="act-time">Yesterday</span></div><p class="act-desc">Atorvastatin 20mg sent to CVS Pharmacy</p></div></div>
-    <div class="act-item"><div class="act-icon act-icon-orange"><span class="material-symbols-outlined">check_circle</span></div><div class="act-content"><div class="act-header"><span class="act-title">Appointment Confirmed</span><span class="act-time">Oct 21</span></div><p class="act-desc">With Dr. Sarah Jenning for Annual Physical</p></div></div>
-  </div><div class="act-footer"><button onclick="go('/records')">View Full History</button></div></div></section>
-</div><div class="dash-side">
-  <section><div class="sec-header"><h2 class="sec-title">Vitals</h2><span class="badge" style="font-size:11px;background:var(--bg3);color:var(--t3);border:1px solid var(--b1)">Today</span></div>
-  <div class="card vital-card"><div class="vital-bg" style="color:var(--c-err)"><span class="material-symbols-outlined">favorite</span></div><div class="vital-head"><div class="vital-icon" style="background:var(--c-err-l);color:var(--c-err)"><span class="material-symbols-outlined">favorite</span></div><span class="vital-label">Heart Rate</span></div><div class="vital-val">72 <span class="vital-unit">bpm</span><span class="vital-change vital-down"><span class="material-symbols-outlined" style="font-size:14px">arrow_drop_down</span>2%</span></div><div class="vital-bar"><div class="vital-bar-fill" style="width:60%;background:var(--c-err)"></div></div></div>
-  <div class="card vital-card" style="margin-top:1rem"><div class="vital-bg" style="color:var(--c-pri)"><span class="material-symbols-outlined">monitor_heart</span></div><div class="vital-head"><div class="vital-icon" style="background:var(--c-info-l);color:var(--c-pri)"><span class="material-symbols-outlined">monitor_heart</span></div><span class="vital-label">Blood Pressure</span></div><div class="vital-val">120/80 <span class="vital-unit">mmHg</span></div><div class="vital-status"><span class="vital-dot"></span><span class="vital-status-txt">Normal status</span></div></div>
-  </section>
-  <section><h2 class="sec-title">Quick Actions</h2><div class="card" style="padding:1rem"><div style="display:flex;flex-direction:column;gap:.75rem">
-    <button class="qa" onclick="notyf.success('Refill request sent')"><div class="qa-left"><span class="material-symbols-outlined">medication</span><span class="qa-text">Request Refill</span></div><span class="material-symbols-outlined chevron">chevron_right</span></button>
-    <button class="qa" onclick="openMsgModal()"><div class="qa-left"><span class="material-symbols-outlined">mail</span><span class="qa-text">Message Doctor</span></div><span class="material-symbols-outlined chevron">chevron_right</span></button>
-    <button class="qa" onclick="go('/records')"><div class="qa-left"><span class="material-symbols-outlined">description</span><span class="qa-text">Download Records</span></div><span class="material-symbols-outlined chevron">chevron_right</span></button>
-    <button class="qa" onclick="notyf.info('Billing coming soon')"><div class="qa-left"><span class="material-symbols-outlined">payments</span><span class="qa-text">Pay Bill</span></div><span class="material-symbols-outlined chevron">chevron_right</span></button>
-  </div></div></section>
-</div></div>`;
-    };
+// 1. HOME (Saludo dinámico y Sparklines)
+V['/'] = () => {
+  const u = DB.get('user', {}); const appts = DB.get('appointments', []).filter(a => a.status !== 'cancelled').sort((a, b) => a.date.localeCompare(b.date));
+  const next = appts[0]; const isToday = next && next.date === new Date().toISOString().split('T')[0];
+  const hr = new Date().getHours(); const greet = hr < 12 ? 'Good Morning' : hr < 18 ? 'Good Afternoon' : 'Good Evening';
+  return `<div class="page-header"><div><h1 class="page-title">${greet}, ${u.firstName || 'User'}</h1><p class="page-sub"><span class="material-symbols-outlined" style="font-size:18px">calendar_today</span>${new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}</p></div><button class="btn btn-primary" onclick="openApptModal()"><span class="material-symbols-outlined">add</span>Book Appointment</button></div>
+  <div class="dash-grid"><div class="dash-main">
+    <section><div class="sec-header"><h2 class="sec-title">Next Appointment</h2><a class="sec-link" href="#/appointments">View all</a></div>
+    ${next ? `<div class="card card-hover"><div class="card-body"><div class="appt-card"><div class="appt-doc"><div class="avatar avatar-xl" style="background-image:url('${docAvatars[next.doctor] || ''}')"></div><div class="appt-vid"><span class="material-symbols-outlined">videocam</span></div></div><div class="appt-info"><div><h3 class="appt-name">${next.doctor}</h3><p class="appt-spec">${next.specialty}</p></div><div class="appt-meta"><div class="appt-meta-item"><span class="material-symbols-outlined">schedule</span>${fmtTime(next.time)}</div><div class="appt-meta-item"><span class="material-symbols-outlined">calendar_month</span>${isToday ? 'Today' : fmtDate(next.date)}</div></div></div><div style="width:100%"><button class="btn btn-secondary btn-full" onclick="notyf.success('Joining call...')"><span class="material-symbols-outlined">videocam</span>Join Call</button></div></div></div></div>` : '<div class="card card-body" style="text-align:center;color:var(--t3)">No appointments</div>'}
+    </section>
+    <section><h2 class="sec-title">Vitals</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+      <div class="card vital-card"><div class="vital-head"><div class="vital-icon" style="background:var(--c-err-l);color:var(--c-err)"><span class="material-symbols-outlined">favorite</span></div><span class="vital-label">Heart Rate</span></div><div class="vital-val">72 <span class="vital-unit">bpm</span></div><svg viewBox="0 0 100 20" style="width:100%;height:30px;margin-top:.5rem"><polyline fill="none" stroke="var(--c-err)" stroke-width="1.5" points="0,15 10,15 15,5 20,18 25,10 35,15 45,15 50,5 55,18 60,10 70,15 80,15 85,5 90,18 95,10 100,15" /></svg></div>
+      <div class="card vital-card"><div class="vital-head"><div class="vital-icon" style="background:var(--c-info-l);color:var(--c-pri)"><span class="material-symbols-outlined">monitor_heart</span></div><span class="vital-label">Blood Pressure</span></div><div class="vital-val">120/80 <span class="vital-unit">mmHg</span></div><div class="vital-status" style="margin-top:1.4rem"><span class="vital-dot"></span><span class="vital-status-txt">Normal</span></div></div>
+    </div></section>
+  </div></div>`;
+};
 
-    V['/appointments'] = () => {
-      const list = DB.get('appointments', []).filter(a => a.status !== 'cancelled');
-      return `
-<div class="page-header"><div><h1 class="page-title">My Appointments</h1><p class="page-sub" style="color:var(--t2)">View and manage your scheduled visits.</p></div><button class="btn btn-primary" onclick="openApptModal()"><span class="material-symbols-outlined">add</span>Book New Appointment</button></div>
-<div style="display:flex;flex-direction:column;gap:1.5rem;margin-bottom:1.5rem">
-  <div class="tabs"><a class="tab active" href="#">Upcoming</a><a class="tab" href="#">History</a><a class="tab" href="#">Canceled</a></div>
-  <div class="filter-bar"><div class="filter-input" style="flex:1;max-width:280px"><span class="material-symbols-outlined">search</span><input type="text" placeholder="Search doctor..." id="apptSearch"></div></div>
-</div>
-<div class="card"><div class="table-wrap"><table class="dtable" id="apptTable"><thead><tr><th>Doctor</th><th>Specialty</th><th>Date & Time</th><th>Status</th><th style="text-align:right">Actions</th></tr></thead><tbody>
- ${list.map(a => `<tr><td><div class="tbl-doc"><div class="avatar" style="background-image:url('${docAvatars[a.doctor] || ''}')"></div><div><span class="tbl-doc-name">${a.doctor}</span><span class="tbl-doc-spec-m">${a.specialty}</span></div></div></td><td>${a.specialty}</td><td><div class="tbl-date"><span class="tbl-date-time">${fmtDate(a.date)}</span><span class="tbl-date-date">${fmtTime(a.time)}</span></div></td><td><span class="badge ${a.status === 'confirmed' ? 'badge-primary' : 'badge-warning'}"><span class="material-symbols-outlined" style="font-size:14px">${a.status === 'confirmed' ? 'check_circle' : 'schedule'}</span>${a.status === 'confirmed' ? 'Confirmed' : 'Pending'}</span></td><td class="tbl-actions"><button class="tbl-act-btn" onclick="openApptModal('${a.id}')" title="Edit"><span class="material-symbols-outlined" style="font-size:20px">edit</span></button><button class="tbl-act-btn" onclick="deleteAppt('${a.id}')" title="Cancel"><span class="material-symbols-outlined" style="font-size:20px">cancel</span></button></td></tr>`).join('')}
- ${!list.length ? '<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--t3)">No appointments found</td></tr>' : ''}
-</tbody></table></div>
-<div class="tbl-pag"><p class="tbl-pag-info">Showing <strong>${list.length}</strong> result${list.length !== 1 ? 's' : ''}</p></div></div>`;
-    };
+// 2. APPOINTMENTS (Botón vista calendario y Acciones rápidas)
+V['/appointments'] = () => {
+  const list = DB.get('appointments', []).filter(a => a.status !== 'cancelled');
+  return `<div class="page-header"><div><h1 class="page-title">Appointments</h1><p class="page-sub" style="color:var(--t2)">Manage visits.</p></div><div style="display:flex;gap:.5rem"><button class="btn btn-secondary btn-sm" onclick="toggleCalView()"><span class="material-symbols-outlined" style="font-size:18px">calendar_month</span>Calendar</button><button class="btn btn-primary" onclick="openApptModal()"><span class="material-symbols-outlined">add</span>New</button></div></div>
+  <div class="card"><div class="table-wrap"><table class="dtable"><thead><tr><th>Doctor</th><th>Type</th><th>Date</th><th>Status</th><th style="text-align:right">Actions</th></tr></thead><tbody>
+  ${list.map(a => `<tr><td><div class="tbl-doc"><div class="avatar" style="background-image:url('${docAvatars[a.doctor] || ''}')"></div><div><span class="tbl-doc-name">${a.doctor}</span><span class="tbl-doc-spec-m">${a.specialty}</span></div></div></td><td><span class="material-symbols-outlined" style="color:var(--c-pri);vertical-align:middle">videocam</span> Video</td><td><div class="tbl-date"><span class="tbl-date-time">${fmtDate(a.date)}</span><span class="tbl-date-date">${fmtTime(a.time)}</span></div></td><td><span class="badge ${a.status === 'confirmed' ? 'badge-primary' : 'badge-warning'}">${a.status}</span></td><td class="tbl-actions"><button class="tbl-act-btn" onclick="openApptModal('${a.id}')" title="Edit"><span class="material-symbols-outlined" style="font-size:20px">edit</span></button><button class="tbl-act-btn" onclick="deleteAppt('${a.id}')" title="Cancel"><span class="material-symbols-outlined" style="font-size:20px">cancel</span></button></td></tr>`).join('')}
+  </tbody></table></div></div>
+  <div id="calViewModal" class="modal-overlay"><div class="modal modal-lg"><div class="modal-head"><span class="modal-title">Calendar View</span><button class="modal-close" onclick="closeModal('calViewModal')"><span class="material-symbols-outlined">close</span></button></div><div class="modal-body"><div class="cal-grid"><div class="cal-day-head">Sun</div><div class="cal-day-head">Mon</div><div class="cal-day-head">Tue</div><div class="cal-day-head">Wed</div><div class="cal-day-head">Thu</div><div class="cal-day-head">Fri</div><div class="cal-day-head">Sat</div>${generateCalendarDays(list)}</div></div></div></div>`;
+};
+function toggleCalView() { openModal('calViewModal'); }
+function generateCalendarDays(appts) {
+  const today = new Date(); const y = today.getFullYear(); const m = today.getMonth();
+  const firstDay = new Date(y, m, 1).getDay(); const daysInMonth = new Date(y, m + 1, 0).getDate();
+  let html = ''; for(let i=0; i<firstDay; i++) html += '<div class="cal-day empty"></div>';
+  for(let d=1; d<=daysInMonth; d++) {
+    const dateStr = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const dayAppts = appts.filter(a => a.date === dateStr);
+    html += `<div class="cal-day ${d === today.getDate() ? 'today' : ''}">${d}${dayAppts.map(a => `<div class="cal-event">${fmtTime(a.time)} ${a.doctor.split(' ').pop()}</div>`).join('')}</div>`;
+  }
+  return html;
+}
 
-    V['/records'] = () => {
-      const list = DB.get('records', []);
-      const stats = { total: list.length, lab: list.filter(r => r.type === 'Lab Results').length, rx: list.filter(r => r.type === 'Prescription').length, img: list.filter(r => r.type === 'Imaging').length };
-      const typeIcons = { 'Lab Results': 'biotech', 'Prescription': 'prescriptions', 'Imaging': 'image', 'Clinical Note': 'description', 'Other': 'folder' };
-      const typeColors = { 'Lab Results': 'act-icon-blue', 'Prescription': 'act-icon-green', 'Imaging': 'act-icon-orange', 'Clinical Note': 'act-icon-blue', 'Other': 'act-icon-orange' };
-      return `
-<div class="page-header"><div><h1 class="page-title">Medical Records</h1><p class="page-sub" style="color:var(--t2)">Access your health documents and lab results.</p></div><button class="btn btn-primary" onclick="openRecModal()"><span class="material-symbols-outlined">upload</span>Upload Document</button></div>
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:2rem">
-  <div class="card stat-card"><div class="stat-head"><div class="vital-icon" style="background:var(--c-info-l);color:var(--c-info)"><span class="material-symbols-outlined">description</span></div><span class="vital-label">Total</span></div><span class="stat-val">${stats.total}</span></div>
-  <div class="card stat-card"><div class="stat-head"><div class="vital-icon" style="background:var(--c-ok-l);color:var(--c-ok)"><span class="material-symbols-outlined">biotech</span></div><span class="vital-label">Labs</span></div><span class="stat-val">${stats.lab}</span></div>
-  <div class="card stat-card"><div class="stat-head"><div class="vital-icon" style="background:var(--c-warn-l);color:var(--c-warn)"><span class="material-symbols-outlined">prescriptions</span></div><span class="vital-label">Prescriptions</span></div><span class="stat-val">${stats.rx}</span></div>
-  <div class="card stat-card"><div class="stat-head"><div class="vital-icon" style="background:var(--c-err-l);color:var(--c-err)"><span class="material-symbols-outlined">image</span></div><span class="vital-label">Imaging</span></div><span class="stat-val">${stats.img}</span></div>
-</div>
-<div class="filter-bar" style="margin-bottom:1.5rem;max-width:400px"><div class="filter-input" style="flex:1"><span class="material-symbols-outlined">search</span><input type="text" placeholder="Search records..." id="recSearch"></div></div>
-<div class="card"><div class="act-list" id="recList">
- ${list.map(r => `<div class="act-item"><div class="act-icon ${typeColors[r.type] || 'act-icon-blue'}"><span class="material-symbols-outlined">${typeIcons[r.type] || 'description'}</span></div><div class="act-content"><div class="act-header"><span class="act-title">${r.title}</span><span class="act-time">${fmtDate(r.date)}</span></div><p class="act-desc">${r.type} • ${r.doctor}</p></div><button class="btn btn-sm btn-ghost" style="flex-shrink:0" onclick="event.stopPropagation();notyf.success('Downloading...')"><span class="material-symbols-outlined" style="font-size:18px">download</span></button><button class="tbl-act-btn" style="flex-shrink:0" onclick="event.stopPropagation();deleteRec('${r.id}')"><span class="material-symbols-outlined" style="font-size:20px">delete</span></button></div>`).join('')}
- ${!list.length ? '<div class="empty-state" style="padding:2rem"><p style="color:var(--t3)">No records yet</p></div>' : ''}
-</div></div>`;
-    };
-
-    V['/messages'] = () => {
-      const list = DB.get('messages', []);
-      const unread = list.filter(m => !m.read && !m.sent).length;
-      return `
-<div class="page-header"><div><h1 class="page-title">Messages</h1><p class="page-sub" style="color:var(--t2)">Communicate with your healthcare team.</p></div><button class="btn btn-primary" onclick="openMsgModal()"><span class="material-symbols-outlined">edit</span>New Message</button></div>
-<div class="card" style="overflow:hidden">
-  <div style="padding:1rem 1.5rem;border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between"><span style="font-size:.875rem;color:var(--t2)"><strong style="color:var(--t1)">${unread}</strong> unread message${unread !== 1 ? 's' : ''}</span><button class="btn btn-sm btn-ghost" onclick="DB.set('messages',DB.get('messages',[]).map(m=>({...m,read:true}));updateMsgBadge();render();notyf.success('All marked as read')">Mark all read</button></div>
-  <div style="min-height:400px">
- ${list.map(m => `<div class="act-item" style="${!m.read && !m.sent ? 'background:var(--c-pri-l)' : ''};cursor:pointer" onclick="markMsgRead('${m.id}')"><div class="avatar" style="background-image:url('${docAvatars[m.from] || ''}');position:relative">${!m.read && !m.sent ? '<span style="position:absolute;top:-2px;right:-2px;width:10px;height:10px;background:var(--c-pri);border-radius:50%;border:2px solid var(--c-pri-l)"></span>' : ''}</div><div class="act-content"><div class="act-header"><div style="display:flex;align-items:center;gap:.5rem"><span class="act-title" style="${!m.read && !m.sent ? 'font-weight:600' : ''}">${m.from}</span>${m.sent ? '<span class="badge badge-success" style="font-size:10px;padding:1px 6px">Sent</span>' : (!m.read ? '<span class="badge badge-primary" style="font-size:10px;padding:1px 6px">New</span>' : '')}</div><span class="act-time">${timeAgo(m.date)}</span></div><p class="act-desc" style="${!m.read && !m.sent ? 'font-weight:500;color:var(--t1)' : ''}">${m.subject}</p><p class="act-desc" style="font-size:.8rem;margin-top:2px">${m.body.substring(0, 80)}${m.body.length > 80 ? '...' : ''}</p></div><div style="display:flex;flex-direction:column;gap:.25rem;flex-shrink:0"><button class="tbl-act-btn" onclick="event.stopPropagation();openMsgModal('${m.id}')" title="Reply"><span class="material-symbols-outlined" style="font-size:20px">reply</span></button><button class="tbl-act-btn" onclick="event.stopPropagation();deleteMsg('${m.id}')" title="Delete"><span class="material-symbols-outlined" style="font-size:20px">delete</span></button></div></div>`).join('')}
- ${!list.length ? '<div class="empty-state" style="padding:2rem"><div class="empty-icon" style="width:48px;height:48px;margin-bottom:.75rem"><span class="material-symbols-outlined" style="font-size:24px">chat_bubble</span></div><p style="color:var(--t3)">No messages</p></div>' : ''}
-  </div>
-</div>`;
-    };
-
-    V['/settings'] = () => {
-      const u = DB.get('user', {});
-      return `
-<div class="page-header"><div><h1 class="page-title">Settings</h1><p class="page-sub" style="color:var(--t2)">Manage your account preferences.</p></div></div>
-<div style="display:flex;flex-direction:column;gap:1.5rem;max-width:700px">
-  <div class="card"><div class="card-body"><h3 style="font-size:18px;font-weight:600;margin-bottom:1.5rem">Appearance</h3>
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:1rem 0;border-bottom:1px solid var(--b1)"><div><p style="font-weight:500">Dark Mode</p><p style="font-size:14px;color:var(--t2)">Toggle between light and dark themes</p></div><button class="btn btn-secondary btn-sm" id="setThemeBtn" onclick="Theme.toggle();initSettingsTheme()"><span class="material-symbols-outlined" style="font-size:18px">${Theme.current === 'dark' ? 'light_mode' : 'dark_mode'}</span><span class="theme-lbl">${Theme.current === 'dark' ? 'Disable' : 'Enable'} Dark Mode</span></button></div>
+// 3. RECORDS (Chips, Iconos y Preview Modal)
+V['/records'] = () => {
+  const list = DB.get('records', []);
+  const typeIcons = { 'Lab Results': 'biotech', 'Prescription': 'prescriptions', 'Imaging': 'image', 'Clinical Note': 'description', 'Other': 'folder' };
+  const typeColors = { 'Lab Results': 'act-icon-blue', 'Prescription': 'act-icon-green', 'Imaging': 'act-icon-orange', 'Clinical Note': 'act-icon-blue', 'Other': 'act-icon-orange' };
+  return `<div class="page-header"><div><h1 class="page-title">Records</h1></div><button class="btn btn-primary" onclick="openRecModal()"><span class="material-symbols-outlined">upload</span>Upload</button></div>
+  <div class="chips-bar"><button class="chip active" onclick="filterRecs(this,'')">All</button><button class="chip" onclick="filterRecs(this,'Lab Results')">Labs</button><button class="chip" onclick="filterRecs(this,'Prescription')">Rx</button><button class="chip" onclick="filterRecs(this,'Imaging')">Imaging</button></div>
+  <div class="card"><div class="act-list" id="recList">
+  ${list.map(r => `<div class="act-item" data-type="${r.type}" onclick="previewRec('${r.id}')"><div class="act-icon ${typeColors[r.type] || 'act-icon-blue'}"><span class="material-symbols-outlined">${typeIcons[r.type] || 'description'}</span></div><div class="act-content"><div class="act-header"><span class="act-title">${r.title}</span><span class="act-time">${fmtDate(r.date)}</span></div><p class="act-desc">${r.type} • ${r.doctor}</p></div><button class="tbl-act-btn" onclick="event.stopPropagation();deleteRec('${r.id}')"><span class="material-symbols-outlined" style="font-size:20px">delete</span></button></div>`).join('')}
   </div></div>
-  <div class="card"><div class="card-body"><h3 style="font-size:18px;font-weight:600;margin-bottom:1.5rem">Notifications</h3>
-    <div style="display:flex;flex-direction:column;gap:1rem">
-      <label class="checkbox-wrapper"><input type="checkbox" class="checkbox-input" checked><span style="font-size:.875rem;color:var(--t2)"><span style="font-weight:500;color:var(--t1);display:block">Email Notifications</span><span style="font-size:13px;color:var(--t3)">Appointment reminders via email</span></span></label>
-      <label class="checkbox-wrapper"><input type="checkbox" class="checkbox-input" checked><span style="font-size:.875rem;color:var(--t2)"><span style="font-weight:500;color:var(--t1);display:block">SMS Notifications</span><span style="font-size:13px;color:var(--t3)">Text messages for urgent alerts</span></span></label>
+  <div id="recPreviewModal" class="modal-overlay"><div class="modal modal-lg"><div class="modal-head"><span class="modal-title" id="prevTitle">Preview</span><button class="modal-close" onclick="closeModal('recPreviewModal')"><span class="material-symbols-outlined">close</span></button></div><div class="modal-body" id="prevBody" style="min-height:300px;display:flex;align-items:center;justify-content:center;background:var(--bg3);color:var(--t3);flex-direction:column;gap:1rem"><span class="material-symbols-outlined" style="font-size:48px">description</span><p>Mock Preview: Document content would appear here.</p></div></div></div>`;
+};
+function filterRecs(btn, type) {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active')); btn.classList.add('active');
+  document.querySelectorAll('#recList .act-item').forEach(item => { item.style.display = (!type || item.dataset.type === type) ? '' : 'none'; });
+}
+function previewRec(id) {
+  const r = DB.get('records', []).find(x => x.id === id); if(!r) return;
+  document.getElementById('prevTitle').textContent = r.title;
+  document.getElementById('prevBody').innerHTML = `<span class="material-symbols-outlined" style="font-size:48px;color:var(--c-pri)">description</span><h3>${r.title}</h3><p>${r.type} • ${r.doctor}</p><p style="font-size:.875rem;max-width:400px;text-align:center">${r.notes || 'No additional notes.'}</p>`;
+  openModal('recPreviewModal');
+}
+
+// 4. MESSAGES (Layout 2 paneles, Burbujas y Búsqueda)
+V['/messages'] = () => {
+  const list = DB.get('messages', []);
+  window.currentMsgId = list[0]?.id || null;
+  return `<div class="page-header"><div><h1 class="page-title">Messages</h1></div><button class="btn btn-primary" onclick="openMsgModal()"><span class="material-symbols-outlined">edit</span>New</button></div>
+  <div class="chat-layout" id="chatLayout">
+    <div class="chat-sidebar">
+      <div style="padding:1rem;border-bottom:1px solid var(--b1)"><div class="filter-input" style="margin:0"><span class="material-symbols-outlined">search</span><input type="text" placeholder="Search chats..." oninput="filterChats(this.value)"></div></div>
+      <div id="chatList">${list.map(m => `<div class="act-item" style="cursor:pointer" onclick="openChat('${m.id}')"><div class="avatar" style="background-image:url('${docAvatars[m.from] || ''}')"></div><div class="act-content"><div class="act-header"><span class="act-title" style="font-size:.8125rem">${m.from}</span><span class="act-time">${timeAgo(m.date)}</span></div><p class="act-desc" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${m.subject}</p></div></div>`).join('')}</div>
     </div>
-  </div></div>
-  <div class="card" style="border-color:var(--c-err)"><div class="card-body">
-    <h3 style="font-size:18px;font-weight:600;color:var(--c-err);margin-bottom:.5rem">Danger Zone</h3>
-    <p style="font-size:14px;color:var(--t2);margin-bottom:1rem">Irreversible actions.</p>
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:1rem;background:var(--c-err-l);border-radius:var(--r-md)"><div><p style="font-weight:500">Clear All Data</p><p style="font-size:13px;color:var(--t2)">Reset all data to defaults</p></div><button class="btn btn-sm btn-danger" onclick="showConfirm('Reset Data','This will delete all your appointments, messages, records, and notifications. Continue?',()=>{Object.keys(localStorage).filter(k=>k.startsWith('pt_')).forEach(k=>localStorage.removeItem(k));initDefaults();notyf.success('Data reset successfully');render()})"><span class="material-symbols-outlined" style="font-size:18px">delete_sweep</span>Reset</button></div>
-  </div></div>
-</div>`;
-    };
-    function initSettingsTheme() { const b = document.getElementById('setThemeBtn'); if (!b) return; const i = b.querySelector('.material-symbols-outlined'); const l = b.querySelector('.theme-lbl'); if (i) i.textContent = Theme.current === 'dark' ? 'light_mode' : 'dark_mode'; if (l) l.textContent = (Theme.current === 'dark' ? 'Disable' : 'Enable') + ' Dark Mode'; }
+    <div class="chat-main" id="chatMain"></div>
+  </div>`;
+};
+function filterChats(q) {
+  document.querySelectorAll('#chatList .act-item').forEach(item => { item.style.display = item.textContent.toLowerCase().includes(q.toLowerCase()) ? '' : 'none'; });
+}
+function openChat(id) {
+  const m = DB.get('messages', []).find(x => x.id === id); if(!m) return;
+  if(!m.read) { m.read = true; DB.set('messages', DB.get('messages', [])); updateMsgBadge(); }
+  document.getElementById('chatMain').innerHTML = `
+    <div class="chat-header"><div class="avatar" style="background-image:url('${docAvatars[m.from] || ''}')"></div><div><div style="font-weight:600;color:var(--t1)">${m.from}</div><div style="font-size:.75rem;color:var(--t3)">${m.subject}</div></div></div>
+    <div class="chat-messages"><div class="chat-bubble them">${m.body}</div><div class="chat-bubble me">Thank you, I'll review this shortly.</div></div>
+    <div class="chat-input-area"><input type="text" class="form-input" placeholder="Type a message..." style="flex:1" onkeydown="if(event.key==='Enter')sendMockReply()"><button class="btn btn-primary" onclick="sendMockReply()"><span class="material-symbols-outlined">send</span></button></div>`;
+}
+function sendMockReply() { notyf.success('Message sent (mock)'); }
+
+// 5. SETTINGS (Pestañas verticales y Toggle Switches)
+V['/settings'] = () => {
+  const u = DB.get('user', {});
+  return `<div class="page-header"><div><h1 class="page-title">Settings</h1></div></div>
+  <div class="settings-layout">
+    <div class="settings-nav">
+      <div class="settings-nav-item active" onclick="switchTab(this,'tab-profile')">Profile</div>
+      <div class="settings-nav-item" onclick="switchTab(this,'tab-security')">Security</div>
+      <div class="settings-nav-item" onclick="switchTab(this,'tab-notif')">Notifications</div>
+    </div>
+    <div class="settings-content">
+      <div id="tab-profile" class="settings-tab">
+        <div class="card card-body" style="margin-bottom:1.5rem">
+          <div style="display:flex;align-items:center;gap:1.5rem;margin-bottom:1.5rem">
+            <div class="avatar-xl" id="setAvatar" style="background-image:url('${u.avatar || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&fit=crop&crop=face'}')"></div>
+            <div><label class="btn btn-secondary btn-sm"><span class="material-symbols-outlined" style="font-size:18px">photo_camera</span>Change<input type="file" accept="image/*" onchange="previewAvatar(event)" style="display:none"></label><p class="form-hint" style="margin-top:.5rem">JPG or PNG.</p></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem"><div class="form-group"><label class="form-label">First Name</label><input class="form-input" value="${u.firstName || ''}"></div><div class="form-group"><label class="form-label">Last Name</label><input class="form-input" value="${u.lastName || ''}"></div></div>
+        </div>
+      </div>
+      <div id="tab-security" class="settings-tab" style="display:none">
+        <div class="card card-body">
+          <h3 style="margin-bottom:1rem">Password</h3>
+          <div class="form-group" style="margin-bottom:1rem"><label class="form-label">New Password</label><input type="password" class="form-input"></div>
+          <button class="btn btn-primary" onclick="notyf.success('Password updated')">Update Password</button>
+        </div>
+      </div>
+      <div id="tab-notif" class="settings-tab" style="display:none">
+        <div class="card card-body">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:1rem 0;border-bottom:1px solid var(--b1)"><div><p style="font-weight:500">Email Alerts</p><p class="form-hint">Appointment reminders</p></div><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:1rem 0"><div><p style="font-weight:500">SMS Alerts</p><p class="form-hint">Urgent notifications</p></div><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+};
+function switchTab(el, tabId) {
+  document.querySelectorAll('.settings-nav-item').forEach(i => i.classList.remove('active')); el.classList.add('active');
+  document.querySelectorAll('.settings-tab').forEach(t => t.style.display = 'none'); document.getElementById(tabId).style.display = 'block';
+}
+function previewAvatar(e) {
+  const file = e.target.files[0]; if(!file) return;
+  const reader = new FileReader(); reader.onload = (ev) => { document.getElementById('setAvatar').style.backgroundImage = `url(${ev.target.result})`; notyf.success('Avatar preview updated'); }; reader.readAsDataURL(file);
+}
+
+// ================= HELPERS ACTUALIZADOS =================
+function render() {
+  const hash = window.location.hash.slice(1) || '/';
+  if (!V[hash]) { go('/'); return; }
+  if (curRoute === hash) return;
+  curRoute = hash;
+  document.querySelectorAll('.nav-item[data-route]').forEach(n => n.classList.toggle('active', n.dataset.route === hash));
+  
+  // Skeleton Loader simulado
+  app.innerHTML = `<div style="padding:2rem 0;"><div class="skeleton" style="width:200px;height:28px;margin-bottom:1rem"></div><div class="skeleton" style="width:100px;height:16px;margin-bottom:2rem"></div><div class="skeleton" style="height:200px;border-radius:12px;margin-bottom:1.5rem"></div><div class="skeleton" style="height:300px;border-radius:12px"></div></div>`;
+  
+  setTimeout(() => {
+    app.innerHTML = '<div class="view-container">' + V[hash]() + '</div>';
+    if (hash === '/messages' && window.currentMsgId) openChat(window.currentMsgId);
+  }, 300); // Retraso de 300ms para apreciar el skeleton
+}
 
     let curRoute = null;
     const app = document.getElementById('app');
