@@ -57,6 +57,39 @@ DATA.initDefaults = () => {
     { id: 'm4', from: 'Support Team', subject: 'Welcome to PlannerTime', body: 'Your account has been verified successfully. Welcome!', date: new Date(Date.now() - 604800000).toISOString(), read: true }
   ]);
 
+  DATA.set('medications', [
+    { id: 'med1', name: 'Atorvastatin', dosage: '20mg', frequency: 'Once daily', prescribedBy: 'Dr. Richard Lee', startDate: fmt(addDays(today, -90)), endDate: '', refillsRemaining: 3, pharmacy: 'CVS Pharmacy', active: true },
+    { id: 'med2', name: 'Lisinopril', dosage: '10mg', frequency: 'Once daily', prescribedBy: 'Dr. Richard Lee', startDate: fmt(addDays(today, -180)), endDate: '', refillsRemaining: 1, pharmacy: 'CVS Pharmacy', active: true },
+    { id: 'med3', name: 'Metformin', dosage: '500mg', frequency: 'Twice daily', prescribedBy: 'Dr. Sarah Jenkins', startDate: fmt(addDays(today, -60)), endDate: '', refillsRemaining: 5, pharmacy: 'Walgreens', active: true },
+    { id: 'med4', name: 'Omeprazole', dosage: '20mg', frequency: 'Once daily', prescribedBy: 'Dr. Mark Lee', startDate: fmt(addDays(today, -30)), endDate: fmt(addDays(today, -5)), refillsRemaining: 0, pharmacy: 'CVS Pharmacy', active: false }
+  ]);
+
+  DATA.set('bills', [
+    { id: 'b1', date: fmt(addDays(today, -5)), description: 'Office Visit - Dr. Richard Lee', amount: 150, status: 'pending' },
+    { id: 'b2', date: fmt(addDays(today, -20)), description: 'Lab Work - Comprehensive Panel', amount: 320, status: 'paid', paidDate: fmt(addDays(today, -18)) },
+    { id: 'b3', date: fmt(addDays(today, -45)), description: 'Annual Physical', amount: 200, status: 'paid', paidDate: fmt(addDays(today, -40)) },
+    { id: 'b4', date: fmt(addDays(today, -60)), description: 'Prescription - Atorvastatin', amount: 25, status: 'paid', paidDate: fmt(addDays(today, -55)) }
+  ]);
+
+  DATA.set('conditions', [
+    { id: 'c1', name: 'Hypertension', diagnosedDate: fmt(addDays(today, -365)), status: 'Managed', notes: 'Well-controlled with Lisinopril' },
+    { id: 'c2', name: 'Hypercholesterolemia', diagnosedDate: fmt(addDays(today, -180)), status: 'Managed', notes: 'Responding well to Atorvastatin' },
+    { id: 'c3', name: 'Type 2 Diabetes', diagnosedDate: fmt(addDays(today, -90)), status: 'Monitoring', notes: 'Recent diagnosis, monitoring blood glucose' }
+  ]);
+
+  DATA.set('allergies', [
+    { id: 'al1', name: 'Penicillin', severity: 'Severe', reaction: 'Hives, difficulty breathing' },
+    { id: 'al2', name: 'Sulfa Drugs', severity: 'Moderate', reaction: 'Skin rash' },
+    { id: 'al3', name: 'Peanuts', severity: 'Mild', reaction: 'Minor itching' }
+  ]);
+
+  DATA.set('immunizations', [
+    { id: 'im1', name: 'Influenza (Flu)', date: fmt(addDays(today, -60)), provider: 'CVS Pharmacy' },
+    { id: 'im2', name: 'COVID-19 Booster', date: fmt(addDays(today, -120)), provider: 'PlannerTime Clinic' },
+    { id: 'im3', name: 'Tdap (Tetanus)', date: fmt(addDays(today, -730)), provider: 'PlannerTime Clinic' },
+    { id: 'im4', name: 'Hepatitis B', date: fmt(addDays(today, -1095)), provider: 'PlannerTime Clinic' }
+  ]);
+
   DATA.set('notifications', [
     { id: 'n1', title: 'Appointment Reminder', desc: `You have an appointment with Dr. Richard Lee ${fmt(addDays(today, 1))} at 10:00 AM`, time: new Date(Date.now() - 3600000).toISOString(), read: false },
     { id: 'n2', title: 'Lab Results Available', desc: 'Your Comprehensive Metabolic Panel results are ready to view', time: new Date(Date.now() - 7200000).toISOString(), read: false },

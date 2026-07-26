@@ -1,4 +1,7 @@
 const Utils = {
+  fmtCurrency(n) {
+    return '$' + parseFloat(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  },
   fmtDate(d) {
     return new Date(d + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   },
@@ -61,6 +64,41 @@ const Utils = {
       toast.classList.remove('toast-visible');
       setTimeout(() => toast.remove(), 300);
     }, duration);
+  },
+  initTooltips() {
+    document.querySelectorAll('[data-tip]').forEach(el => {
+      el.addEventListener('mouseenter', function () {
+        let tip = this.nextElementSibling;
+        if (!tip || !tip.classList.contains('tooltip-box')) {
+          tip = document.createElement('div');
+          tip.className = 'tooltip-box';
+          tip.textContent = this.dataset.tip;
+          this.parentNode.style.position = 'relative';
+          this.parentNode.insertBefore(tip, this.nextSibling);
+        }
+        tip.classList.add('visible');
+      });
+      el.addEventListener('mouseleave', function () {
+        const tip = this.nextElementSibling;
+        if (tip && tip.classList.contains('tooltip-box')) tip.classList.remove('visible');
+      });
+    });
+  },
+  animateElement(el, anim = 'fadeIn', duration = 300) {
+    if (!el) return;
+    el.style.animation = 'none';
+    el.offsetHeight;
+    el.style.animation = `${anim} ${duration}ms ease forwards`;
+  },
+  countUp(el, target, duration = 800) {
+    if (!el) return;
+    const start = performance.now();
+    const step = (now) => {
+      const p = Math.min((now - start) / duration, 1);
+      el.textContent = Math.floor(p * target);
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
   },
   trapFocus(e, modalId) {
     const modal = document.getElementById(modalId);

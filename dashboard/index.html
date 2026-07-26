@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" translate="no" data-theme="dark">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google" content="notranslate">
+  <meta http-equiv="Content-Language" content="en">
   <title>PlannerTime Portal</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
@@ -21,7 +23,7 @@
   </script>
 </head>
 
-<body>
+<body class="notranslate">
   <div class="dash-layout">
     <div class="sidebar-ov" id="overlay" aria-hidden="true"></div>
     <aside class="sidebar" id="sidebar" aria-label="Main navigation">
@@ -39,6 +41,10 @@
         <a class="nav-item" href="#/appointments" data-route="/appointments"><span class="material-symbols-outlined" aria-hidden="true">calendar_month</span><span>Appointments</span></a>
         <a class="nav-item" href="#/records" data-route="/records"><span class="material-symbols-outlined" aria-hidden="true">folder_open</span><span>Records</span></a>
         <a class="nav-item" href="#/messages" data-route="/messages"><span class="material-symbols-outlined" aria-hidden="true">chat_bubble</span><span>Messages</span><span class="nav-badge" id="msgBadge" aria-label="Unread messages">2</span></a>
+        <a class="nav-item" href="#/medications" data-route="/medications"><span class="material-symbols-outlined" aria-hidden="true">medication</span><span>Medications</span></a>
+        <a class="nav-item" href="#/billing" data-route="/billing"><span class="material-symbols-outlined" aria-hidden="true">payments</span><span>Billing</span></a>
+        <a class="nav-item" href="#/care-team" data-route="/care-team"><span class="material-symbols-outlined" aria-hidden="true">group</span><span>Care Team</span></a>
+        <a class="nav-item" href="#/health-summary" data-route="/health-summary"><span class="material-symbols-outlined" aria-hidden="true">monitor_heart</span><span>Health Summary</span></a>
         <div class="nav-divider" role="separator"></div>
         <a class="nav-item" href="#/settings" data-route="/settings"><span class="material-symbols-outlined" aria-hidden="true">settings</span><span>Settings</span></a>
       </nav>
@@ -92,6 +98,10 @@
         <div class="cmd-item" role="option" onclick="go('/appointments')"><span class="material-symbols-outlined" aria-hidden="true">calendar_month</span>Appointments</div>
         <div class="cmd-item" role="option" onclick="go('/records')"><span class="material-symbols-outlined" aria-hidden="true">folder_open</span>Records</div>
         <div class="cmd-item" role="option" onclick="go('/messages')"><span class="material-symbols-outlined" aria-hidden="true">chat_bubble</span>Messages</div>
+        <div class="cmd-item" role="option" onclick="go('/medications')"><span class="material-symbols-outlined" aria-hidden="true">medication</span>Medications</div>
+        <div class="cmd-item" role="option" onclick="go('/billing')"><span class="material-symbols-outlined" aria-hidden="true">payments</span>Billing</div>
+        <div class="cmd-item" role="option" onclick="go('/care-team')"><span class="material-symbols-outlined" aria-hidden="true">group</span>Care Team</div>
+        <div class="cmd-item" role="option" onclick="go('/health-summary')"><span class="material-symbols-outlined" aria-hidden="true">monitor_heart</span>Health Summary</div>
         <div class="cmd-item" role="option" onclick="go('/settings')"><span class="material-symbols-outlined" aria-hidden="true">settings</span>Settings</div>
       </div>
     </div>
@@ -624,32 +634,42 @@
       const hr = new Date().getHours();
       const greet = hr < 12 ? 'Good Morning' : hr < 18 ? 'Good Afternoon' : 'Good Evening';
       const recs = DB.get('records', []).slice(0, 3);
+      const meds = DB.get('medications', []).filter(m => m.active);
+      const bills = DB.get('bills', []).filter(b => b.status === 'pending');
+      const unreadMsgs = DB.get('messages', []).filter(m => !m.read && !m.sent).length;
+      const totalDue = bills.reduce((s, b) => s + b.amount, 0);
       return `<div class="page-header">
         <div><h1 class="page-title">${greet}, ${u.firstName || 'User'}</h1>
         <p class="page-sub"><span class="material-symbols-outlined" style="font-size:18px" aria-hidden="true">calendar_today</span>${new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}</p></div>
-        <div style="display:flex;gap:.5rem;flex-wrap:wrap"><button class="btn btn-secondary" onclick="Utils.openModal('refillModal')"><span class="material-symbols-outlined" aria-hidden="true">medication</span>Request Refill</button><button class="btn btn-primary" onclick="openApptModal()"><span class="material-symbols-outlined" aria-hidden="true">add</span>Book Appointment</button></div>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap"><button class="btn btn-secondary" onclick="Utils.openModal('refillModal')" data-tip="Request a prescription refill"><span class="material-symbols-outlined" aria-hidden="true">medication</span>Request Refill</button><button class="btn btn-primary" onclick="openApptModal()" data-tip="Schedule a new appointment"><span class="material-symbols-outlined" aria-hidden="true">add</span>Book Appointment</button></div>
+      </div>
+      <div class="stats-row">
+        <div class="card stat-card glow-hover" onclick="go('/appointments')" data-tip="${appts.length} total appointments"><div class="stat-head"><div class="stat-icon" style="background:var(--c-pri-l);color:var(--c-pri)"><span class="material-symbols-outlined" aria-hidden="true">calendar_month</span></div><span class="stat-label">Upcoming</span></div><div class="stat-num">${appts.length}</div></div>
+        <div class="card stat-card glow-hover" onclick="go('/messages')" data-tip="${unreadMsgs} unread messages"><div class="stat-head"><div class="stat-icon" style="background:var(--c-info-l);color:var(--c-info)"><span class="material-symbols-outlined" aria-hidden="true">chat_bubble</span></div><span class="stat-label">Messages</span></div><div class="stat-num">${unreadMsgs}<span style="font-size:.75rem;color:var(--t3);font-weight:400"> unread</span></div></div>
+        <div class="card stat-card glow-hover" onclick="go('/medications')" data-tip="${meds.length} active medications"><div class="stat-head"><div class="stat-icon" style="background:var(--c-ok-l);color:var(--c-ok)"><span class="material-symbols-outlined" aria-hidden="true">medication</span></div><span class="stat-label">Active Rx</span></div><div class="stat-num">${meds.length}</div></div>
+        <div class="card stat-card glow-hover" onclick="go('/billing')" data-tip="$${totalDue} total due"><div class="stat-head"><div class="stat-icon" style="background:var(--c-warn-l);color:var(--c-warn)"><span class="material-symbols-outlined" aria-hidden="true">payments</span></div><span class="stat-label">Due</span></div><div class="stat-num">${bills.length}</div></div>
       </div>
       <div class="dash-grid"><div class="dash-main">
         <section><div class="sec-header"><h2 class="sec-title">Next Appointment</h2><a class="sec-link" href="#/appointments">View all</a></div>
-        ${next ? `<div class="card card-hover"><div class="card-body"><div class="appt-card"><div class="appt-doc"><div class="avatar avatar-xl" style="background-image:url('${docAvatars[next.doctor] || ''}')" role="img" aria-label="${next.doctor}"></div><div class="appt-vid"><span class="material-symbols-outlined" aria-hidden="true">videocam</span></div></div><div class="appt-info"><div><h3 class="appt-name">${next.doctor}</h3><p class="appt-spec">${next.specialty}</p></div><div class="appt-meta"><div class="appt-meta-item"><span class="material-symbols-outlined" aria-hidden="true">schedule</span>${Utils.fmtTime(next.time)}</div><div class="appt-meta-item"><span class="material-symbols-outlined" aria-hidden="true">calendar_month</span>${Utils.fmtDate(next.date)}</div></div></div><div style="width:100%"><button class="btn btn-secondary btn-full" onclick="notyf.success('Joining call...')"><span class="material-symbols-outlined" aria-hidden="true">videocam</span>Join Call</button></div></div></div></div>` : '<div class="card card-body" style="text-align:center;color:var(--t3)">No upcoming appointments</div>'}
+        ${next ? `<div class="card card-hover glow-hover"><div class="card-body"><div class="appt-card"><div class="appt-doc"><div class="avatar avatar-xl" style="background-image:url('${docAvatars[next.doctor] || ''}')" role="img" aria-label="${next.doctor}"></div><div class="appt-vid"><span class="material-symbols-outlined" aria-hidden="true">videocam</span></div></div><div class="appt-info"><div><h3 class="appt-name">${next.doctor}</h3><p class="appt-spec">${next.specialty}</p></div><div class="appt-meta"><div class="appt-meta-item"><span class="material-symbols-outlined" aria-hidden="true">schedule</span>${Utils.fmtTime(next.time)}</div><div class="appt-meta-item"><span class="material-symbols-outlined" aria-hidden="true">calendar_month</span>${Utils.fmtDate(next.date)}</div></div></div><div style="width:100%"><button class="btn btn-secondary btn-full ripple" onclick="notyf.success('Joining call...')"><span class="material-symbols-outlined" aria-hidden="true">videocam</span>Join Call</button></div></div></div></div>` : '<div class="card card-body" style="text-align:center;color:var(--t3)">No upcoming appointments</div>'}
         </section>
         <section><h2 class="sec-title">Vitals</h2><div class="vitals-grid">
-          <div class="card vital-card"><div class="vital-head"><div class="vital-icon" style="background:var(--c-err-l);color:var(--c-err)"><span class="material-symbols-outlined" aria-hidden="true">favorite</span></div><span class="vital-label">Heart Rate</span></div><div class="vital-val">72 <span class="vital-unit">bpm</span></div><svg viewBox="0 0 100 20" style="width:100%;height:30px;margin-top:.5rem" aria-hidden="true"><polyline fill="none" stroke="var(--c-err)" stroke-width="1.5" points="0,15 10,15 15,5 20,18 25,10 35,15 45,15 50,5 55,18 60,10 70,15 80,15 85,5 90,18 95,10 100,15" /></svg></div>
-          <div class="card vital-card"><div class="vital-head"><div class="vital-icon" style="background:var(--c-info-l);color:var(--c-pri)"><span class="material-symbols-outlined" aria-hidden="true">monitor_heart</span></div><span class="vital-label">Blood Pressure</span></div><div class="vital-val">120/80 <span class="vital-unit">mmHg</span></div><div class="vital-status" style="margin-top:1.4rem"><span class="vital-dot"></span><span class="vital-status-txt">Normal</span></div></div>
+          <div class="card vital-card glow-hover"><div class="vital-head"><div class="vital-icon" style="background:var(--c-err-l);color:var(--c-err)"><span class="material-symbols-outlined" aria-hidden="true">favorite</span></div><span class="vital-label">Heart Rate</span></div><div class="vital-val">72 <span class="vital-unit">bpm</span></div><svg viewBox="0 0 100 20" style="width:100%;height:30px;margin-top:.5rem" aria-hidden="true"><polyline fill="none" stroke="var(--c-err)" stroke-width="1.5" points="0,15 10,15 15,5 20,18 25,10 35,15 45,15 50,5 55,18 60,10 70,15 80,15 85,5 90,18 95,10 100,15" /></svg></div>
+          <div class="card vital-card glow-hover"><div class="vital-head"><div class="vital-icon" style="background:var(--c-info-l);color:var(--c-pri)"><span class="material-symbols-outlined" aria-hidden="true">monitor_heart</span></div><span class="vital-label">Blood Pressure</span></div><div class="vital-val">120/80 <span class="vital-unit">mmHg</span></div><div class="vital-status" style="margin-top:1.4rem"><span class="vital-dot"></span><span class="vital-status-txt">Normal</span></div></div>
         </div></section>
       </div>
       <div class="dash-side">
-        <section><h2 class="sec-title">Quick Actions</h2><div class="qa-list">
-          <button class="qa" onclick="Utils.openModal('refillModal')"><div class="qa-left"><span class="material-symbols-outlined" aria-hidden="true">medication</span><span class="qa-text">Request Refill</span></div><span class="material-symbols-outlined chevron" aria-hidden="true">chevron_right</span></button>
-          <button class="qa" onclick="Utils.openModal('billModal')"><div class="qa-left"><span class="material-symbols-outlined" aria-hidden="true">payments</span><span class="qa-text">Pay Bill</span></div><span class="material-symbols-outlined chevron" aria-hidden="true">chevron_right</span></button>
-          <button class="qa" onclick="openMsgModal()"><div class="qa-left"><span class="material-symbols-outlined" aria-hidden="true">chat_bubble</span><span class="qa-text">New Message</span></div><span class="material-symbols-outlined chevron" aria-hidden="true">chevron_right</span></button>
-          <button class="qa" onclick="go('/records')"><div class="qa-left"><span class="material-symbols-outlined" aria-hidden="true">folder_open</span><span class="qa-text">View Records</span></div><span class="material-symbols-outlined chevron" aria-hidden="true">chevron_right</span></button>
+        <section><h2 class="sec-title">Quick Actions</h2><div class="qa-list stagger">
+          <button class="qa" onclick="Utils.openModal('refillModal')" data-tip="Request a prescription refill"><div class="qa-left"><span class="material-symbols-outlined" aria-hidden="true">medication</span><span class="qa-text">Request Refill</span></div><span class="material-symbols-outlined chevron" aria-hidden="true">chevron_right</span></button>
+          <button class="qa" onclick="Utils.openModal('billModal')" data-tip="Pay your current balance"><div class="qa-left"><span class="material-symbols-outlined" aria-hidden="true">payments</span><span class="qa-text">Pay Bill</span></div><span class="material-symbols-outlined chevron" aria-hidden="true">chevron_right</span></button>
+          <button class="qa" onclick="openMsgModal()" data-tip="Send a new message"><div class="qa-left"><span class="material-symbols-outlined" aria-hidden="true">chat_bubble</span><span class="qa-text">New Message</span></div><span class="material-symbols-outlined chevron" aria-hidden="true">chevron_right</span></button>
+          <button class="qa" onclick="go('/records')" data-tip="View your medical records"><div class="qa-left"><span class="material-symbols-outlined" aria-hidden="true">folder_open</span><span class="qa-text">View Records</span></div><span class="material-symbols-outlined chevron" aria-hidden="true">chevron_right</span></button>
         </div></section>
         <section><div class="sec-header"><h2 class="sec-title">Recent Records</h2><a class="sec-link" href="#/records">View all</a></div>
-        ${recs.length ? recs.map(r => `<div class="act-item" style="cursor:pointer;border:1px solid var(--b1);border-radius:var(--r-md);margin-bottom:.25rem;padding:.75rem" onclick="go('/records')" tabindex="0" role="button"><div class="act-icon act-icon-blue" style="width:32px;height:32px"><span class="material-symbols-outlined" style="font-size:16px" aria-hidden="true">description</span></div><div class="act-content"><div class="act-header"><span class="act-title" style="font-size:.8125rem">${r.title}</span><span class="act-time">${Utils.fmtDate(r.date)}</span></div><p class="act-desc" style="font-size:.75rem">${r.type}</p></div></div>`).join('') : '<div style="color:var(--t3);font-size:.875rem;padding:.5rem 0">No records yet</div>'}
+        ${recs.length ? recs.map(r => `<div class="act-item glow-hover" style="cursor:pointer;border:1px solid var(--b1);border-radius:var(--r-md);margin-bottom:.25rem;padding:.75rem" onclick="go('/records')" tabindex="0" role="button" data-tip="${r.type}"><div class="act-icon act-icon-blue" style="width:32px;height:32px"><span class="material-symbols-outlined" style="font-size:16px" aria-hidden="true">description</span></div><div class="act-content"><div class="act-header"><span class="act-title" style="font-size:.8125rem">${r.title}</span><span class="act-time">${Utils.fmtDate(r.date)}</span></div><p class="act-desc" style="font-size:.75rem">${r.type}</p></div></div>`).join('') : '<div style="color:var(--t3);font-size:.875rem;padding:.5rem 0">No records yet</div>'}
         </section>
-      </div></div>`;
-    };
+      </div></div>
+      <div class="health-insight card card-body" style="margin-top:1.5rem"><div style="display:flex;align-items:center;gap:.75rem"><div class="stat-icon" style="background:var(--c-ok-l);color:var(--c-ok);width:36px;height:36px;border-radius:var(--r-f);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span class="material-symbols-outlined" style="font-size:20px" aria-hidden="true">lightbulb</span></div><div><p style="font-weight:600;color:var(--t1);font-size:.875rem">Health Insight</p><p style="font-size:.8125rem;color:var(--t2);margin-top:2px">Your blood pressure is in the normal range. Keep up with your medication schedule.</p></div></div></div>`;
 
     V['/appointments'] = () => {
       const list = DB.get('appointments', []).filter(a => a.status !== 'cancelled');
@@ -861,6 +881,79 @@
       notyf.success('Password updated');
     }
 
+    // ---- Medications actions ----
+    function stopMed(id) {
+      Utils.showConfirm('Stop Medication', 'Are you sure you want to mark this medication as inactive?', () => {
+        const list = DB.get('medications', []);
+        const m = list.find(x => x.id === id);
+        if (m) { m.active = false; m.endDate = new Date().toISOString().split('T')[0]; DB.set('medications', list); notyf.success('Medication stopped'); render(); }
+      });
+    }
+
+    // ---- Billing actions ----
+    function payBillById(id) {
+      const list = DB.get('bills', []);
+      const b = list.find(x => x.id === id);
+      if (!b) return;
+      b.status = 'paid';
+      b.paidDate = new Date().toISOString().split('T')[0];
+      DB.set('bills', list);
+      notyf.success(`Payment of $${b.amount} for "${b.description}" completed`);
+      addNotification('Payment Made', `$${b.amount} paid for ${b.description}`);
+      render();
+    }
+
+    // ---- NEW MODULE VIEWS ----
+
+    V['/medications'] = () => {
+      const list = DB.get('medications', []);
+      const active = list.filter(m => m.active);
+      const past = list.filter(m => !m.active);
+      return `<div class="page-header"><div><h1 class="page-title">Medications</h1><p class="page-sub">Manage your prescriptions</p></div><button class="btn btn-primary" onclick="Utils.openModal('refillModal')" data-tip="Request a new refill"><span class="material-symbols-outlined" aria-hidden="true">add</span>Request Refill</button></div>
+      <div class="tabs" role="tablist" aria-label="Medication view"><div class="tab active" role="tab" aria-selected="true" onclick="switchMedsTab(this,'active')">Active (${active.length})</div><div class="tab" role="tab" aria-selected="false" onclick="switchMedsTab(this,'past')">Past (${past.length})</div></div>
+      <div class="card" id="medsList">${active.length ? active.map(m => `<div class="med-card stagger"><div class="med-icon"><span class="material-symbols-outlined" aria-hidden="true">medication</span></div><div class="med-info"><div class="med-name">${m.name}</div><div class="med-dose"><span>${m.dosage}</span><span>${m.frequency}</span></div><div class="med-meta">${m.prescribedBy} &middot; ${m.pharmacy}</div></div><div style="text-align:right;flex-shrink:0"><div class="med-refill ${m.refillsRemaining > 1 ? 'ok' : 'low'}"><span class="material-symbols-outlined" style="font-size:14px" aria-hidden="true">refresh</span>${m.refillsRemaining} refill${m.refillsRemaining !== 1 ? 's' : ''}</div><button class="tbl-act-btn" onclick="stopMed('${m.id}')" title="Stop medication" data-tip="Mark as inactive" style="margin-top:.5rem"><span class="material-symbols-outlined" style="font-size:18px" aria-hidden="true">do_not_disturb_on</span></button></div></div>`).join('') : '<div class="card-body" style="text-align:center;color:var(--t3)">No active medications</div>'}${past.length ? `<div style="display:none" id="pastMeds">${past.map(m => `<div class="med-card"><div class="med-icon inactive"><span class="material-symbols-outlined" aria-hidden="true">medication</span></div><div class="med-info"><div class="med-name">${m.name}</div><div class="med-dose"><span>${m.dosage}</span><span>${m.frequency}</span></div><div class="med-meta">${m.prescribedBy} &middot; Ended ${Utils.fmtDate(m.endDate)}</div></div></div>`).join('')}</div>` : ''}</div>`;
+    };
+
+    function switchMedsTab(el, view) {
+      document.querySelectorAll('.tabs .tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
+      el.classList.add('active'); el.setAttribute('aria-selected', 'true');
+      document.querySelectorAll('#medsList .med-card').forEach(c => { c.style.display = ''; });
+      const past = document.getElementById('pastMeds');
+      if (past) past.style.display = view === 'past' ? 'block' : 'none';
+      if (view === 'past') document.querySelectorAll('#medsList .med-card').forEach(c => { if (!c.closest('#pastMeds')) c.style.display = 'none'; });
+    }
+
+    V['/billing'] = () => {
+      const list = DB.get('bills', []);
+      const pending = list.filter(b => b.status === 'pending');
+      const paid = list.filter(b => b.status === 'paid');
+      const totalDue = pending.reduce((s, b) => s + b.amount, 0);
+      const totalPaid = paid.reduce((s, b) => s + b.amount, 0);
+      return `<div class="page-header"><div><h1 class="page-title">Billing</h1><p class="page-sub">Payment history and invoices</p></div></div>
+      <div class="bill-summary">
+        <div class="bill-stat card glow-hover"><div class="bill-stat-label">Total Due</div><div class="bill-stat-val due">${Utils.fmtCurrency(totalDue)}</div></div>
+        <div class="bill-stat card"><div class="bill-stat-label">Outstanding Bills</div><div class="bill-stat-val">${pending.length}</div></div>
+        <div class="bill-stat card"><div class="bill-stat-label">Total Paid</div><div class="bill-stat-val">${Utils.fmtCurrency(totalPaid)}</div></div>
+      </div>
+      ${pending.length ? `<div class="card" style="margin-bottom:1.5rem"><div class="card-body" style="padding-bottom:.5rem"><h3 style="font-size:.875rem;font-weight:600;color:var(--t1);margin-bottom:.5rem">Pending Payments</h3></div>${pending.map(b => `<div class="bill-item"><div><div style="font-weight:500;color:var(--t1);font-size:.875rem">${b.description}</div><div style="font-size:.75rem;color:var(--t3);margin-top:2px">${Utils.fmtDate(b.date)}</div></div><div style="display:flex;align-items:center;gap:.75rem"><span style="font-weight:700;color:var(--c-err)">${Utils.fmtCurrency(b.amount)}</span><button class="btn btn-sm btn-primary" onclick="payBillById('${b.id}')" data-tip="Pay this bill">Pay Now</button></div></div>`).join('')}</div>` : ''}
+      ${paid.length ? `<div class="card"><div class="card-body" style="padding-bottom:.5rem"><h3 style="font-size:.875rem;font-weight:600;color:var(--t1);margin-bottom:.5rem">Payment History</h3></div>${paid.map(b => `<div class="bill-item"><div><div style="font-weight:500;color:var(--t1);font-size:.875rem">${b.description}</div><div style="font-size:.75rem;color:var(--t3);margin-top:2px">Paid ${Utils.fmtDate(b.paidDate)}</div></div><span style="font-weight:500;color:var(--c-ok);font-size:.875rem">${Utils.fmtCurrency(b.amount)}</span></div>`).join('')}</div>` : '<div class="card card-body" style="text-align:center;color:var(--t3)">No payment history</div>'}`;
+    };
+
+    V['/care-team'] = () => {
+      return `<div class="page-header"><div><h1 class="page-title">Care Team</h1><p class="page-sub">Your healthcare providers</p></div></div>
+      <div class="team-grid">${DATA.doctors.map(d => `<div class="card card-body team-card glow-hover"><div class="avatar avatar-xl" style="background-image:url('${d.avatar}');flex-shrink:0" role="img" aria-label="${d.name}"></div><div class="team-info"><div class="team-name">${d.name}</div><div class="team-spec">${d.specialty}</div><div class="team-contact"><span class="material-symbols-outlined" style="font-size:14px" aria-hidden="true">phone</span>(555) 123-4567<span class="material-symbols-outlined" style="font-size:14px" aria-hidden="true">mail</span>contact@plannertime.com</div></div><button class="btn btn-sm btn-secondary" onclick="openMsgModal()" data-tip="Send a message"><span class="material-symbols-outlined" style="font-size:16px" aria-hidden="true">chat</span>Message</button></div>`).join('')}</div>`;
+    };
+
+    V['/health-summary'] = () => {
+      const conditions = DB.get('conditions', []);
+      const allergies = DB.get('allergies', []);
+      const immunizations = DB.get('immunizations', []);
+      return `<div class="page-header"><div><h1 class="page-title">Health Summary</h1><p class="page-sub">Conditions, allergies, and immunizations</p></div></div>
+      <div class="card card-body hs-section"><h3 class="hs-title"><span class="material-symbols-outlined" style="color:var(--c-err);font-size:20px" aria-hidden="true">stethoscope</span>Conditions</h3>${conditions.length ? conditions.map(c => `<div class="hs-item"><div><div class="hs-item-name">${c.name}</div><div class="hs-item-detail">Diagnosed ${Utils.fmtDate(c.diagnosedDate)} &middot; ${c.notes}</div></div><span class="hs-badge ${c.status === 'Managed' ? 'managed' : 'monitoring'}">${c.status}</span></div>`).join('') : '<p style="color:var(--t3);font-size:.875rem;padding:.5rem 1rem">No conditions recorded</p>'}</div>
+      <div class="card card-body hs-section"><h3 class="hs-title"><span class="material-symbols-outlined" style="color:var(--c-warn);font-size:20px" aria-hidden="true">warning</span>Allergies</h3>${allergies.length ? allergies.map(a => `<div class="hs-item"><div><div class="hs-item-name">${a.name}</div><div class="hs-item-detail">${a.reaction}</div></div><span class="hs-badge ${a.severity === 'Severe' ? 'severe' : a.severity === 'Moderate' ? 'moderate' : 'mild'}">${a.severity}</span></div>`).join('') : '<p style="color:var(--t3);font-size:.875rem;padding:.5rem 1rem">No allergies recorded</p>'}</div>
+      <div class="card card-body hs-section"><h3 class="hs-title"><span class="material-symbols-outlined" style="color:var(--c-pri);font-size:20px" aria-hidden="true">vaccines</span>Immunizations</h3>${immunizations.length ? immunizations.map(im => `<div class="hs-item"><div><div class="hs-item-name">${im.name}</div><div class="hs-item-detail">${Utils.fmtDate(im.date)} &middot; ${im.provider}</div></div></div>`).join('') : '<p style="color:var(--t3);font-size:.875rem;padding:.5rem 1rem">No immunizations recorded</p>'}</div>`;
+    };
+
     // ---- Router & Render ----
     let curRoute = null;
     const app = document.getElementById('app');
@@ -872,7 +965,7 @@
       if (!V[hash]) { go('/'); return; }
       if (curRoute === hash) return;
       curRoute = hash;
-      const titles = { '/': 'Dashboard', '/appointments': 'Appointments', '/records': 'Records', '/messages': 'Messages', '/settings': 'Settings' };
+      const titles = { '/': 'Dashboard', '/appointments': 'Appointments', '/records': 'Records', '/messages': 'Messages', '/medications': 'Medications', '/billing': 'Billing', '/care-team': 'Care Team', '/health-summary': 'Health Summary', '/settings': 'Settings' };
       document.title = (titles[hash] || 'Dashboard') + ' - PlannerTime Portal';
 
       document.querySelectorAll('.nav-item[data-route]').forEach(n => {
@@ -886,6 +979,7 @@
       setTimeout(() => {
         app.innerHTML = '<div class="view-container">' + V[hash]() + '</div>';
         initPageEvents(hash);
+        Utils.initTooltips();
       }, 300);
     }
 
