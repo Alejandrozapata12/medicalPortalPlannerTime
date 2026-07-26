@@ -1,22 +1,38 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
+<script>
+(function() {
+  const t = localStorage.getItem('pt-theme') || (window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Reset Password - PlannerTime Portal</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="assets/css/variables.css">
   <link rel="stylesheet" href="assets/css/base.css">
   <link rel="stylesheet" href="assets/css/components.css">
   <link rel="stylesheet" href="assets/css/auth.css">
+  <style>
+    .reset-layout { min-height: 100vh; display: flex; flex-direction: column; }
+    .reset-header-bar { width: 100%; padding: var(--space-5) var(--space-5); }
+    .reset-inner { max-width: 80rem; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+    .reset-main { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: var(--space-4) var(--space-5) var(--space-10); }
+    .reset-success-icon { width: 64px; height: 64px; border-radius: 50%; background: var(--color-success-light); display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-4); }
+    .reset-success-icon .material-symbols-outlined { font-size: 32px; color: var(--color-success); }
+    .reset-success-title { font-size: 1.125rem; font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-2); }
+    .reset-success-text { font-size: 0.875rem; color: var(--text-secondary); margin-bottom: var(--space-6); }
+  </style>
 </head>
 
-<body style="min-height:100vh; display: flex; flex-direction: column;">
-  <header style="width: 100%; padding: var(--space-5) var(--space-5);">
-    <div style="max-width: 80rem; margin: 0 auto; display:flex; align-items:center; justify-content:space-between;">
+<body class="reset-layout">
+  <header class="reset-header-bar">
+    <div class="reset-inner">
       <a href="index.html" class="logo">
         <div class="logo-icon"><span class="material-symbols-outlined">local_hospital</span></div>
         <span class="logo-text">PlannerTime Portal</span>
@@ -27,8 +43,7 @@
     </div>
   </header>
 
-  <main
-    style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: var(--space-4) var(--space-5) var(--space-10);">
+  <main class="reset-main">
     <div class="card reset-card">
       <div class="card-body">
         <a href="index.html" class="reset-back-link">
@@ -46,26 +61,18 @@
             <label class="form-label" for="reset-email">Email Address</label>
             <div class="form-input-wrapper">
               <span class="material-symbols-outlined input-icon">mail</span>
-              <input class="form-input form-input-icon" type="email" id="reset-email" placeholder="name@example.com"
-                required autocomplete="email">
+              <input class="form-input form-input-icon" type="email" id="reset-email" placeholder="name@example.com" required autocomplete="email">
             </div>
             <span class="form-hint form-error" id="reset-email-error"></span>
           </div>
 
-          <button type="submit" class="btn btn-primary btn-full" id="reset-btn"
-            style="margin-top: var(--space-4);"><span class="btn-text">Send Reset Link</span></button>
+          <button type="submit" class="btn btn-primary btn-full" id="reset-btn" style="margin-top: var(--space-4);"><span class="btn-text">Send Reset Link</span></button>
         </form>
 
         <div id="reset-success" style="display: none; text-align: center; padding: var(--space-8) 0;">
-          <div
-            style="width:64px; height:64px; border-radius:50%; background:var(--color-success-light);display:flex;align-items:center;justify-content:center;margin:0 auto var(--space-4);">
-            <span class="material-symbols-outlined"
-              style="font-size:32px;color:var(--color-success);">check_circle</span>
-          </div>
-          <h3 style="font-size:1.125rem;font-weight:600;color:var(--text-primary);margin-bottom:var(--space-2);">Email
-            Sent!</h3>
-          <p style="font-size:0.875rem;color:var(--text-secondary);margin-bottom:var(--space-6);">Check your inbox for
-            the password reset link.</p>
+          <div class="reset-success-icon"><span class="material-symbols-outlined">check_circle</span></div>
+          <h3 class="reset-success-title">Email Sent!</h3>
+          <p class="reset-success-text">Check your inbox for the password reset link.</p>
           <a href="index.html" class="btn btn-primary btn-full">Back to Login</a>
         </div>
 
@@ -121,5 +128,4 @@
     });
   </script>
 </body>
-
 </html>

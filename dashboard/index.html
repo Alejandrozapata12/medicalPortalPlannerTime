@@ -1,1791 +1,33 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PlannerTime Portal</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+  <link rel="manifest" href="../manifest.json">
+  <link rel="stylesheet" href="../assets/css/variables.css">
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/dashboard.css">
   <script>
-  // Prevenir flash de tema
-  (function() {
-    const t = localStorage.getItem('pt-theme') || (window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light');
-    document.documentElement.setAttribute('data-theme', t);
-  })();
-</script>
-  <style>
-    :root {
-      --c-pri: #137fec;
-      --c-pri-h: #0d6ebd;
-      --c-pri-l: rgba(19, 127, 236, .1);
-      --c-pri-20: rgba(19, 127, 236, .2);
-      --c-ok: #22c55e;
-      --c-ok-l: rgba(34, 197, 94, .1);
-      --c-warn: #f59e0b;
-      --c-warn-l: rgba(245, 158, 11, .1);
-      --c-err: #ef4444;
-      --c-err-l: rgba(239, 68, 68, .1);
-      --c-info: #3b82f6;
-      --c-info-l: rgba(59, 130, 246, .1);
-      --bg1: #f6f7f8;
-      --bg2: #fff;
-      --bg3: #f1f5f9;
-      --bg-h: #f8fafc;
-      --t1: #0f172a;
-      --t2: #475569;
-      --t3: #94a3b8;
-      --t-inv: #fff;
-      --b1: #e2e8f0;
-      --b2: #cbd5e1;
-      --sh-sm: 0 1px 2px rgba(0, 0, 0, .05);
-      --sh-md: 0 4px 6px -1px rgba(0, 0, 0, .07), 0 2px 4px -2px rgba(0, 0, 0, .05);
-      --sh-lg: 0 10px 15px -3px rgba(0, 0, 0, .08), 0 4px 6px -4px rgba(0, 0, 0, .05);
-      --sh-xl: 0 20px 25px -5px rgba(0, 0, 0, .1), 0 8px 10px -6px rgba(0, 0, 0, .1);
-      --ff: 'Inter', -apple-system, sans-serif;
-      --r-sm: .25rem;
-      --r-md: .5rem;
-      --r-lg: .75rem;
-      --r-xl: 1rem;
-      --r-f: 9999px;
-      --tf: 150ms ease;
-      --tb: 200ms ease;
-      --ts: 300ms ease;
-      --sb-w: 256px;
-      --hd-h: 64px
-    }
-
-    [data-theme="dark"] {
-      --bg1: #0f172a;
-      --bg2: #1e293b;
-      --bg3: #334155;
-      --bg-h: #334155;
-      --t1: #f1f5f9;
-      --t2: #94a3b8;
-      --t3: #64748b;
-      --b1: #334155;
-      --b2: #475569;
-      --sh-sm: 0 1px 2px rgba(0, 0, 0, .3);
-      --sh-md: 0 4px 6px -1px rgba(0, 0, 0, .4);
-      --sh-lg: 0 10px 15px -3px rgba(0, 0, 0, .5);
-      --sh-xl: 0 20px 25px -5px rgba(0, 0, 0, .6), 0 8px 10px -6px rgba(0, 0, 0, .5)
-    }
-
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0
-    }
-
-    html {
-      font-size: 16px;
-      -webkit-font-smoothing: antialiased
-    }
-
-    body {
-      font-family: var(--ff);
-      font-size: 1rem;
-      line-height: 1.5;
-      color: var(--t1);
-      background: var(--bg1);
-      transition: background var(--tb), color var(--tb);
-      overflow: hidden;
-      height: 100vh
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none
-    }
-
-    button {
-      font-family: inherit;
-      cursor: pointer;
-      border: none;
-      background: none
-    }
-
-    input,
-    select,
-    textarea {
-      font-family: inherit;
-      font-size: inherit
-    }
-
-    img {
-      max-width: 100%;
-      display: block
-    }
-
-    ul,
-    ol {
-      list-style: none
-    }
-
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px
-    }
-
-    ::-webkit-scrollbar-track {
-      background: transparent
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: var(--b2);
-      border-radius: var(--r-f)
-    }
-
-    .material-symbols-outlined {
-      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24
-    }
-
-    .material-symbols-outlined.filled {
-      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(8px)
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0)
-      }
-    }
-
-    @keyframes spin {
-      from {
-        transform: rotate(0)
-      }
-
-      to {
-        transform: rotate(360deg)
-      }
-    }
-
-    .dash-layout {
-      display: flex;
-      height: 100vh;
-      overflow: hidden
-    }
-
-    /* ===== SIDEBAR - CORREGIDO PARA MOBILE ===== */
-    .sidebar-ov {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, .5);
-      z-index: 35;
-      opacity: 0;
-      transition: opacity var(--ts)
-    }
-
-    .sidebar-ov.active {
-      display: block;
-      opacity: 1
-    }
-
-    /* Desktop: sidebar siempre visible */
-    @media(min-width:768px) {
-      .sidebar {
-        width: var(--sb-w);
-        height: 100%;
-        background: var(--bg2);
-        border-right: 1px solid var(--b1);
-        display: flex;
-        flex-direction: column;
-        z-index: 40;
-        transition: transform var(--ts)
-      }
-    }
-
-    /* Mobile: sidebar oculto por defecto, visible con .open */
-    @media(max-width:767px) {
-      .sidebar {
-        position: fixed;
-        left: 0;
-        top: 0;
-        width: var(--sb-w);
-        height: 100%;
-        background: var(--bg2);
-        border-right: 1px solid var(--b1);
-        display: flex;
-        flex-direction: column;
-        z-index: 40;
-        transform: translateX(-100%);
-        transition: transform var(--ts);
-        box-shadow: var(--sh-xl)
-      }
-
-      .sidebar.open {
-        transform: translateX(0)
-      }
-    }
-
-    .sidebar-head {
-      padding: 1.5rem;
-      border-bottom: 1px solid var(--b1)
-    }
-
-    .sidebar-nav {
-      flex: 1;
-      overflow-y: auto;
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: .25rem
-    }
-
-    .sidebar-foot {
-      padding: 1rem;
-      border-top: 1px solid var(--b1)
-    }
-
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: .75rem;
-      padding: .75rem;
-      border-radius: var(--r-md);
-      color: var(--t2);
-      font-size: .875rem;
-      font-weight: 500;
-      transition: all var(--tf);
-      cursor: pointer
-    }
-
-    .nav-item:hover {
-      background: var(--bg3);
-      color: var(--t1)
-    }
-
-    .nav-item.active {
-      background: var(--c-pri-l);
-      color: var(--c-pri);
-      font-weight: 600
-    }
-
-    .nav-item .material-symbols-outlined {
-      font-size: 22px
-    }
-
-    .nav-badge {
-      margin-left: auto;
-      background: var(--c-err);
-      color: #fff;
-      font-size: 10px;
-      font-weight: 700;
-      padding: 2px 6px;
-      border-radius: var(--r-f);
-      line-height: 1.2
-    }
-
-    .nav-divider {
-      height: 1px;
-      background: var(--b1);
-      margin: .5rem 0
-    }
-
-    .nav-logout {
-      display: flex;
-      align-items: center;
-      gap: .75rem;
-      padding: .5rem .75rem;
-      width: 100%;
-      border-radius: var(--r-md);
-      color: var(--t2);
-      font-size: .875rem;
-      font-weight: 500;
-      transition: all var(--tf);
-      cursor: pointer;
-    }
-
-    .nav-logout:hover {
-      background: var(--c-err-l);
-      color: var(--c-err)
-    }
-
-    .main-wrap {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      overflow: hidden
-    }
-
-    .top-header {
-      height: var(--hd-h);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 1.5rem;
-      background: var(--bg2);
-      border-bottom: 1px solid var(--b1);
-      flex-shrink: 0;
-      z-index: 20
-    }
-
-    .header-left,
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 1rem
-    }
-
-    .mobile-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      border-radius: var(--r-md);
-      color: var(--t2);
-      transition: all var(--tf)
-    }
-
-    .mobile-btn:hover {
-      background: var(--bg3);
-      color: var(--t1)
-    }
-
-    @media(min-width:768px) {
-      .mobile-btn {
-        display: none
-      }
-    }
-
-    .search-bar {
-      position: relative;
-      width: 100%;
-      max-width: 400px
-    }
-
-    .search-bar input {
-      width: 100%;
-      height: 40px;
-      padding: 0 1rem 0 2.5rem;
-      background: var(--bg3);
-      border: none;
-      border-radius: var(--r-md);
-      color: var(--t1);
-      font-size: .875rem;
-      transition: all var(--tf)
-    }
-
-    .search-bar input::placeholder {
-      color: var(--t3)
-    }
-
-    .search-bar input:focus {
-      outline: none;
-      background: var(--bg-h);
-      box-shadow: 0 0 0 2px var(--c-pri-l)
-    }
-
-    .search-bar .s-icon {
-      position: absolute;
-      left: .75rem;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--t3);
-      pointer-events: none
-    }
-
-    .hdr-action {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      border-radius: var(--r-md);
-      color: var(--t2);
-      transition: all var(--tf)
-    }
-
-    .hdr-action:hover {
-      background: var(--bg3);
-      color: var(--t1)
-    }
-
-    .notif-dot {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      width: 8px;
-      height: 8px;
-      background: var(--c-err);
-      border-radius: var(--r-f);
-      border: 2px solid var(--bg2)
-    }
-
-    .hdr-div {
-      width: 1px;
-      height: 32px;
-      background: var(--b1)
-    }
-
-    .user-menu {
-      position: relative
-    }
-
-    .user-trigger {
-      display: flex;
-      align-items: center;
-      gap: .75rem;
-      padding: .25rem .75rem .25rem .25rem;
-      border-radius: var(--r-f);
-      border: 1px solid transparent;
-      transition: all var(--tf);
-      cursor: pointer
-    }
-
-    .user-trigger:hover {
-      background: var(--bg-h);
-      border-color: var(--b1)
-    }
-
-    .user-info {
-      display: none
-    }
-
-    @media(min-width:640px) {
-      .user-info {
-        display: flex;
-        flex-direction: column
-      }
-    }
-
-    .user-name {
-      font-size: .875rem;
-      font-weight: 500;
-      color: var(--t1);
-      line-height: 1.2
-    }
-
-    .user-role {
-      font-size: .75rem;
-      color: var(--t3)
-    }
-
-    .user-dropdown {
-      position: absolute;
-      top: calc(100% + 8px);
-      right: 0;
-      width: 240px;
-      background: var(--bg2);
-      border: 1px solid var(--b1);
-      border-radius: var(--r-lg);
-      box-shadow: var(--sh-xl);
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(-8px);
-      transition: all var(--tf);
-      z-index: 50;
-      overflow: hidden
-    }
-
-    .user-dropdown.open {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0)
-    }
-
-    .ud-header {
-      padding: 1rem;
-      border-bottom: 1px solid var(--b1);
-      display: flex;
-      align-items: center;
-      gap: .75rem
-    }
-
-    .ud-header-info {
-      flex: 1;
-      min-width: 0
-    }
-
-    .ud-header-name {
-      font-size: .875rem;
-      font-weight: 600;
-      color: var(--t1);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis
-    }
-
-    .ud-header-email {
-      font-size: .75rem;
-      color: var(--t3);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis
-    }
-
-    .ud-items {
-      padding: .5rem
-    }
-
-    .ud-item {
-      display: flex;
-      align-items: center;
-      gap: .75rem;
-      padding: .625rem .75rem;
-      border-radius: var(--r-md);
-      font-size: .875rem;
-      color: var(--t2);
-      transition: all var(--tf);
-      cursor: pointer;
-      width: 100%;
-      text-align: left
-    }
-
-    .ud-item:hover {
-      background: var(--bg3);
-      color: var(--t1)
-    }
-
-    .ud-item .material-symbols-outlined {
-      font-size: 20px
-    }
-
-    .ud-item.danger {
-      color: var(--c-err)
-    }
-
-    .ud-item.danger:hover {
-      background: var(--c-err-l)
-    }
-
-    .ud-divider {
-      height: 1px;
-      background: var(--b1);
-      margin: .375rem 0
-    }
-
-    .content-area {
-      flex: 1;
-      overflow-y: auto;
-      padding: 1rem 1.5rem
-    }
-
-    @media(min-width:768px) {
-      .content-area {
-        padding: 2rem
-      }
-    }
-
-    .content-box {
-      max-width: 1200px;
-      margin: 0 auto
-    }
-
-    .view-container {
-      animation: fadeIn .2s ease
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: .75rem
-    }
-
-    .logo-icon {
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: var(--r-md);
-      background: var(--c-pri-l);
-      color: var(--c-pri)
-    }
-
-    .logo-icon .material-symbols-outlined {
-      font-size: 20px
-    }
-
-    .logo-text {
-      font-size: 1.125rem;
-      font-weight: 700;
-      color: var(--t1)
-    }
-
-    .logo-sub {
-      font-size: .75rem;
-      color: var(--t3);
-      font-weight: 400
-    }
-
-    .avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: var(--r-f);
-      background-size: cover;
-      background-position: center;
-      background-color: var(--bg3);
-      flex-shrink: 0
-    }
-
-    .avatar-xl {
-      width: 80px;
-      height: 80px;
-      border-radius: var(--r-lg)
-    }
-
-    .avatar-lg {
-      width: 56px;
-      height: 56px
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: .5rem;
-      padding: .75rem 1.25rem;
-      font-size: .875rem;
-      font-weight: 600;
-      border-radius: var(--r-md);
-      transition: all var(--tf);
-      white-space: nowrap;
-      line-height: 1;
-      height: 44px
-    }
-
-    .btn:active {
-      transform: scale(.98)
-    }
-
-    .btn:disabled {
-      opacity: .6;
-      cursor: not-allowed;
-      transform: none
-    }
-
-    .btn-primary {
-      background: var(--c-pri);
-      color: var(--t-inv);
-      box-shadow: 0 1px 3px rgba(19, 127, 236, .3)
-    }
-
-    .btn-primary:hover:not(:disabled) {
-      background: var(--c-pri-h);
-      box-shadow: 0 4px 12px rgba(19, 127, 236, .4)
-    }
-
-    .btn-secondary {
-      background: var(--bg3);
-      color: var(--t1);
-      border: 1px solid var(--b1)
-    }
-
-    .btn-secondary:hover:not(:disabled) {
-      background: var(--bg-h);
-      border-color: var(--b2)
-    }
-
-    .btn-ghost {
-      background: transparent;
-      color: var(--t2)
-    }
-
-    .btn-ghost:hover {
-      background: var(--bg3);
-      color: var(--t1)
-    }
-
-    .btn-danger {
-      background: var(--c-err);
-      color: var(--t-inv)
-    }
-
-    .btn-danger:hover:not(:disabled) {
-      background: #dc2626
-    }
-
-    .btn-full {
-      width: 100%
-    }
-
-    .btn-sm {
-      height: 36px;
-      padding: .5rem .75rem;
-      font-size: .75rem
-    }
-
-    .card {
-      background: var(--bg2);
-      border: 1px solid var(--b1);
-      border-radius: var(--r-lg);
-      box-shadow: var(--sh-sm);
-      overflow: hidden;
-      transition: all var(--tf)
-    }
-
-    .card-body {
-      padding: 1.5rem
-    }
-
-    .card-hover:hover {
-      box-shadow: var(--sh-md);
-      border-color: var(--b2)
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: .25rem;
-      padding: .25rem .75rem;
-      font-size: .75rem;
-      font-weight: 600;
-      border-radius: var(--r-f);
-      line-height: 1.4
-    }
-
-    .badge-primary {
-      background: var(--c-pri-l);
-      color: var(--c-pri);
-      border: 1px solid var(--c-pri-20)
-    }
-
-    .badge-warning {
-      background: var(--c-warn-l);
-      color: var(--c-warn);
-      border: 1px solid rgba(245, 158, 11, .2)
-    }
-
-    .badge-success {
-      background: var(--c-ok-l);
-      color: var(--c-ok);
-      border: 1px solid rgba(34, 197, 94, .2)
-    }
-
-    .badge-danger {
-      background: var(--c-err-l);
-      color: var(--c-err);
-      border: 1px solid rgba(239, 68, 68, .2)
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: .5rem
-    }
-
-    .form-label {
-      font-size: .875rem;
-      font-weight: 500;
-      color: var(--t1)
-    }
-
-    .form-input {
-      width: 100%;
-      height: 48px;
-      padding: 0 1rem;
-      background: var(--bg2);
-      border: 1px solid var(--b1);
-      border-radius: var(--r-md);
-      color: var(--t1);
-      transition: all var(--tf)
-    }
-
-    .form-input::placeholder {
-      color: var(--t3)
-    }
-
-    .form-input:focus {
-      outline: none;
-      border-color: var(--c-pri);
-      box-shadow: 0 0 0 3px var(--c-pri-l)
-    }
-
-    .form-input-error {
-      border-color: var(--c-err) !important;
-      box-shadow: 0 0 0 3px var(--c-err-l) !important
-    }
-
-    .form-error {
-      font-size: .75rem;
-      color: var(--c-err);
-      display: none
-    }
-
-    .form-error.show {
-      display: block
-    }
-
-    .form-hint {
-      font-size: .75rem;
-      color: var(--t3)
-    }
-
-    .checkbox-wrapper {
-      display: flex;
-      align-items: flex-start;
-      gap: .75rem;
-      cursor: pointer
-    }
-
-    .checkbox-input {
-      width: 20px;
-      height: 20px;
-      border: 2px solid var(--b2);
-      border-radius: var(--r-sm);
-      appearance: none;
-      cursor: pointer;
-      transition: all var(--tf);
-      flex-shrink: 0;
-      position: relative
-    }
-
-    .checkbox-input:checked {
-      background: var(--c-pri);
-      border-color: var(--c-pri)
-    }
-
-    .checkbox-input:checked::after {
-      content: '';
-      position: absolute;
-      left: 5px;
-      top: 1px;
-      width: 6px;
-      height: 11px;
-      border: solid #fff;
-      border-width: 0 2px 2px 0;
-      transform: rotate(45deg)
-    }
-
-    .flex-center {
-      display: flex;
-      align-items: center;
-      justify-content: center
-    }
-
-    .collapsible-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
-      padding: 1.25rem 1.25rem 0;
-      user-select: none
-    }
-
-    .collapsible-chevron {
-      transition: transform var(--tf);
-      color: var(--t3)
-    }
-
-    .collapsible-header.collapsed .collapsible-chevron {
-      transform: rotate(-90deg)
-    }
-
-    .collapsible-body {
-      overflow: hidden;
-      transition: max-height .3s ease, opacity .2s ease, padding .3s ease;
-      max-height: 500px;
-      opacity: 1;
-      padding: 1.25rem;
-      padding-top: .75rem
-    }
-
-    .collapsible-body.collapsed {
-      max-height: 0;
-      opacity: 0;
-      padding-top: 0;
-      padding-bottom: 0
-    }
-
-    .page-header {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin-bottom: 2rem
-    }
-
-    @media(min-width:768px) {
-      .page-header {
-        flex-direction: row;
-        align-items: flex-end;
-        justify-content: space-between
-      }
-    }
-
-    .page-title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--t1);
-      letter-spacing: -.02em
-    }
-
-    @media(min-width:768px) {
-      .page-title {
-        font-size: 1.875rem
-      }
-    }
-
-    .page-sub {
-      font-size: .875rem;
-      color: var(--t2);
-      margin-top: .25rem;
-      display: flex;
-      align-items: center;
-      gap: .5rem
-    }
-
-    .dash-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1.5rem
-    }
-
-    @media(min-width:1024px) {
-      .dash-grid {
-        grid-template-columns: 2fr 1fr
-      }
-    }
-
-    .dash-main,
-    .dash-side {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem
-    }
-
-    .sec-title {
-      font-size: 1.125rem;
-      font-weight: 700;
-      color: var(--t1);
-      margin-bottom: .75rem
-    }
-
-    .sec-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: .75rem
-    }
-
-    .sec-link {
-      font-size: .875rem;
-      font-weight: 500;
-      color: var(--c-pri)
-    }
-
-    .sec-link:hover {
-      text-decoration: underline
-    }
-
-    .appt-card {
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem
-    }
-
-    @media(min-width:640px) {
-      .appt-card {
-        flex-direction: row;
-        align-items: center
-      }
-    }
-
-    .appt-doc {
-      position: relative;
-      flex-shrink: 0
-    }
-
-    .appt-vid {
-      position: absolute;
-      bottom: -6px;
-      right: -6px;
-      width: 28px;
-      height: 28px;
-      background: var(--c-ok);
-      border-radius: var(--r-f);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 2px solid var(--bg2)
-    }
-
-    .appt-vid .material-symbols-outlined {
-      font-size: 14px;
-      color: #fff
-    }
-
-    .appt-info {
-      flex: 1;
-      min-width: 0
-    }
-
-    .appt-name {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--t1)
-    }
-
-    .appt-spec {
-      font-size: .875rem;
-      color: var(--t2);
-      font-weight: 500
-    }
-
-    .appt-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: .75rem;
-      margin-top: .5rem
-    }
-
-    .appt-meta-item {
-      display: flex;
-      align-items: center;
-      gap: .375rem;
-      padding: .25rem .625rem;
-      background: var(--bg3);
-      border-radius: var(--r-sm);
-      font-size: .75rem;
-      font-weight: 500;
-      color: var(--t2)
-    }
-
-    .appt-meta-item .material-symbols-outlined {
-      font-size: 14px
-    }
-
-    .act-list {
-      display: flex;
-      flex-direction: column
-    }
-
-    .act-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-      padding: 1rem;
-      cursor: pointer;
-      transition: background var(--tf)
-    }
-
-    .act-item:hover {
-      background: var(--bg-h)
-    }
-
-    .act-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: var(--r-f);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0
-    }
-
-    .act-icon-blue {
-      background: var(--c-info-l);
-      color: var(--c-info)
-    }
-
-    .act-icon-green {
-      background: var(--c-ok-l);
-      color: var(--c-ok)
-    }
-
-    .act-icon-orange {
-      background: var(--c-warn-l);
-      color: var(--c-warn)
-    }
-
-    .act-icon-red {
-      background: var(--c-err-l);
-      color: var(--c-err)
-    }
-
-    .act-content {
-      flex: 1;
-      min-width: 0
-    }
-
-    .act-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start
-    }
-
-    .act-title {
-      font-size: .875rem;
-      font-weight: 500;
-      color: var(--t1)
-    }
-
-    .act-time {
-      font-size: .75rem;
-      color: var(--t3);
-      white-space: nowrap
-    }
-
-    .act-desc {
-      font-size: .875rem;
-      color: var(--t2);
-      margin-top: 2px
-    }
-
-    .act-footer {
-      padding: .75rem;
-      background: var(--bg3);
-      border-top: 1px solid var(--b1);
-      text-align: center
-    }
-
-    .act-footer button {
-      font-size: .875rem;
-      font-weight: 500;
-      color: var(--t2);
-      transition: color var(--tf)
-    }
-
-    .act-footer button:hover {
-      color: var(--t1)
-    }
-
-    .vital-card {
-      padding: 1rem;
-      position: relative;
-      overflow: hidden
-    }
-
-    .vital-bg {
-      position: absolute;
-      top: 0;
-      right: 0;
-      padding: 1rem;
-      opacity: .1;
-      transition: opacity var(--tf)
-    }
-
-    .vital-card:hover .vital-bg {
-      opacity: .2
-    }
-
-    .vital-bg .material-symbols-outlined {
-      font-size: 56px
-    }
-
-    .vital-head {
-      display: flex;
-      align-items: center;
-      gap: .75rem;
-      margin-bottom: .5rem
-    }
-
-    .vital-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: var(--r-md);
-      display: flex;
-      align-items: center;
-      justify-content: center
-    }
-
-    .vital-icon .material-symbols-outlined {
-      font-size: 20px
-    }
-
-    .vital-label {
-      font-size: .875rem;
-      font-weight: 600;
-      color: var(--t2)
-    }
-
-    .vital-val {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--t1);
-      display: flex;
-      align-items: baseline;
-      gap: .5rem
-    }
-
-    .vital-unit {
-      font-size: .875rem;
-      font-weight: 400;
-      color: var(--t3)
-    }
-
-    .vital-change {
-      font-size: .75rem;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 2px
-    }
-
-    .vital-down {
-      color: var(--c-ok)
-    }
-
-    .vital-bar {
-      height: 4px;
-      background: var(--bg3);
-      border-radius: var(--r-f);
-      margin-top: .75rem;
-      overflow: hidden
-    }
-
-    .vital-bar-fill {
-      height: 100%;
-      border-radius: var(--r-f)
-    }
-
-    .vital-status {
-      display: flex;
-      align-items: center;
-      gap: .5rem;
-      margin-top: .5rem
-    }
-
-    .vital-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: var(--r-f);
-      background: var(--c-ok)
-    }
-
-    .vital-status-txt {
-      font-size: .75rem;
-      color: var(--t3)
-    }
-
-    .qa {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      padding: .75rem;
-      background: var(--bg3);
-      border-radius: var(--r-md);
-      transition: all var(--tf);
-      text-align: left
-    }
-
-    .qa:hover {
-      background: var(--bg-h)
-    }
-
-    .qa-left {
-      display: flex;
-      align-items: center;
-      gap: .75rem
-    }
-
-    .qa-left .material-symbols-outlined {
-      color: var(--t3);
-      transition: color var(--tf)
-    }
-
-    .qa:hover .qa-left .material-symbols-outlined {
-      color: var(--c-pri)
-    }
-
-    .qa-text {
-      font-size: .875rem;
-      font-weight: 500;
-      color: var(--t1)
-    }
-
-    .qa .chevron {
-      font-size: 18px;
-      color: var(--t3)
-    }
-
-    .table-wrap {
-      overflow-x: auto
-    }
-
-    .dtable {
-      width: 100%;
-      min-width: 700px;
-      border-collapse: collapse;
-      text-align: left
-    }
-
-    .dtable th {
-      padding: 1rem 1.5rem;
-      font-size: .75rem;
-      font-weight: 600;
-      color: var(--t3);
-      text-transform: uppercase;
-      letter-spacing: .05em;
-      background: var(--bg3);
-      border-bottom: 1px solid var(--b1)
-    }
-
-    .dtable td {
-      padding: 1rem 1.5rem;
-      font-size: .875rem;
-      border-bottom: 1px solid var(--b1)
-    }
-
-    .dtable tr:last-child td {
-      border-bottom: none
-    }
-
-    .dtable tbody tr {
-      transition: background var(--tf)
-    }
-
-    .dtable tbody tr:hover {
-      background: var(--bg-h)
-    }
-
-    .tbl-doc {
-      display: flex;
-      align-items: center;
-      gap: .75rem
-    }
-
-    .tbl-doc-name {
-      font-weight: 600;
-      color: var(--t1)
-    }
-
-    .tbl-doc-spec-m {
-      display: block;
-      font-size: .75rem;
-      color: var(--t3)
-    }
-
-    @media(min-width:768px) {
-      .tbl-doc-spec-m {
-        display: none
-      }
-    }
-
-    .tbl-date {
-      display: flex;
-      flex-direction: column
-    }
-
-    .tbl-date-time {
-      font-weight: 500;
-      color: var(--t1)
-    }
-
-    .tbl-date-date {
-      font-size: .75rem;
-      color: var(--t3)
-    }
-
-    .tbl-actions {
-      text-align: right
-    }
-
-    .tbl-act-btn {
-      width: 36px;
-      height: 36px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: var(--r-md);
-      color: var(--t3);
-      transition: all var(--tf)
-    }
-
-    .tbl-act-btn:hover {
-      background: var(--bg3);
-      color: var(--t1)
-    }
-
-    .tbl-pag {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1rem 1.5rem;
-      border-top: 1px solid var(--b1)
-    }
-
-    .tbl-pag-info {
-      font-size: .875rem;
-      color: var(--t3)
-    }
-
-    .tbl-pag-info strong {
-      color: var(--t1);
-      font-weight: 500
-    }
-
-    .tabs {
-      display: flex;
-      gap: 2rem;
-      border-bottom: 1px solid var(--b1)
-    }
-
-    .tab {
-      position: relative;
-      padding: .75rem 0;
-      font-size: .875rem;
-      font-weight: 500;
-      color: var(--t3);
-      cursor: pointer;
-      transition: color var(--tf)
-    }
-
-    .tab:hover {
-      color: var(--t1)
-    }
-
-    .tab.active {
-      color: var(--c-pri);
-      font-weight: 600
-    }
-
-    .tab.active::after {
-      content: '';
-      position: absolute;
-      bottom: -1px;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: var(--c-pri);
-      border-radius: var(--r-f) var(--r-f) 0 0
-    }
-
-    .filter-bar {
-      display: flex;
-      flex-direction: column;
-      gap: .75rem
-    }
-
-    @media(min-width:1024px) {
-      .filter-bar {
-        flex-direction: row;
-        align-items: flex-end
-      }
-    }
-
-    .filter-input {
-      position: relative
-    }
-
-    .filter-input input {
-      height: 40px;
-      width: 100%;
-      padding: 0 1rem 0 2.5rem;
-      background: var(--bg2);
-      border: 1px solid var(--b1);
-      border-radius: var(--r-md);
-      color: var(--t1);
-      font-size: .875rem;
-      transition: all var(--tf);
-      box-shadow: var(--sh-sm)
-    }
-
-    .filter-input input::placeholder {
-      color: var(--t3)
-    }
-
-    .filter-input input:focus {
-      outline: none;
-      border-color: var(--c-pri);
-      box-shadow: 0 0 0 3px var(--c-pri-l)
-    }
-
-    .filter-input .material-symbols-outlined {
-      position: absolute;
-      left: .75rem;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--t3);
-      font-size: 20px;
-      pointer-events: none
-    }
-
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, .5);
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-      opacity: 0;
-      visibility: hidden;
-      transition: all var(--tf)
-    }
-
-    .modal-overlay.open {
-      opacity: 1;
-      visibility: visible
-    }
-
-    .modal {
-      background: var(--bg2);
-      border-radius: var(--r-xl);
-      box-shadow: var(--sh-xl);
-      width: 100%;
-      max-width: 480px;
-      max-height: 90vh;
-      overflow-y: auto;
-      transform: scale(.95);
-      transition: transform var(--tf)
-    }
-
-    .modal-overlay.open .modal {
-      transform: scale(1)
-    }
-
-    .modal-lg {
-      max-width: 600px
-    }
-
-    .modal-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.25rem 1.5rem;
-      border-bottom: 1px solid var(--b1)
-    }
-
-    .modal-title {
-      font-size: 1.125rem;
-      font-weight: 700;
-      color: var(--t1)
-    }
-
-    .modal-close {
-      width: 36px;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: var(--r-md);
-      color: var(--t3);
-      transition: all var(--tf)
-    }
-
-    .modal-close:hover {
-      background: var(--bg3);
-      color: var(--t1)
-    }
-
-    .modal-body {
-      padding: 1.5rem
-    }
-
-    .modal-foot {
-      padding: 1rem 1.5rem;
-      border-top: 1px solid var(--b1);
-      display: flex;
-      justify-content: flex-end;
-      gap: .75rem
-    }
-
-    .notif-item {
-      display: flex;
-      gap: .75rem;
-      padding: .875rem 0;
-      border-bottom: 1px solid var(--b1);
-      cursor: pointer;
-      transition: background var(--tf)
-    }
-
-    .notif-item:last-child {
-      border-bottom: none
-    }
-
-    .notif-item:hover {
-      background: var(--bg3);
-      margin: 0 -1.5rem;
-      padding: .875rem 1.5rem
-    }
-
-    .notif-item.unread .notif-title {
-      font-weight: 600
-    }
-
-    .notif-dot-ind {
-      width: 8px;
-      height: 8px;
-      border-radius: var(--r-f);
-      background: var(--c-pri);
-      flex-shrink: 0;
-      margin-top: 6px
-    }
-
-    .notif-dot-ind.read {
-      background: transparent
-    }
-
-    .notif-title {
-      font-size: .875rem;
-      color: var(--t1)
-    }
-
-    .notif-desc {
-      font-size: .8rem;
-      color: var(--t3);
-      margin-top: 2px
-    }
-
-    .notif-time {
-      font-size: .75rem;
-      color: var(--t3);
-      white-space: nowrap;
-      flex-shrink: 0
-    }
-
-    .stat-card {
-      padding: 1.25rem
-    }
-
-    .stat-head {
-      display: flex;
-      align-items: center;
-      gap: .75rem;
-      margin-bottom: .75rem
-    }
-
-    .stat-val {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--t1)
-    }
-
-    .empty-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 4rem 2rem;
-      text-align: center
-    }
-
-    .empty-icon {
-      width: 80px;
-      height: 80px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: var(--r-f);
-      background: var(--bg3);
-      color: var(--t3);
-      margin-bottom: 1.5rem
-    }
-
-    .empty-icon .material-symbols-outlined {
-      font-size: 40px
-    }
-
-    .empty-title {
-      font-size: 1.125rem;
-      font-weight: 600;
-      color: var(--t1);
-      margin-bottom: .5rem
-    }
-
-    .empty-desc {
-      font-size: .875rem;
-      color: var(--t2);
-      max-width: 400px;
-      margin-bottom: 1.5rem
-    }
-
-    .form-select {
-      width: 100%;
-      height: 48px;
-      padding: 0 2.5rem 0 1rem;
-      background: var(--bg2);
-      border: 1px solid var(--b1);
-      border-radius: var(--r-md);
-      color: var(--t1);
-      font-size: .875rem;
-      transition: all var(--tf);
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2394a3b8' viewBox='0 0 16 16'%3E%3Cpath d='M4.646 5.646a.5.5 0 0 1 .708 0L8 8.293l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 1rem center
-    }
-
-    .form-select:focus {
-      outline: none;
-      border-color: var(--c-pri);
-      box-shadow: 0 0 0 3px var(--c-pri-l)
-    }
-
-    /* === NUEVAS MEJORAS UI === */
-/* Glassmorphism Header */
-.top-header { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-[data-theme="dark"] .top-header { background: rgba(30, 41, 59, 0.8); }
-
-/* Skeleton Loader */
-.skeleton { background: linear-gradient(90deg, var(--bg3) 25%, var(--bg-h) 37%, var(--bg3) 63%); background-size: 400% 100%; animation: shimmer 1.4s ease infinite; border-radius: var(--r-md); }
-@keyframes shimmer { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
-
-/* Toggle Switch */
-.switch { position: relative; display: inline-block; width: 44px; height: 24px; flex-shrink: 0; }
-.switch input { opacity: 0; width: 0; height: 0; }
-.slider { position: absolute; cursor: pointer; inset: 0; background: var(--bg3); transition: .4s; border-radius: 34px; }
-.slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background: white; transition: .4s; border-radius: 50%; }
-input:checked + .slider { background: var(--c-pri); }
-input:checked + .slider:before { transform: translateX(20px); }
-
-/* Chips Filter */
-.chips-bar { display: flex; gap: .5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
-.chip { padding: .375rem .875rem; background: var(--bg2); border: 1px solid var(--b1); border-radius: var(--r-f); font-size: .8125rem; font-weight: 500; color: var(--t2); cursor: pointer; transition: all .2s; display: flex; align-items: center; gap: .375rem; }
-.chip:hover { border-color: var(--c-pri); color: var(--c-pri); }
-.chip.active { background: var(--c-pri-l); color: var(--c-pri); border-color: var(--c-pri); }
-
-/* Command Palette */
-.cmd-palette { position: fixed; top: 20%; left: 50%; transform: translateX(-50%); width: 90%; max-width: 500px; background: var(--bg2); border: 1px solid var(--b1); border-radius: var(--r-lg); box-shadow: var(--sh-xl); z-index: 200; overflow: hidden; display: none; }
-.cmd-palette.open { display: block; }
-.cmd-input { width: 100%; padding: 1rem 1.25rem; border: none; border-bottom: 1px solid var(--b1); background: transparent; color: var(--t1); font-size: 1rem; outline: none; }
-.cmd-item { padding: .75rem 1.25rem; display: flex; align-items: center; gap: .75rem; cursor: pointer; color: var(--t2); }
-.cmd-item:hover, .cmd-item.selected { background: var(--bg3); color: var(--t1); }
-
-/* Chat Layout */
-.chat-layout { display: grid; grid-template-columns: 320px 1fr; height: 600px; border-radius: var(--r-lg); overflow: hidden; border: 1px solid var(--b1); }
-@media (max-width: 768px) { .chat-layout { grid-template-columns: 1fr; } .chat-main { display: none; } .chat-layout.mobile-view .chat-main { display: flex; } .chat-layout.mobile-view .chat-sidebar { display: none; } }
-.chat-sidebar { border-right: 1px solid var(--b1); overflow-y: auto; background: var(--bg2); }
-.chat-main { display: flex; flex-direction: column; background: var(--bg1); }
-.chat-header { padding: 1rem; border-bottom: 1px solid var(--b1); display: flex; align-items: center; gap: .75rem; background: var(--bg2); }
-.chat-messages { flex: 1; padding: 1.5rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1rem; }
-.chat-bubble { max-width: 70%; padding: .75rem 1rem; border-radius: var(--r-lg); font-size: .875rem; line-height: 1.4; }
-.chat-bubble.them { background: var(--bg2); border: 1px solid var(--b1); border-bottom-left-radius: 4px; align-self: flex-start; }
-.chat-bubble.me { background: var(--c-pri); color: white; border-bottom-right-radius: 4px; align-self: flex-end; }
-.chat-input-area { padding: 1rem; border-top: 1px solid var(--b1); display: flex; gap: .75rem; background: var(--bg2); }
-
-/* Settings Vertical Tabs */
-.settings-layout { display: grid; grid-template-columns: 220px 1fr; gap: 2rem; }
-@media (max-width: 768px) { .settings-layout { grid-template-columns: 1fr; } }
-.settings-nav { display: flex; flex-direction: column; gap: .25rem; }
-.settings-nav-item { padding: .75rem 1rem; border-radius: var(--r-md); color: var(--t2); font-weight: 500; cursor: pointer; border-left: 3px solid transparent; }
-.settings-nav-item.active { background: var(--c-pri-l); color: var(--c-pri); border-left-color: var(--c-pri); }
-.settings-content { max-width: 600px; }
-
-/* Calendar Grid */
-.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background: var(--b1); border: 1px solid var(--b1); border-radius: var(--r-md); overflow: hidden; }
-.cal-day-head { background: var(--bg3); padding: .5rem; text-align: center; font-size: .75rem; font-weight: 600; color: var(--t3); }
-.cal-day { background: var(--bg2); min-height: 80px; padding: .5rem; font-size: .75rem; color: var(--t2); }
-.cal-day.empty { background: var(--bg3); }
-.cal-day.today { background: var(--c-pri-l); color: var(--c-pri); font-weight: 700; }
-.cal-event { background: var(--c-pri); color: white; padding: 2px 4px; border-radius: 2px; font-size: 10px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  </style>
+    (function() {
+      const t = localStorage.getItem('pt-theme') || (window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
 </head>
 
 <body>
   <div class="dash-layout">
-    <div class="sidebar-ov" id="overlay"></div>
-    <aside class="sidebar" id="sidebar">
+    <div class="sidebar-ov" id="overlay" aria-hidden="true"></div>
+    <aside class="sidebar" id="sidebar" aria-label="Main navigation">
       <div class="sidebar-head">
-        <a href="#/" class="logo">
-          <div class="logo-icon"><span class="material-symbols-outlined">local_hospital</span></div>
+        <a href="#/" class="logo" aria-label="Go to Dashboard">
+          <div class="logo-icon"><span class="material-symbols-outlined" aria-hidden="true">local_hospital</span></div>
           <div>
             <div class="logo-text">PlannerTime</div>
             <div class="logo-sub">Patient Portal</div>
@@ -1793,590 +35,951 @@ input:checked + .slider:before { transform: translateX(20px); }
         </a>
       </div>
       <nav class="sidebar-nav">
-        <a class="nav-item active" href="#/" data-route="/"><span
-            class="material-symbols-outlined">grid_view</span><span>Dashboard</span></a>
-        <a class="nav-item" href="#/appointments" data-route="/appointments"><span
-            class="material-symbols-outlined">calendar_month</span><span>Appointments</span></a>
-        <a class="nav-item" href="#/records" data-route="/records"><span
-            class="material-symbols-outlined">folder_open</span><span>Records</span></a>
-        <a class="nav-item" href="#/messages" data-route="/messages"><span
-            class="material-symbols-outlined">chat_bubble</span><span>Messages</span><span class="nav-badge"
-            id="msgBadge">2</span></a>
-        <div class="nav-divider"></div>
-        <a class="nav-item" href="#/settings" data-route="/settings"><span
-            class="material-symbols-outlined">settings</span><span>Settings</span></a>
+        <a class="nav-item active" href="#/" data-route="/" aria-current="page"><span class="material-symbols-outlined" aria-hidden="true">grid_view</span><span>Dashboard</span></a>
+        <a class="nav-item" href="#/appointments" data-route="/appointments"><span class="material-symbols-outlined" aria-hidden="true">calendar_month</span><span>Appointments</span></a>
+        <a class="nav-item" href="#/records" data-route="/records"><span class="material-symbols-outlined" aria-hidden="true">folder_open</span><span>Records</span></a>
+        <a class="nav-item" href="#/messages" data-route="/messages"><span class="material-symbols-outlined" aria-hidden="true">chat_bubble</span><span>Messages</span><span class="nav-badge" id="msgBadge" aria-label="Unread messages">2</span></a>
+        <div class="nav-divider" role="separator"></div>
+        <a class="nav-item" href="#/settings" data-route="/settings"><span class="material-symbols-outlined" aria-hidden="true">settings</span><span>Settings</span></a>
       </nav>
-      <div class="sidebar-foot"><a class="nav-logout" id="logoutBtn"><span
-            class="material-symbols-outlined">logout</span><span>Log Out</span></a></div>
+      <div class="sidebar-foot">
+        <button class="nav-logout" id="logoutBtn" aria-label="Log out"><span class="material-symbols-outlined" aria-hidden="true">logout</span><span>Log Out</span></button>
+      </div>
     </aside>
     <div class="main-wrap">
-      <header class="top-header">
+      <header class="top-header" role="banner">
         <div class="header-left">
-          <button class="mobile-btn" id="menuBtn"><span class="material-symbols-outlined">menu</span></button>
-          <div class="search-bar"><span class="material-symbols-outlined s-icon">search</span><input type="text"
-              placeholder="Search..." id="globalSearch"></div>
+          <button class="mobile-btn" id="menuBtn" aria-label="Toggle menu" aria-expanded="false" aria-controls="sidebar"><span class="material-symbols-outlined" aria-hidden="true">menu</span></button>
+          <div class="search-bar" role="search"><span class="material-symbols-outlined s-icon" aria-hidden="true">search</span><input type="text" placeholder="Search..." id="globalSearch" aria-label="Search"></div>
         </div>
         <div class="header-right">
-          <button class="hdr-action" id="themeBtn" title="Toggle theme"><span
-              class="material-symbols-outlined">dark_mode</span></button>
-          <button class="hdr-action" id="notifBtn" title="Notifications"><span
-              class="material-symbols-outlined">notifications</span><span class="notif-dot"
-              id="notifDot"></span></button>
-          <div class="hdr-div"></div>
+          <button class="hdr-action" id="themeBtn" title="Toggle theme" aria-label="Toggle dark/light mode"><span class="material-symbols-outlined" aria-hidden="true">dark_mode</span></button>
+          <button class="hdr-action" id="notifBtn" title="Notifications" aria-label="Open notifications" aria-haspopup="dialog"><span class="material-symbols-outlined" aria-hidden="true">notifications</span><span class="notif-dot" id="notifDot"></span></button>
+          <div class="hdr-div" role="separator"></div>
           <div class="user-menu" id="userMenu">
-            <div class="user-trigger" id="userTrigger">
-              <div class="avatar" id="userAvatar"
-                style="background-image:url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face')">
-              </div>
-              <div class="user-info"><span class="user-name" id="userDisplayName">Sarah Connor</span><span
-                  class="user-role">Patient</span></div>
-              <span class="material-symbols-outlined" style="font-size:18px;color:var(--t3)">expand_more</span>
+            <div class="user-trigger" id="userTrigger" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false" aria-label="User menu">
+              <div class="avatar" id="userAvatar" style="background-image:url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face')" role="img" aria-label="User avatar"></div>
+              <div class="user-info"><span class="user-name" id="userDisplayName">Sarah Connor</span><span class="user-role">Patient</span></div>
+              <span class="material-symbols-outlined" aria-hidden="true" style="font-size:18px;color:var(--t3)">expand_more</span>
             </div>
-            <div class="user-dropdown" id="userDropdown">
+            <div class="user-dropdown" id="userDropdown" role="menu" aria-label="User options">
               <div class="ud-header">
-                <div class="avatar-lg" id="udAvatar"
-                  style="background-image:url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face')">
-                </div>
+                <div class="avatar avatar-lg" id="udAvatar" style="background-image:url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face')" role="img" aria-label="User avatar"></div>
                 <div class="ud-header-info">
                   <div class="ud-header-name" id="udName">Sarah Connor</div>
                   <div class="ud-header-email" id="udEmail">sarah.connor@email.com</div>
                 </div>
               </div>
               <div class="ud-items">
-                <button class="ud-item" onclick="openModal('profileModal')"><span
-                    class="material-symbols-outlined">person</span>My Profile</button>
-                <button class="ud-item" onclick="openModal('passwordModal')"><span
-                    class="material-symbols-outlined">lock</span>Change Password</button>
-                <button class="ud-item" onclick="go('/settings')"><span
-                    class="material-symbols-outlined">settings</span>Settings</button>
-                <div class="ud-divider"></div>
-                <button class="ud-item danger" id="logoutBtn2"><span class="material-symbols-outlined">logout</span>Log
-                  Out</button>
+                <button class="ud-item" role="menuitem" onclick="Utils.openModal('profileModal')"><span class="material-symbols-outlined" aria-hidden="true">person</span>My Profile</button>
+                <button class="ud-item" role="menuitem" onclick="Utils.openModal('passwordModal')"><span class="material-symbols-outlined" aria-hidden="true">lock</span>Change Password</button>
+                <button class="ud-item" role="menuitem" onclick="go('/settings')"><span class="material-symbols-outlined" aria-hidden="true">settings</span>Settings</button>
+                <div class="ud-divider" role="separator"></div>
+                <button class="ud-item danger" role="menuitem" id="logoutBtn2"><span class="material-symbols-outlined" aria-hidden="true">logout</span>Log Out</button>
               </div>
             </div>
           </div>
         </div>
       </header>
-      <main class="content-area">
-        <div class="content-box" id="app"></div>
+      <main class="content-area" id="mainContent">
+        <div class="content-box" id="app" role="region" aria-live="polite"></div>
       </main>
     </div>
-    <div class="cmd-palette" id="cmdPalette">
-  <input type="text" class="cmd-input" placeholder="Search pages..." id="cmdInput" autocomplete="off">
-  <div id="cmdResults" style="max-height: 300px; overflow-y: auto;">
-    <div class="cmd-item" onclick="go('/')"><span class="material-symbols-outlined">grid_view</span>Dashboard</div>
-    <div class="cmd-item" onclick="go('/appointments')"><span class="material-symbols-outlined">calendar_month</span>Appointments</div>
-    <div class="cmd-item" onclick="go('/records')"><span class="material-symbols-outlined">folder_open</span>Records</div>
-    <div class="cmd-item" onclick="go('/messages')"><span class="material-symbols-outlined">chat_bubble</span>Messages</div>
-    <div class="cmd-item" onclick="go('/settings')"><span class="material-symbols-outlined">settings</span>Settings</div>
-  </div>
-</div>
+    <div class="cmd-palette" id="cmdPalette" role="dialog" aria-label="Command palette">
+      <input type="text" class="cmd-input" placeholder="Search pages..." id="cmdInput" autocomplete="off" aria-label="Search pages">
+      <div id="cmdResults" style="max-height:300px;overflow-y:auto" role="listbox">
+        <div class="cmd-item" role="option" onclick="go('/')"><span class="material-symbols-outlined" aria-hidden="true">grid_view</span>Dashboard</div>
+        <div class="cmd-item" role="option" onclick="go('/appointments')"><span class="material-symbols-outlined" aria-hidden="true">calendar_month</span>Appointments</div>
+        <div class="cmd-item" role="option" onclick="go('/records')"><span class="material-symbols-outlined" aria-hidden="true">folder_open</span>Records</div>
+        <div class="cmd-item" role="option" onclick="go('/messages')"><span class="material-symbols-outlined" aria-hidden="true">chat_bubble</span>Messages</div>
+        <div class="cmd-item" role="option" onclick="go('/settings')"><span class="material-symbols-outlined" aria-hidden="true">settings</span>Settings</div>
+      </div>
+    </div>
   </div>
 
   <!-- Notification Modal -->
-  <div class="modal-overlay" id="notifModal">
+  <div class="modal-overlay" id="notifModal" role="dialog" aria-labelledby="notifModalTitle" aria-hidden="true">
     <div class="modal modal-lg">
-      <div class="modal-head"><span class="modal-title">Notifications</span><button class="modal-close"
-          onclick="closeModal('notifModal')"><span class="material-symbols-outlined">close</span></button></div>
+      <div class="modal-head"><span class="modal-title" id="notifModalTitle">Notifications</span><button class="modal-close" onclick="Utils.closeModal('notifModal')" aria-label="Close notifications"><span class="material-symbols-outlined" aria-hidden="true">close</span></button></div>
       <div class="modal-body" id="notifList" style="max-height:400px;overflow-y:auto"></div>
-      <div class="modal-foot"><button class="btn btn-sm btn-ghost" onclick="markAllRead()">Mark all as
-          read</button><button class="btn btn-sm btn-secondary" onclick="closeModal('notifModal')">Close</button></div>
+      <div class="modal-foot"><button class="btn btn-sm btn-ghost" onclick="markAllRead()">Mark all as read</button><button class="btn btn-sm btn-secondary" onclick="Utils.closeModal('notifModal')">Close</button></div>
     </div>
   </div>
 
   <!-- Profile Modal -->
-  <div class="modal-overlay" id="profileModal">
+  <div class="modal-overlay" id="profileModal" role="dialog" aria-labelledby="profileModalTitle" aria-hidden="true">
     <div class="modal modal-lg">
-      <div class="modal-head"><span class="modal-title">My Profile</span><button class="modal-close"
-          onclick="closeModal('profileModal')"><span class="material-symbols-outlined">close</span></button></div>
+      <div class="modal-head"><span class="modal-title" id="profileModalTitle">My Profile</span><button class="modal-close" onclick="Utils.closeModal('profileModal')" aria-label="Close profile"><span class="material-symbols-outlined" aria-hidden="true">close</span></button></div>
       <div class="modal-body">
         <form id="profileForm" style="display:flex;flex-direction:column;gap:1.25rem">
           <div style="display:flex;align-items:center;gap:1.25rem">
-            <div class="avatar-xl" id="profAvatar"
-              style="background-image:url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&fit=crop&crop=face')">
-            </div>
-            <div><button type="button" class="btn btn-sm btn-secondary"
-                onclick="notyf.error('Photo upload not available in demo')">Change Photo</button>
+            <div class="avatar-xl" id="profAvatar" style="background-image:url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&fit=crop&crop=face')" role="img" aria-label="Profile photo"></div>
+            <div>
+              <button type="button" class="btn btn-sm btn-secondary" onclick="document.getElementById('profAvatarInput').click()">Change Photo</button>
+              <input type="file" id="profAvatarInput" accept="image/*" onchange="changeProfileAvatar(event)" style="display:none">
               <p class="form-hint" style="margin-top:.25rem">JPG, PNG. Max 5MB.</p>
             </div>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
-            <div class="form-group"><label class="form-label">First Name</label><input class="form-input" id="profFirst"
-                type="text" required></div>
-            <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" id="profLast"
-                type="text" required></div>
+            <div class="form-group"><label class="form-label" for="profFirst">First Name</label><input class="form-input" id="profFirst" type="text" required></div>
+            <div class="form-group"><label class="form-label" for="profLast">Last Name</label><input class="form-input" id="profLast" type="text" required></div>
           </div>
-          <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="profEmail"
-              type="email" required></div>
-          <div class="form-group"><label class="form-label">Phone</label><input class="form-input" id="profPhone"
-              type="tel" required></div>
-          <div class="form-group"><label class="form-label">Date of Birth</label><input class="form-input" id="profDob"
-              type="date"></div>
+          <div class="form-group"><label class="form-label" for="profEmail">Email</label><input class="form-input" id="profEmail" type="email" required></div>
+          <div class="form-group"><label class="form-label" for="profPhone">Phone</label><input class="form-input" id="profPhone" type="tel" required></div>
+          <div class="form-group"><label class="form-label" for="profDob">Date of Birth</label><input class="form-input" id="profDob" type="date"></div>
         </form>
       </div>
-      <div class="modal-foot"><button class="btn btn-secondary"
-          onclick="closeModal('profileModal')">Cancel</button><button class="btn btn-primary"
-          onclick="saveProfile()">Save Changes</button></div>
+      <div class="modal-foot"><button class="btn btn-secondary" onclick="Utils.closeModal('profileModal')">Cancel</button><button class="btn btn-primary" onclick="saveProfile()">Save Changes</button></div>
     </div>
   </div>
 
   <!-- Change Password Modal -->
-  <div class="modal-overlay" id="passwordModal">
+  <div class="modal-overlay" id="passwordModal" role="dialog" aria-labelledby="passModalTitle" aria-hidden="true">
     <div class="modal">
-      <div class="modal-head"><span class="modal-title">Change Password</span><button class="modal-close"
-          onclick="closeModal('passwordModal')"><span class="material-symbols-outlined">close</span></button></div>
+      <div class="modal-head"><span class="modal-title" id="passModalTitle">Change Password</span><button class="modal-close" onclick="Utils.closeModal('passwordModal')" aria-label="Close password modal"><span class="material-symbols-outlined" aria-hidden="true">close</span></button></div>
       <div class="modal-body">
         <form id="passForm" style="display:flex;flex-direction:column;gap:1.25rem" novalidate>
-          <div class="form-group"><label class="form-label">Current Password</label><input class="form-input"
-              id="passCur" type="password" placeholder="Enter current password" required><span class="form-error"
-              id="passCurErr"></span></div>
-          <div class="form-group"><label class="form-label">New Password</label><input class="form-input" id="passNew"
-              type="password" placeholder="Min 8 characters" required><span class="form-error" id="passNewErr"></span>
-          </div>
-          <div class="form-group"><label class="form-label">Confirm New Password</label><input class="form-input"
-              id="passConf" type="password" placeholder="Repeat new password" required><span class="form-error"
-              id="passConfErr"></span></div>
+          <div class="form-group"><label class="form-label" for="passCur">Current Password</label><input class="form-input" id="passCur" type="password" placeholder="Enter current password" required><span class="form-hint form-error" id="passCurErr"></span></div>
+          <div class="form-group"><label class="form-label" for="passNew">New Password</label><input class="form-input" id="passNew" type="password" placeholder="Min 8 characters" required><span class="form-hint form-error" id="passNewErr"></span></div>
+          <div class="form-group"><label class="form-label" for="passConf">Confirm New Password</label><input class="form-input" id="passConf" type="password" placeholder="Repeat new password" required><span class="form-hint form-error" id="passConfErr"></span></div>
         </form>
       </div>
-      <div class="modal-foot"><button class="btn btn-secondary"
-          onclick="closeModal('passwordModal')">Cancel</button><button class="btn btn-primary"
-          onclick="changePassword()">Update Password</button></div>
+      <div class="modal-foot"><button class="btn btn-secondary" onclick="Utils.closeModal('passwordModal')">Cancel</button><button class="btn btn-primary" onclick="changePassword()">Update Password</button></div>
     </div>
   </div>
 
   <!-- Confirm Modal -->
-  <div class="modal-overlay" id="confirmModal">
+  <div class="modal-overlay" id="confirmModal" role="dialog" aria-labelledby="confirmTitle" aria-hidden="true">
     <div class="modal" style="max-width:400px">
-      <div class="modal-head"><span class="modal-title" id="confirmTitle">Confirm</span><button class="modal-close"
-          onclick="closeModal('confirmModal')"><span class="material-symbols-outlined">close</span></button></div>
-      <div class="modal-body">
-        <p id="confirmMsg" style="color:var(--t2)"></p>
-      </div>
-      <div class="modal-foot"><button class="btn btn-secondary"
-          onclick="closeModal('confirmModal')">Cancel</button><button class="btn btn-danger"
-          id="confirmOkBtn">Confirm</button></div>
+      <div class="modal-head"><span class="modal-title" id="confirmTitle">Confirm</span><button class="modal-close" onclick="Utils.closeModal('confirmModal')" aria-label="Close confirmation"><span class="material-symbols-outlined" aria-hidden="true">close</span></button></div>
+      <div class="modal-body"><p id="confirmMsg" style="color:var(--t2)"></p></div>
+      <div class="modal-foot"><button class="btn btn-secondary" onclick="Utils.closeModal('confirmModal')">Cancel</button><button class="btn btn-danger" id="confirmOkBtn">Confirm</button></div>
     </div>
   </div>
 
   <!-- Appointment Modal -->
-  <div class="modal-overlay" id="apptModal">
+  <div class="modal-overlay" id="apptModal" role="dialog" aria-labelledby="apptModalTitle" aria-hidden="true">
     <div class="modal modal-lg">
-      <div class="modal-head"><span class="modal-title" id="apptModalTitle">New Appointment</span><button
-          class="modal-close" onclick="closeModal('apptModal')"><span
-            class="material-symbols-outlined">close</span></button></div>
+      <div class="modal-head"><span class="modal-title" id="apptModalTitle">New Appointment</span><button class="modal-close" onclick="Utils.closeModal('apptModal')" aria-label="Close appointment modal"><span class="material-symbols-outlined" aria-hidden="true">close</span></button></div>
       <div class="modal-body">
         <form id="apptForm" style="display:flex;flex-direction:column;gap:1.25rem" novalidate>
           <input type="hidden" id="apptId">
-          <div class="form-group"><label class="form-label">Doctor</label><select class="form-select" id="apptDoctor"
-              required>
-              <option value="">Select a doctor...</option>
-              <option value="Dr. Sarah Jenkins">Dr. Sarah Jenkins - Cardiologist</option>
-              <option value="Dr. Mark Lee">Dr. Mark Lee - Dermatologist</option>
-              <option value="Dr. Emily Chen">Dr. Emily Chen - Pediatrician</option>
-              <option value="Dr. James Wilson">Dr. James Wilson - Orthopedist</option>
-              <option value="Dr. Richard Lee">Dr. Richard Lee - Cardiologist</option>
-            </select><span class="form-error" id="apptDocErr"></span></div>
-          <div class="form-group"><label class="form-label">Specialty</label><input class="form-input" id="apptSpec"
-              placeholder="Auto-filled" readonly></div>
+          <div class="form-group"><label class="form-label" for="apptDoctor">Doctor</label><select class="form-select" id="apptDoctor" required>
+            <option value="">Select a doctor...</option>
+          </select><span class="form-hint form-error" id="apptDocErr"></span></div>
+          <div class="form-group"><label class="form-label" for="apptSpec">Specialty</label><input class="form-input" id="apptSpec" placeholder="Auto-filled" readonly></div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
-            <div class="form-group"><label class="form-label">Date</label><input class="form-input" id="apptDate"
-                type="date" required><span class="form-error" id="apptDateErr"></span></div>
-            <div class="form-group"><label class="form-label">Time</label><input class="form-input" id="apptTime"
-                type="time" required><span class="form-error" id="apptTimeErr"></span></div>
+            <div class="form-group"><label class="form-label" for="apptDate">Date</label><input class="form-input" id="apptDate" type="date" required><span class="form-hint form-error" id="apptDateErr"></span></div>
+            <div class="form-group"><label class="form-label" for="apptTime">Time</label><input class="form-input" id="apptTime" type="time" required><span class="form-hint form-error" id="apptTimeErr"></span></div>
           </div>
-          <div class="form-group"><label class="form-label">Notes (optional)</label><textarea class="form-input"
-              id="apptNotes" rows="3" style="height:auto;padding:.75rem 1rem"
-              placeholder="Any notes for the doctor..."></textarea></div>
+          <div class="form-group"><label class="form-label" for="apptNotes">Notes (optional)</label><textarea class="form-input" id="apptNotes" rows="3" style="height:auto;padding:.75rem 1rem" placeholder="Any notes for the doctor..."></textarea></div>
         </form>
       </div>
-      <div class="modal-foot"><button class="btn btn-secondary" onclick="closeModal('apptModal')">Cancel</button><button
-          class="btn btn-primary" id="apptSaveBtn">Save Appointment</button></div>
+      <div class="modal-foot"><button class="btn btn-secondary" onclick="Utils.closeModal('apptModal')">Cancel</button><button class="btn btn-primary" id="apptSaveBtn">Save Appointment</button></div>
     </div>
   </div>
 
   <!-- Message Modal -->
-  <div class="modal-overlay" id="msgModal">
+  <div class="modal-overlay" id="msgModal" role="dialog" aria-labelledby="msgModalTitle" aria-hidden="true">
     <div class="modal modal-lg">
-      <div class="modal-head"><span class="modal-title" id="msgModalTitle">New Message</span><button class="modal-close"
-          onclick="closeModal('msgModal')"><span class="material-symbols-outlined">close</span></button></div>
+      <div class="modal-head"><span class="modal-title" id="msgModalTitle">New Message</span><button class="modal-close" onclick="Utils.closeModal('msgModal')" aria-label="Close message modal"><span class="material-symbols-outlined" aria-hidden="true">close</span></button></div>
       <div class="modal-body">
         <form id="msgForm" style="display:flex;flex-direction:column;gap:1.25rem" novalidate>
           <input type="hidden" id="msgId">
-          <div class="form-group"><label class="form-label">To (Doctor)</label><select class="form-select" id="msgTo"
-              required>
-              <option value="">Select a doctor...</option>
-              <option value="Dr. Richard Lee">Dr. Richard Lee</option>
-              <option value="Dr. Sarah Jenkins">Dr. Sarah Jenkins</option>
-              <option value="Dr. Emily Chen">Dr. Emily Chen</option>
-              <option value="Dr. James Wilson">Dr. James Wilson</option>
-              <option value="Support Team">Support Team</option>
-            </select><span class="form-error" id="msgToErr"></span></div>
-          <div class="form-group"><label class="form-label">Subject</label><input class="form-input" id="msgSubject"
-              type="text" placeholder="What is this about?" required><span class="form-error" id="msgSubErr"></span>
-          </div>
-          <div class="form-group"><label class="form-label">Message</label><textarea class="form-input" id="msgBody"
-              rows="4" style="height:auto;padding:.75rem 1rem" placeholder="Type your message..."
-              required></textarea><span class="form-error" id="msgBodyErr"></span></div>
+          <div class="form-group"><label class="form-label" for="msgTo">To (Doctor)</label><select class="form-select" id="msgTo" required>
+            <option value="">Select a doctor...</option>
+            <option value="Support Team">Support Team</option>
+          </select><span class="form-hint form-error" id="msgToErr"></span></div>
+          <div class="form-group"><label class="form-label" for="msgSubject">Subject</label><input class="form-input" id="msgSubject" type="text" placeholder="What is this about?" required><span class="form-hint form-error" id="msgSubErr"></span></div>
+          <div class="form-group"><label class="form-label" for="msgBody">Message</label><textarea class="form-input" id="msgBody" rows="4" style="height:auto;padding:.75rem 1rem" placeholder="Type your message..." required></textarea><span class="form-hint form-error" id="msgBodyErr"></span></div>
         </form>
       </div>
-      <div class="modal-foot"><button class="btn btn-secondary" onclick="closeModal('msgModal')">Cancel</button><button
-          class="btn btn-primary" id="msgSaveBtn">Send Message</button></div>
+      <div class="modal-foot"><button class="btn btn-secondary" onclick="Utils.closeModal('msgModal')">Cancel</button><button class="btn btn-primary" id="msgSaveBtn">Send Message</button></div>
     </div>
   </div>
 
   <!-- Record Upload Modal -->
-  <div class="modal-overlay" id="recModal">
+  <div class="modal-overlay" id="recModal" role="dialog" aria-labelledby="recModalTitle" aria-hidden="true">
     <div class="modal">
-      <div class="modal-head"><span class="modal-title">Upload Document</span><button class="modal-close"
-          onclick="closeModal('recModal')"><span class="material-symbols-outlined">close</span></button></div>
+      <div class="modal-head"><span class="modal-title" id="recModalTitle">Upload Document</span><button class="modal-close" onclick="Utils.closeModal('recModal')" aria-label="Close upload modal"><span class="material-symbols-outlined" aria-hidden="true">close</span></button></div>
       <div class="modal-body">
         <form id="recForm" style="display:flex;flex-direction:column;gap:1.25rem" novalidate>
-          <div class="form-group"><label class="form-label">Document Type</label><select class="form-select"
-              id="recType" required>
-              <option value="">Select type...</option>
-              <option value="Lab Results">Lab Results</option>
-              <option value="Prescription">Prescription</option>
-              <option value="Imaging">Imaging</option>
-              <option value="Clinical Note">Clinical Note</option>
-              <option value="Other">Other</option>
-            </select><span class="form-error" id="recTypeErr"></span></div>
-          <div class="form-group"><label class="form-label">Title</label><input class="form-input" id="recTitle"
-              type="text" placeholder="e.g. Blood Test Results" required><span class="form-error"
-              id="recTitleErr"></span></div>
-          <div class="form-group"><label class="form-label">Doctor</label><select class="form-select" id="recDoctor"
-              required>
-              <option value="">Select doctor...</option>
-              <option value="Dr. Richard Lee">Dr. Richard Lee</option>
-              <option value="Dr. Sarah Jenkins">Dr. Sarah Jenkins</option>
-              <option value="Dr. Emily Chen">Dr. Emily Chen</option>
-              <option value="Dr. James Wilson">Dr. James Wilson</option>
-            </select><span class="form-error" id="recDocErr"></span></div>
-          <div class="form-group"><label class="form-label">Notes (optional)</label><textarea class="form-input"
-              id="recNotes" rows="2" style="height:auto;padding:.75rem 1rem"
-              placeholder="Additional notes..."></textarea></div>
+          <div class="form-group"><label class="form-label" for="recType">Document Type</label><select class="form-select" id="recType" required>
+            <option value="">Select type...</option>
+            <option value="Lab Results">Lab Results</option>
+            <option value="Prescription">Prescription</option>
+            <option value="Imaging">Imaging</option>
+            <option value="Clinical Note">Clinical Note</option>
+            <option value="Other">Other</option>
+          </select><span class="form-hint form-error" id="recTypeErr"></span></div>
+          <div class="form-group"><label class="form-label" for="recTitle">Title</label><input class="form-input" id="recTitle" type="text" placeholder="e.g. Blood Test Results" required><span class="form-hint form-error" id="recTitleErr"></span></div>
+          <div class="form-group"><label class="form-label" for="recDoctor">Doctor</label><select class="form-select" id="recDoctor" required>
+            <option value="">Select doctor...</option>
+          </select><span class="form-hint form-error" id="recDocErr"></span></div>
+          <div class="form-group"><label class="form-label" for="recNotes">Notes (optional)</label><textarea class="form-input" id="recNotes" rows="2" style="height:auto;padding:.75rem 1rem" placeholder="Additional notes..."></textarea></div>
         </form>
       </div>
-      <div class="modal-foot"><button class="btn btn-secondary" onclick="closeModal('recModal')">Cancel</button><button
-          class="btn btn-primary" id="recSaveBtn">Upload Document</button></div>
+      <div class="modal-foot"><button class="btn btn-secondary" onclick="Utils.closeModal('recModal')">Cancel</button><button class="btn btn-primary" id="recSaveBtn">Upload Document</button></div>
+    </div>
+  </div>
+
+  <!-- Refill Modal -->
+  <div class="modal-overlay" id="refillModal" role="dialog" aria-labelledby="refillModalTitle" aria-hidden="true">
+    <div class="modal">
+      <div class="modal-head"><span class="modal-title" id="refillModalTitle">Request Prescription Refill</span><button class="modal-close" onclick="Utils.closeModal('refillModal')" aria-label="Close refill modal"><span class="material-symbols-outlined" aria-hidden="true">close</span></button></div>
+      <div class="modal-body">
+        <form id="refillForm" style="display:flex;flex-direction:column;gap:1.25rem" novalidate>
+          <div class="form-group"><label class="form-label" for="refillMed">Medication</label><select class="form-select" id="refillMed" required>
+            <option value="">Select medication...</option>
+            <option value="Atorvastatin 20mg">Atorvastatin 20mg</option>
+            <option value="Lisinopril 10mg">Lisinopril 10mg</option>
+            <option value="Metformin 500mg">Metformin 500mg</option>
+            <option value="Omeprazole 20mg">Omeprazole 20mg</option>
+          </select><span class="form-hint form-error" id="refillMedErr"></span></div>
+          <div class="form-group"><label class="form-label" for="refillPharmacy">Pharmacy</label><select class="form-select" id="refillPharmacy" required>
+            <option value="">Select pharmacy...</option>
+            <option value="CVS Pharmacy">CVS Pharmacy</option>
+            <option value="Walgreens">Walgreens</option>
+            <option value="Walmart Pharmacy">Walmart Pharmacy</option>
+            <option value="Rite Aid">Rite Aid</option>
+          </select><span class="form-hint form-error" id="refillPharmErr"></span></div>
+          <button type="submit" class="btn btn-primary btn-full" onclick="submitRefill(event)">Request Refill</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pay Bill Modal -->
+  <div class="modal-overlay" id="billModal" role="dialog" aria-labelledby="billModalTitle" aria-hidden="true">
+    <div class="modal">
+      <div class="modal-head"><span class="modal-title" id="billModalTitle">Pay Bill</span><button class="modal-close" onclick="Utils.closeModal('billModal')" aria-label="Close bill modal"><span class="material-symbols-outlined" aria-hidden="true">close</span></button></div>
+      <div class="modal-body">
+        <div style="display:flex;flex-direction:column;gap:1.25rem">
+          <div class="card" style="background:var(--bg3);padding:1rem;text-align:center">
+            <p style="font-size:.75rem;color:var(--t3);margin-bottom:.25rem">Current Balance</p>
+            <p style="font-size:2rem;font-weight:700;color:var(--t1)">$125.00</p>
+          </div>
+          <div class="form-group"><label class="form-label" for="billAmount">Amount to Pay</label><input class="form-input" id="billAmount" type="number" value="125.00" step="0.01"></div>
+          <div class="form-group"><label class="form-label" for="billMethod">Payment Method</label><select class="form-select" id="billMethod">
+            <option value="visa">Visa •••• 4242</option>
+            <option value="mastercard">Mastercard •••• 8888</option>
+            <option value="amex">Amex •••• 0005</option>
+          </select></div>
+          <button class="btn btn-primary btn-full" onclick="payBill()"><span class="material-symbols-outlined" aria-hidden="true">lock</span>Pay $125.00</button>
+        </div>
+      </div>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/utils.js"></script>
+  <script src="../assets/js/data.js"></script>
   <script>
-    const notyf = new Notyf({ duration: 3000, position: { x: 'right', y: 'bottom' }, types: [{ type: 'info', background: '#3b82f6', icon: { className: 'material-symbols-outlined', tagName: 'i', color: '#fff' } }, { type: 'warning', background: '#f59e0b', icon: { className: 'material-symbols-outlined', tagName: 'i', color: '#fff' } }] });
+    const notyf = new Notyf({
+      duration: 3000,
+      position: { x: 'right', y: 'bottom' },
+      types: [
+        { type: 'info', background: '#3b82f6', icon: { className: 'material-symbols-outlined', tagName: 'i', color: '#fff' } },
+        { type: 'warning', background: '#f59e0b', icon: { className: 'material-symbols-outlined', tagName: 'i', color: '#fff' } }
+      ]
+    });
 
-    const Theme = { KEY: 'pt-theme', init() { this.set(localStorage.getItem(this.KEY) || (window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light')); }, set(t) { document.documentElement.setAttribute('data-theme', t); localStorage.setItem(this.KEY, t); const i = document.querySelector('#themeBtn .material-symbols-outlined'); if (i) i.textContent = t === 'dark' ? 'light_mode' : 'dark_mode'; }, toggle() { this.set(this.current === 'dark' ? 'light' : 'dark'); }, get current() { return document.documentElement.getAttribute('data-theme') || 'light'; } };
+    // ---- Session check ----
+    (function checkSession() {
+      if (!sessionStorage.getItem('pt_logged_in') && !localStorage.getItem('pt_inited')) {
+        window.location.href = '../index.html';
+        return;
+      }
+      if (!sessionStorage.getItem('pt_logged_in')) {
+        sessionStorage.setItem('pt_logged_in', '1');
+      }
+    })();
 
-    function debounce(fn, d = 300) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), d); }; }
-
+    // ---- DB helpers ----
     const DB = {
-      get(k, def = []) { try { return JSON.parse(localStorage.getItem('pt_' + k)) || def; } catch { return def; } },
-      set(k, v) { localStorage.setItem('pt_' + k, JSON.stringify(v)); },
-      genId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 6); }
+      get: DATA.get,
+      set: DATA.set,
+      genId: DATA.genId
     };
 
-    function initDefaults() {
-      if (!localStorage.getItem('pt_inited')) {
-        DB.set('user', { firstName: 'Sarah', lastName: 'Connor', email: 'sarah.connor@email.com', phone: '(555) 123-4567', dob: '1985-06-15', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face' });
-        DB.set('appointments', [
-          { id: 'a1', doctor: 'Dr. Richard Lee', specialty: 'Cardiologist', date: '2026-06-20', time: '10:00', status: 'confirmed', notes: 'Follow-up checkup' },
-          { id: 'a2', doctor: 'Dr. Mark Lee', specialty: 'Dermatologist', date: '2026-07-05', time: '14:30', status: 'pending', notes: '' },
-          { id: 'a3', doctor: 'Dr. Emily Chen', specialty: 'Pediatrician', date: '2026-07-12', time: '09:15', status: 'confirmed', notes: '' },
-          { id: 'a4', doctor: 'Dr. James Wilson', specialty: 'Orthopedist', date: '2026-07-20', time: '11:00', status: 'confirmed', notes: '' }
-        ]);
-        DB.set('records', [
-          { id: 'r1', type: 'Lab Results', title: 'Comprehensive Metabolic Panel', doctor: 'Dr. Richard Lee', date: '2026-06-18', notes: '' },
-          { id: 'r2', type: 'Prescription', title: 'Atorvastatin 20mg', doctor: 'Dr. Richard Lee', date: '2026-06-16', notes: '' },
-          { id: 'r3', type: 'Imaging', title: 'Chest X-Ray', doctor: 'Heart Center', date: '2026-06-10', notes: '' },
-          { id: 'r4', type: 'Clinical Note', title: 'Annual Physical Summary', doctor: 'Dr. Sarah Jenkins', date: '2026-06-05', notes: '' }
-        ]);
-        DB.set('messages', [
-          { id: 'm1', from: 'Dr. Richard Lee', subject: 'Lab Results Ready', body: 'Your lab results look great! Let\'s discuss them during our appointment tomorrow.', date: new Date(Date.now() - 7200000).toISOString(), read: false },
-          { id: 'm2', from: 'Dr. Emily Chen', subject: 'Vaccination Schedule', body: 'I\'ve reviewed the vaccination schedule for your child. Here are my recommendations.', date: new Date(Date.now() - 86400000).toISOString(), read: false },
-          { id: 'm3', from: 'Dr. Sarah Jenkins', subject: 'Prescription Refill', body: 'The prescription refill has been processed and sent to your pharmacy.', date: new Date(Date.now() - 172800000).toISOString(), read: true },
-          { id: 'm4', from: 'Support Team', subject: 'Welcome to PlannerTime', body: 'Your account has been verified successfully. Welcome!', date: new Date(Date.now() - 604800000).toISOString(), read: true }
-        ]);
-        DB.set('notifications', [
-          { id: 'n1', title: 'Appointment Reminder', desc: 'You have an appointment with Dr. Richard Lee today at 10:00 AM', time: new Date(Date.now() - 3600000).toISOString(), read: false },
-          { id: 'n2', title: 'Lab Results Available', desc: 'Your Comprehensive Metabolic Panel results are ready to view', time: new Date(Date.now() - 7200000).toISOString(), read: false },
-          { id: 'n3', title: 'Prescription Refilled', desc: 'Atorvastatin 20mg has been sent to CVS Pharmacy', time: new Date(Date.now() - 86400000).toISOString(), read: true }
-        ]);
-        localStorage.setItem('pt_inited', '1');
-      }
+    // ---- Doctor data ----
+    const specMap = DATA.specMap;
+    const docAvatars = DATA.docAvatars;
+
+    // ---- Modal management ----
+    let ddOpen = false;
+
+    function toggleDd() {
+      ddOpen = !ddOpen;
+      document.getElementById('userDropdown').classList.toggle('open', ddOpen);
+      document.getElementById('userTrigger').setAttribute('aria-expanded', ddOpen);
     }
 
-    function openModal(id) { document.getElementById(id).classList.add('open'); if (id === 'profileModal') loadProfile(); if (id === 'notifModal') renderNotifications(); }
-    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-    function showConfirm(title, msg, onOk) { document.getElementById('confirmTitle').textContent = title; document.getElementById('confirmMsg').textContent = msg; document.getElementById('confirmOkBtn').onclick = () => { closeModal('confirmModal'); onOk(); }; openModal('confirmModal'); }
+    document.addEventListener('click', e => {
+      const um = document.getElementById('userMenu');
+      if (ddOpen && !um.contains(e.target)) {
+        ddOpen = false;
+        document.getElementById('userDropdown').classList.remove('open');
+        document.getElementById('userTrigger').setAttribute('aria-expanded', 'false');
+      }
+    });
 
-    let ddOpen = false;
-    function toggleDd() { ddOpen = !ddOpen; document.getElementById('userDropdown').classList.toggle('open', ddOpen); }
-    document.addEventListener('click', e => { const um = document.getElementById('userMenu'); if (ddOpen && !um.contains(e.target)) { ddOpen = false; document.getElementById('userDropdown').classList.remove('open'); } });
+    // ---- Profile ----
+    function loadProfile() {
+      const u = DB.get('user', {});
+      document.getElementById('profFirst').value = u.firstName || '';
+      document.getElementById('profLast').value = u.lastName || '';
+      document.getElementById('profEmail').value = u.email || '';
+      document.getElementById('profPhone').value = u.phone || '';
+      document.getElementById('profDob').value = u.dob || '';
+      const avatar = u.avatar || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&fit=crop&crop=face';
+      document.getElementById('profAvatar').style.backgroundImage = `url('${avatar}')`;
+    }
 
-    function loadProfile() { const u = DB.get('user', {}); document.getElementById('profFirst').value = u.firstName || ''; document.getElementById('profLast').value = u.lastName || ''; document.getElementById('profEmail').value = u.email || ''; document.getElementById('profPhone').value = u.phone || ''; document.getElementById('profDob').value = u.dob || ''; }
-    function saveProfile() { const u = DB.get('user', {}); u.firstName = document.getElementById('profFirst').value.trim(); u.lastName = document.getElementById('profLast').value.trim(); u.email = document.getElementById('profEmail').value.trim(); u.phone = document.getElementById('profPhone').value.trim(); u.dob = document.getElementById('profDob').value; DB.set('user', u); updateUserUI(); closeModal('profileModal'); notyf.success('Profile updated successfully'); }
-    function changePassword() { const cur = document.getElementById('passCur').value, nw = document.getElementById('passNew').value, cf = document.getElementById('passConf').value; let ok = true;['passCurErr', 'passNewErr', 'passConfErr'].forEach(id => { document.getElementById(id).classList.remove('show'); document.getElementById(id).textContent = ''; }); if (!cur) { document.getElementById('passCurErr').textContent = 'Required'; document.getElementById('passCurErr').classList.add('show'); ok = false; } if (nw.length < 8) { document.getElementById('passNewErr').textContent = 'Min 8 characters'; document.getElementById('passNewErr').classList.add('show'); ok = false; } if (nw !== cf) { document.getElementById('passConfErr').textContent = 'Passwords do not match'; document.getElementById('passConfErr').classList.add('show'); ok = false; } if (!ok) return; DB.set('password', nw); closeModal('passwordModal'); document.getElementById('passForm').reset(); notyf.success('Password changed successfully'); }
-    function updateUserUI() { const u = DB.get('user', {}); const name = (u.firstName || '') + ' ' + (u.lastName || ''); document.getElementById('userDisplayName').textContent = name; document.getElementById('udName').textContent = name; document.getElementById('udEmail').textContent = u.email || ''; }
+    function changeProfileAvatar(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const dataUrl = ev.target.result;
+        const u = DB.get('user', {});
+        u.avatar = dataUrl;
+        DB.set('user', u);
+        updateUserUI();
+        notyf.success('Photo updated');
+      };
+      reader.readAsDataURL(file);
+    }
 
-    function renderNotifications() { const list = DB.get('notifications', []); const el = document.getElementById('notifList'); if (!list.length) { el.innerHTML = '<div class="empty-state" style="padding:2rem"><div class="empty-icon" style="width:48px;height:48px;margin-bottom:.75rem"><span class="material-symbols-outlined" style="font-size:24px">notifications_off</span></div><p style="color:var(--t3);font-size:.875rem">No notifications</p></div>'; return; } el.innerHTML = list.map(n => `<div class="notif-item ${n.read ? '' : 'unread'}" onclick="markNotifRead('${n.id}')"><div class="notif-dot-ind ${n.read ? 'read' : ''}"></div><div style="flex:1;min-width:0"><div class="notif-title">${n.title}</div><div class="notif-desc">${n.desc}</div></div><span class="notif-time">${timeAgo(n.time)}</span></div>`).join(''); }
-    function markNotifRead(id) { const list = DB.get('notifications', []); const n = list.find(x => x.id === id); if (n) { n.read = true; DB.set('notifications', list); renderNotifications(); updateNotifDot(); } }
-    function markAllRead() { const list = DB.get('notifications', []).map(n => ({ ...n, read: true })); DB.set('notifications', list); renderNotifications(); updateNotifDot(); notyf.success('All notifications marked as read'); }
-    function updateNotifDot() { const unread = DB.get('notifications', []).filter(n => !n.read).length; document.getElementById('notifDot').style.display = unread ? '' : 'none'; }
-    function addNotification(title, desc) { const list = DB.get('notifications', []); list.unshift({ id: DB.genId(), title, desc, time: new Date().toISOString(), read: false }); DB.set('notifications', list); updateNotifDot(); }
+    function saveProfile() {
+      const u = DB.get('user', {});
+      u.firstName = document.getElementById('profFirst').value.trim();
+      u.lastName = document.getElementById('profLast').value.trim();
+      u.email = document.getElementById('profEmail').value.trim();
+      u.phone = document.getElementById('profPhone').value.trim();
+      u.dob = document.getElementById('profDob').value;
+      DB.set('user', u);
+      updateUserUI();
+      Utils.closeModal('profileModal');
+      notyf.success('Profile updated successfully');
+    }
 
-    function timeAgo(iso) { const s = Math.floor((Date.now() - new Date(iso).getTime()) / 1000); if (s < 60) return 'Just now'; if (s < 3600) return Math.floor(s / 60) + 'm ago'; if (s < 86400) return Math.floor(s / 3600) + 'h ago'; if (s < 604800) return Math.floor(s / 86400) + 'd ago'; return new Date(iso).toLocaleDateString(); }
-    function fmtDate(d) { return new Date(d + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }
-    function fmtTime(t) { const [h, m] = t.split(':'); const hr = parseInt(h); return (hr % 12 || 12) + ':' + m + ' ' + (hr >= 12 ? 'PM' : 'AM'); }
+    function changePassword() {
+      const cur = document.getElementById('passCur').value;
+      const nw = document.getElementById('passNew').value;
+      const cf = document.getElementById('passConf').value;
+      let ok = true;
+      ['passCurErr', 'passNewErr', 'passConfErr'].forEach(id => {
+        document.getElementById(id).classList.remove('show');
+        document.getElementById(id).textContent = '';
+      });
+      if (!cur) { document.getElementById('passCurErr').textContent = 'Required'; document.getElementById('passCurErr').classList.add('show'); ok = false; }
+      if (nw.length < 8) { document.getElementById('passNewErr').textContent = 'Min 8 characters'; document.getElementById('passNewErr').classList.add('show'); ok = false; }
+      if (nw !== cf) { document.getElementById('passConfErr').textContent = 'Passwords do not match'; document.getElementById('passConfErr').classList.add('show'); ok = false; }
+      if (!ok) return;
+      DB.set('password', nw);
+      Utils.closeModal('passwordModal');
+      document.getElementById('passForm').reset();
+      notyf.success('Password changed successfully');
+    }
 
-    const specMap = { 'Dr. Sarah Jenkins': 'Cardiologist', 'Dr. Mark Lee': 'Dermatologist', 'Dr. Emily Chen': 'Pediatrician', 'Dr. James Wilson': 'Orthopedist', 'Dr. Richard Lee': 'Cardiologist' };
-    function openApptModal(id) { const m = id ? DB.get('appointments', []).find(a => a.id === id) : null; document.getElementById('apptModalTitle').textContent = m ? 'Edit Appointment' : 'New Appointment'; document.getElementById('apptSaveBtn').innerHTML = m ? 'Save Changes' : 'Book Appointment'; document.getElementById('apptId').value = m ? m.id : ''; document.getElementById('apptDoctor').value = m ? m.doctor : ''; document.getElementById('apptSpec').value = m ? m.specialty : ''; document.getElementById('apptDate').value = m ? m.date : ''; document.getElementById('apptTime').value = m ? m.time : ''; document.getElementById('apptNotes').value = m ? (m.notes || '') : '';['apptDocErr', 'apptDateErr', 'apptTimeErr'].forEach(e => { document.getElementById(e).classList.remove('show'); document.getElementById(e).textContent = ''; }); openModal('apptModal'); }
-    function saveAppt() { const doc = document.getElementById('apptDoctor').value, date = document.getElementById('apptDate').value, time = document.getElementById('apptTime').value; let ok = true;['apptDocErr', 'apptDateErr', 'apptTimeErr'].forEach(e => { document.getElementById(e).classList.remove('show'); document.getElementById(e).textContent = ''; }); if (!doc) { document.getElementById('apptDocErr').textContent = 'Select a doctor'; document.getElementById('apptDocErr').classList.add('show'); ok = false; } if (!date) { document.getElementById('apptDateErr').textContent = 'Select a date'; document.getElementById('apptDateErr').classList.add('show'); ok = false; } if (!time) { document.getElementById('apptTimeErr').textContent = 'Select a time'; document.getElementById('apptTimeErr').classList.add('show'); ok = false; } if (!ok) return; const list = DB.get('appointments', []); const id = document.getElementById('apptId').value; if (id) { const i = list.findIndex(a => a.id === id); if (i > -1) list[i] = { ...list[i], doctor: doc, specialty: specMap[doc] || '', date, time, notes: document.getElementById('apptNotes').value }; notyf.success('Appointment updated'); } else { list.push({ id: DB.genId(), doctor: doc, specialty: specMap[doc] || '', date, time, status: 'pending', notes: document.getElementById('apptNotes').value }); addNotification('Appointment Booked', `New appointment with ${doc} on ${fmtDate(date)}`); notyf.success('Appointment booked successfully'); } DB.set('appointments', list); closeModal('apptModal'); render(); }
-    function deleteAppt(id) { showConfirm('Cancel Appointment', 'Are you sure you want to cancel this appointment?', () => { DB.set('appointments', DB.get('appointments', []).filter(a => a.id !== id)); notyf.success('Appointment cancelled'); addNotification('Appointment Cancelled', 'An appointment has been cancelled'); render(); }); }
+    function updateUserUI() {
+      const u = DB.get('user', {});
+      const name = (u.firstName || '') + ' ' + (u.lastName || '');
+      const avatar = u.avatar || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face';
+      document.getElementById('userDisplayName').textContent = name;
+      document.getElementById('udName').textContent = name;
+      document.getElementById('udEmail').textContent = u.email || '';
+      document.getElementById('userAvatar').style.backgroundImage = `url('${avatar}')`;
+      document.getElementById('udAvatar').style.backgroundImage = `url('${avatar}')`;
+    }
 
-    function openMsgModal(id) { const m = id ? DB.get('messages', []).find(x => x.id === id) : null; document.getElementById('msgModalTitle').textContent = m ? 'Reply' : 'New Message'; document.getElementById('msgSaveBtn').textContent = m ? 'Send Reply' : 'Send Message'; document.getElementById('msgId').value = m ? m.id : ''; document.getElementById('msgTo').value = m ? m.from : ''; document.getElementById('msgSubject').value = m ? 'Re: ' + m.subject : ''; document.getElementById('msgBody').value = '';['msgToErr', 'msgSubErr', 'msgBodyErr'].forEach(e => { document.getElementById(e).classList.remove('show'); document.getElementById(e).textContent = ''; }); openModal('msgModal'); }
-    function saveMsg() { const to = document.getElementById('msgTo').value, sub = document.getElementById('msgSubject').value.trim(), body = document.getElementById('msgBody').value.trim(); let ok = true;['msgToErr', 'msgSubErr', 'msgBodyErr'].forEach(e => { document.getElementById(e).classList.remove('show'); document.getElementById(e).textContent = ''; }); if (!to) { document.getElementById('msgToErr').textContent = 'Select a doctor'; document.getElementById('msgToErr').classList.add('show'); ok = false; } if (!sub) { document.getElementById('msgSubErr').textContent = 'Enter a subject'; document.getElementById('msgSubErr').classList.add('show'); ok = false; } if (!body) { document.getElementById('msgBodyErr').textContent = 'Enter a message'; document.getElementById('msgBodyErr').classList.add('show'); ok = false; } if (!ok) return; const list = DB.get('messages', []); list.unshift({ id: DB.genId(), from: to, subject: sub, body, date: new Date().toISOString(), read: true, sent: true }); DB.set('messages', list); closeModal('msgModal'); notyf.success('Message sent'); render(); }
-    function deleteMsg(id) { showConfirm('Delete Message', 'Are you sure you want to delete this message?', () => { DB.set('messages', DB.get('messages', []).filter(m => m.id !== id)); notyf.success('Message deleted'); render(); }); }
-    function markMsgRead(id) { const list = DB.get('messages', []); const m = list.find(x => x.id === id); if (m && !m.read) { m.read = true; DB.set('messages', list); updateMsgBadge(); render(); } }
+    // ---- Notifications ----
+    function renderNotifications() {
+      const list = DB.get('notifications', []);
+      const el = document.getElementById('notifList');
+      if (!list.length) {
+        el.innerHTML = '<div class="empty-state" style="padding:2rem"><div class="empty-icon" style="width:48px;height:48px;margin-bottom:.75rem"><span class="material-symbols-outlined" style="font-size:24px">notifications_off</span></div><p style="color:var(--t3);font-size:.875rem">No notifications</p></div>';
+        return;
+      }
+      el.innerHTML = list.map(n =>
+        `<div class="notif-item ${n.read ? '' : 'unread'}" onclick="markNotifRead('${n.id}')" role="button" tabindex="0">
+          <div class="notif-dot-ind ${n.read ? 'read' : ''}"></div>
+          <div style="flex:1;min-width:0"><div class="notif-title">${n.title}</div><div class="notif-desc">${n.desc}</div></div>
+          <span class="notif-time">${Utils.timeAgo(n.time)}</span>
+        </div>`
+      ).join('');
+    }
 
-    function openRecModal() { document.getElementById('recForm').reset();['recTypeErr', 'recTitleErr', 'recDocErr'].forEach(e => { document.getElementById(e).classList.remove('show'); document.getElementById(e).textContent = ''; }); openModal('recModal'); }
-    function saveRec() { const type = document.getElementById('recType').value, title = document.getElementById('recTitle').value.trim(), doc = document.getElementById('recDoctor').value; let ok = true;['recTypeErr', 'recTitleErr', 'recDocErr'].forEach(e => { document.getElementById(e).classList.remove('show'); document.getElementById(e).textContent = ''; }); if (!type) { document.getElementById('recTypeErr').textContent = 'Select a type'; document.getElementById('recTypeErr').classList.add('show'); ok = false; } if (!title) { document.getElementById('recTitleErr').textContent = 'Enter a title'; document.getElementById('recTitleErr').classList.add('show'); ok = false; } if (!doc) { document.getElementById('recDocErr').textContent = 'Select a doctor'; document.getElementById('recDocErr').classList.add('show'); ok = false; } if (!ok) return; const list = DB.get('records', []); list.unshift({ id: DB.genId(), type, title, doctor: doc, date: new Date().toISOString().split('T')[0], notes: document.getElementById('recNotes').value }); DB.set('records', list); closeModal('recModal'); notyf.success('Document uploaded'); addNotification('New Document', `"${title}" has been added to your records`); render(); }
-    function deleteRec(id) { showConfirm('Delete Record', 'Are you sure you want to delete this record?', () => { DB.set('records', DB.get('records', []).filter(r => r.id !== id)); notyf.success('Record deleted'); render(); }); }
+    function markNotifRead(id) {
+      const list = DB.get('notifications', []);
+      const n = list.find(x => x.id === id);
+      if (n) { n.read = true; DB.set('notifications', list); renderNotifications(); updateNotifDot(); }
+    }
 
-    function updateMsgBadge() { const unread = DB.get('messages', []).filter(m => !m.read && !m.sent).length; const b = document.getElementById('msgBadge'); b.textContent = unread; b.style.display = unread ? '' : 'none'; }
+    function markAllRead() {
+      DB.set('notifications', DB.get('notifications', []).map(n => ({ ...n, read: true })));
+      renderNotifications();
+      updateNotifDot();
+      notyf.success('All notifications marked as read');
+    }
 
-    const docAvatars = { 'Dr. Sarah Jenkins': 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=80&h=80&fit=crop&crop=face', 'Dr. Mark Lee': 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=80&h=80&fit=crop&crop=face', 'Dr. Emily Chen': 'https://images.unsplash.com/photo-1594824476967-48c8b964ac31?w=80&h=80&fit=crop&crop=face', 'Dr. James Wilson': 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=80&h=80&fit=crop&crop=face', 'Dr. Richard Lee': 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=80&h=80&fit=crop&crop=face' };
+    function updateNotifDot() {
+      const unread = DB.get('notifications', []).filter(n => !n.read).length;
+      document.getElementById('notifDot').style.display = unread ? '' : 'none';
+    }
 
-    // ================= VISTAS ACTUALIZADAS =================
-const V = {};
+    function addNotification(title, desc) {
+      const list = DB.get('notifications', []);
+      list.unshift({ id: DB.genId(), title, desc, time: new Date().toISOString(), read: false });
+      DB.set('notifications', list);
+      updateNotifDot();
+    }
 
-// 1. HOME (Saludo dinámico y Sparklines)
-V['/'] = () => {
-  const u = DB.get('user', {}); const appts = DB.get('appointments', []).filter(a => a.status !== 'cancelled').sort((a, b) => a.date.localeCompare(b.date));
-  const next = appts[0]; const isToday = next && next.date === new Date().toISOString().split('T')[0];
-  const hr = new Date().getHours(); const greet = hr < 12 ? 'Good Morning' : hr < 18 ? 'Good Afternoon' : 'Good Evening';
-  return `<div class="page-header"><div><h1 class="page-title">${greet}, ${u.firstName || 'User'}</h1><p class="page-sub"><span class="material-symbols-outlined" style="font-size:18px">calendar_today</span>${new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}</p></div><button class="btn btn-primary" onclick="openApptModal()"><span class="material-symbols-outlined">add</span>Book Appointment</button></div>
-  <div class="dash-grid"><div class="dash-main">
-    <section><div class="sec-header"><h2 class="sec-title">Next Appointment</h2><a class="sec-link" href="#/appointments">View all</a></div>
-    ${next ? `<div class="card card-hover"><div class="card-body"><div class="appt-card"><div class="appt-doc"><div class="avatar avatar-xl" style="background-image:url('${docAvatars[next.doctor] || ''}')"></div><div class="appt-vid"><span class="material-symbols-outlined">videocam</span></div></div><div class="appt-info"><div><h3 class="appt-name">${next.doctor}</h3><p class="appt-spec">${next.specialty}</p></div><div class="appt-meta"><div class="appt-meta-item"><span class="material-symbols-outlined">schedule</span>${fmtTime(next.time)}</div><div class="appt-meta-item"><span class="material-symbols-outlined">calendar_month</span>${isToday ? 'Today' : fmtDate(next.date)}</div></div></div><div style="width:100%"><button class="btn btn-secondary btn-full" onclick="notyf.success('Joining call...')"><span class="material-symbols-outlined">videocam</span>Join Call</button></div></div></div></div>` : '<div class="card card-body" style="text-align:center;color:var(--t3)">No appointments</div>'}
-    </section>
-    <section><h2 class="sec-title">Vitals</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
-      <div class="card vital-card"><div class="vital-head"><div class="vital-icon" style="background:var(--c-err-l);color:var(--c-err)"><span class="material-symbols-outlined">favorite</span></div><span class="vital-label">Heart Rate</span></div><div class="vital-val">72 <span class="vital-unit">bpm</span></div><svg viewBox="0 0 100 20" style="width:100%;height:30px;margin-top:.5rem"><polyline fill="none" stroke="var(--c-err)" stroke-width="1.5" points="0,15 10,15 15,5 20,18 25,10 35,15 45,15 50,5 55,18 60,10 70,15 80,15 85,5 90,18 95,10 100,15" /></svg></div>
-      <div class="card vital-card"><div class="vital-head"><div class="vital-icon" style="background:var(--c-info-l);color:var(--c-pri)"><span class="material-symbols-outlined">monitor_heart</span></div><span class="vital-label">Blood Pressure</span></div><div class="vital-val">120/80 <span class="vital-unit">mmHg</span></div><div class="vital-status" style="margin-top:1.4rem"><span class="vital-dot"></span><span class="vital-status-txt">Normal</span></div></div>
-    </div></section>
-  </div></div>`;
-};
+    // ---- Appointments CRUD ----
+    function openApptModal(id) {
+      const m = id ? DB.get('appointments', []).find(a => a.id === id) : null;
+      document.getElementById('apptModalTitle').textContent = m ? 'Edit Appointment' : 'New Appointment';
+      document.getElementById('apptSaveBtn').innerHTML = m ? 'Save Changes' : 'Book Appointment';
+      document.getElementById('apptId').value = m ? m.id : '';
+      document.getElementById('apptDoctor').value = m ? m.doctor : '';
+      document.getElementById('apptSpec').value = m ? m.specialty : '';
+      document.getElementById('apptDate').value = m ? m.date : '';
+      document.getElementById('apptTime').value = m ? m.time : '';
+      document.getElementById('apptNotes').value = m ? (m.notes || '') : '';
+      ['apptDocErr', 'apptDateErr', 'apptTimeErr'].forEach(e => {
+        document.getElementById(e).classList.remove('show');
+        document.getElementById(e).textContent = '';
+      });
+      Utils.openModal('apptModal');
+    }
 
-// 2. APPOINTMENTS (Botón vista calendario y Acciones rápidas)
-V['/appointments'] = () => {
-  const list = DB.get('appointments', []).filter(a => a.status !== 'cancelled');
-  return `<div class="page-header"><div><h1 class="page-title">Appointments</h1><p class="page-sub" style="color:var(--t2)">Manage visits.</p></div><div style="display:flex;gap:.5rem"><button class="btn btn-secondary btn-sm" onclick="toggleCalView()"><span class="material-symbols-outlined" style="font-size:18px">calendar_month</span>Calendar</button><button class="btn btn-primary" onclick="openApptModal()"><span class="material-symbols-outlined">add</span>New</button></div></div>
-  <div class="card"><div class="table-wrap"><table class="dtable"><thead><tr><th>Doctor</th><th>Type</th><th>Date</th><th>Status</th><th style="text-align:right">Actions</th></tr></thead><tbody>
-  ${list.map(a => `<tr><td><div class="tbl-doc"><div class="avatar" style="background-image:url('${docAvatars[a.doctor] || ''}')"></div><div><span class="tbl-doc-name">${a.doctor}</span><span class="tbl-doc-spec-m">${a.specialty}</span></div></div></td><td><span class="material-symbols-outlined" style="color:var(--c-pri);vertical-align:middle">videocam</span> Video</td><td><div class="tbl-date"><span class="tbl-date-time">${fmtDate(a.date)}</span><span class="tbl-date-date">${fmtTime(a.time)}</span></div></td><td><span class="badge ${a.status === 'confirmed' ? 'badge-primary' : 'badge-warning'}">${a.status}</span></td><td class="tbl-actions"><button class="tbl-act-btn" onclick="openApptModal('${a.id}')" title="Edit"><span class="material-symbols-outlined" style="font-size:20px">edit</span></button><button class="tbl-act-btn" onclick="deleteAppt('${a.id}')" title="Cancel"><span class="material-symbols-outlined" style="font-size:20px">cancel</span></button></td></tr>`).join('')}
-  </tbody></table></div></div>
-  <div id="calViewModal" class="modal-overlay"><div class="modal modal-lg"><div class="modal-head"><span class="modal-title">Calendar View</span><button class="modal-close" onclick="closeModal('calViewModal')"><span class="material-symbols-outlined">close</span></button></div><div class="modal-body"><div class="cal-grid"><div class="cal-day-head">Sun</div><div class="cal-day-head">Mon</div><div class="cal-day-head">Tue</div><div class="cal-day-head">Wed</div><div class="cal-day-head">Thu</div><div class="cal-day-head">Fri</div><div class="cal-day-head">Sat</div>${generateCalendarDays(list)}</div></div></div></div>`;
-};
-function toggleCalView() { openModal('calViewModal'); }
-function generateCalendarDays(appts) {
-  const today = new Date(); const y = today.getFullYear(); const m = today.getMonth();
-  const firstDay = new Date(y, m, 1).getDay(); const daysInMonth = new Date(y, m + 1, 0).getDate();
-  let html = ''; for(let i=0; i<firstDay; i++) html += '<div class="cal-day empty"></div>';
-  for(let d=1; d<=daysInMonth; d++) {
-    const dateStr = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const dayAppts = appts.filter(a => a.date === dateStr);
-    html += `<div class="cal-day ${d === today.getDate() ? 'today' : ''}">${d}${dayAppts.map(a => `<div class="cal-event">${fmtTime(a.time)} ${a.doctor.split(' ').pop()}</div>`).join('')}</div>`;
-  }
-  return html;
-}
+    function saveAppt() {
+      const doc = document.getElementById('apptDoctor').value;
+      const date = document.getElementById('apptDate').value;
+      const time = document.getElementById('apptTime').value;
+      let ok = true;
+      ['apptDocErr', 'apptDateErr', 'apptTimeErr'].forEach(e => {
+        document.getElementById(e).classList.remove('show');
+        document.getElementById(e).textContent = '';
+      });
+      if (!doc) { document.getElementById('apptDocErr').textContent = 'Select a doctor'; document.getElementById('apptDocErr').classList.add('show'); ok = false; }
+      if (!date) { document.getElementById('apptDateErr').textContent = 'Select a date'; document.getElementById('apptDateErr').classList.add('show'); ok = false; }
+      if (!time) { document.getElementById('apptTimeErr').textContent = 'Select a time'; document.getElementById('apptTimeErr').classList.add('show'); ok = false; }
+      if (!ok) return;
+      const list = DB.get('appointments', []);
+      const id = document.getElementById('apptId').value;
+      if (id) {
+        const i = list.findIndex(a => a.id === id);
+        if (i > -1) list[i] = { ...list[i], doctor: doc, specialty: specMap[doc] || '', date, time, notes: document.getElementById('apptNotes').value };
+        notyf.success('Appointment updated');
+      } else {
+        list.push({ id: DB.genId(), doctor: doc, specialty: specMap[doc] || '', date, time, status: 'pending', notes: document.getElementById('apptNotes').value });
+        addNotification('Appointment Booked', `New appointment with ${doc} on ${Utils.fmtDate(date)}`);
+        notyf.success('Appointment booked successfully');
+      }
+      DB.set('appointments', list);
+      Utils.closeModal('apptModal');
+      render();
+    }
 
-// 3. RECORDS (Chips, Iconos y Preview Modal)
-V['/records'] = () => {
-  const list = DB.get('records', []);
-  const typeIcons = { 'Lab Results': 'biotech', 'Prescription': 'prescriptions', 'Imaging': 'image', 'Clinical Note': 'description', 'Other': 'folder' };
-  const typeColors = { 'Lab Results': 'act-icon-blue', 'Prescription': 'act-icon-green', 'Imaging': 'act-icon-orange', 'Clinical Note': 'act-icon-blue', 'Other': 'act-icon-orange' };
-  return `<div class="page-header"><div><h1 class="page-title">Records</h1></div><button class="btn btn-primary" onclick="openRecModal()"><span class="material-symbols-outlined">upload</span>Upload</button></div>
-  <div class="chips-bar"><button class="chip active" onclick="filterRecs(this,'')">All</button><button class="chip" onclick="filterRecs(this,'Lab Results')">Labs</button><button class="chip" onclick="filterRecs(this,'Prescription')">Rx</button><button class="chip" onclick="filterRecs(this,'Imaging')">Imaging</button></div>
-  <div class="card"><div class="act-list" id="recList">
-  ${list.map(r => `<div class="act-item" data-type="${r.type}" onclick="previewRec('${r.id}')"><div class="act-icon ${typeColors[r.type] || 'act-icon-blue'}"><span class="material-symbols-outlined">${typeIcons[r.type] || 'description'}</span></div><div class="act-content"><div class="act-header"><span class="act-title">${r.title}</span><span class="act-time">${fmtDate(r.date)}</span></div><p class="act-desc">${r.type} • ${r.doctor}</p></div><button class="tbl-act-btn" onclick="event.stopPropagation();deleteRec('${r.id}')"><span class="material-symbols-outlined" style="font-size:20px">delete</span></button></div>`).join('')}
-  </div></div>
-  <div id="recPreviewModal" class="modal-overlay"><div class="modal modal-lg"><div class="modal-head"><span class="modal-title" id="prevTitle">Preview</span><button class="modal-close" onclick="closeModal('recPreviewModal')"><span class="material-symbols-outlined">close</span></button></div><div class="modal-body" id="prevBody" style="min-height:300px;display:flex;align-items:center;justify-content:center;background:var(--bg3);color:var(--t3);flex-direction:column;gap:1rem"><span class="material-symbols-outlined" style="font-size:48px">description</span><p>Mock Preview: Document content would appear here.</p></div></div></div>`;
-};
-function filterRecs(btn, type) {
-  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active')); btn.classList.add('active');
-  document.querySelectorAll('#recList .act-item').forEach(item => { item.style.display = (!type || item.dataset.type === type) ? '' : 'none'; });
-}
-function previewRec(id) {
-  const r = DB.get('records', []).find(x => x.id === id); if(!r) return;
-  document.getElementById('prevTitle').textContent = r.title;
-  document.getElementById('prevBody').innerHTML = `<span class="material-symbols-outlined" style="font-size:48px;color:var(--c-pri)">description</span><h3>${r.title}</h3><p>${r.type} • ${r.doctor}</p><p style="font-size:.875rem;max-width:400px;text-align:center">${r.notes || 'No additional notes.'}</p>`;
-  openModal('recPreviewModal');
-}
+    function deleteAppt(id) {
+      Utils.showConfirm('Cancel Appointment', 'Are you sure you want to cancel this appointment?', () => {
+        DB.set('appointments', DB.get('appointments', []).filter(a => a.id !== id));
+        notyf.success('Appointment cancelled');
+        addNotification('Appointment Cancelled', 'An appointment has been cancelled');
+        render();
+      });
+    }
 
-// 4. MESSAGES (Layout 2 paneles, Burbujas y Búsqueda)
-V['/messages'] = () => {
-  const list = DB.get('messages', []);
-  window.currentMsgId = list[0]?.id || null;
-  return `<div class="page-header"><div><h1 class="page-title">Messages</h1></div><button class="btn btn-primary" onclick="openMsgModal()"><span class="material-symbols-outlined">edit</span>New</button></div>
-  <div class="chat-layout" id="chatLayout">
-    <div class="chat-sidebar">
-      <div style="padding:1rem;border-bottom:1px solid var(--b1)"><div class="filter-input" style="margin:0"><span class="material-symbols-outlined">search</span><input type="text" placeholder="Search chats..." oninput="filterChats(this.value)"></div></div>
-      <div id="chatList">${list.map(m => `<div class="act-item" style="cursor:pointer" onclick="openChat('${m.id}')"><div class="avatar" style="background-image:url('${docAvatars[m.from] || ''}')"></div><div class="act-content"><div class="act-header"><span class="act-title" style="font-size:.8125rem">${m.from}</span><span class="act-time">${timeAgo(m.date)}</span></div><p class="act-desc" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${m.subject}</p></div></div>`).join('')}</div>
-    </div>
-    <div class="chat-main" id="chatMain"></div>
-  </div>`;
-};
-function filterChats(q) {
-  document.querySelectorAll('#chatList .act-item').forEach(item => { item.style.display = item.textContent.toLowerCase().includes(q.toLowerCase()) ? '' : 'none'; });
-}
-function openChat(id) {
-  const m = DB.get('messages', []).find(x => x.id === id); if(!m) return;
-  if(!m.read) { m.read = true; DB.set('messages', DB.get('messages', [])); updateMsgBadge(); }
-  document.getElementById('chatMain').innerHTML = `
-    <div class="chat-header"><div class="avatar" style="background-image:url('${docAvatars[m.from] || ''}')"></div><div><div style="font-weight:600;color:var(--t1)">${m.from}</div><div style="font-size:.75rem;color:var(--t3)">${m.subject}</div></div></div>
-    <div class="chat-messages"><div class="chat-bubble them">${m.body}</div><div class="chat-bubble me">Thank you, I'll review this shortly.</div></div>
-    <div class="chat-input-area"><input type="text" class="form-input" placeholder="Type a message..." style="flex:1" onkeydown="if(event.key==='Enter')sendMockReply()"><button class="btn btn-primary" onclick="sendMockReply()"><span class="material-symbols-outlined">send</span></button></div>`;
-}
-function sendMockReply() { notyf.success('Message sent (mock)'); }
+    // ---- Messages CRUD ----
+    function openMsgModal(id) {
+      const m = id ? DB.get('messages', []).find(x => x.id === id) : null;
+      document.getElementById('msgModalTitle').textContent = m ? 'Reply' : 'New Message';
+      document.getElementById('msgSaveBtn').textContent = m ? 'Send Reply' : 'Send Message';
+      document.getElementById('msgId').value = m ? m.id : '';
+      document.getElementById('msgTo').value = m ? m.from : '';
+      document.getElementById('msgSubject').value = m ? 'Re: ' + m.subject : '';
+      document.getElementById('msgBody').value = '';
+      ['msgToErr', 'msgSubErr', 'msgBodyErr'].forEach(e => {
+        document.getElementById(e).classList.remove('show');
+        document.getElementById(e).textContent = '';
+      });
+      Utils.openModal('msgModal');
+    }
 
-// 5. SETTINGS (Pestañas verticales y Toggle Switches)
-V['/settings'] = () => {
-  const u = DB.get('user', {});
-  return `<div class="page-header"><div><h1 class="page-title">Settings</h1></div></div>
-  <div class="settings-layout">
-    <div class="settings-nav">
-      <div class="settings-nav-item active" onclick="switchTab(this,'tab-profile')">Profile</div>
-      <div class="settings-nav-item" onclick="switchTab(this,'tab-security')">Security</div>
-      <div class="settings-nav-item" onclick="switchTab(this,'tab-notif')">Notifications</div>
-    </div>
-    <div class="settings-content">
-      <div id="tab-profile" class="settings-tab">
-        <div class="card card-body" style="margin-bottom:1.5rem">
-          <div style="display:flex;align-items:center;gap:1.5rem;margin-bottom:1.5rem">
-            <div class="avatar-xl" id="setAvatar" style="background-image:url('${u.avatar || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&fit=crop&crop=face'}')"></div>
-            <div><label class="btn btn-secondary btn-sm"><span class="material-symbols-outlined" style="font-size:18px">photo_camera</span>Change<input type="file" accept="image/*" onchange="previewAvatar(event)" style="display:none"></label><p class="form-hint" style="margin-top:.5rem">JPG or PNG.</p></div>
+    function saveMsg() {
+      const to = document.getElementById('msgTo').value;
+      const sub = document.getElementById('msgSubject').value.trim();
+      const body = document.getElementById('msgBody').value.trim();
+      let ok = true;
+      ['msgToErr', 'msgSubErr', 'msgBodyErr'].forEach(e => {
+        document.getElementById(e).classList.remove('show');
+        document.getElementById(e).textContent = '';
+      });
+      if (!to) { document.getElementById('msgToErr').textContent = 'Select a doctor'; document.getElementById('msgToErr').classList.add('show'); ok = false; }
+      if (!sub) { document.getElementById('msgSubErr').textContent = 'Enter a subject'; document.getElementById('msgSubErr').classList.add('show'); ok = false; }
+      if (!body) { document.getElementById('msgBodyErr').textContent = 'Enter a message'; document.getElementById('msgBodyErr').classList.add('show'); ok = false; }
+      if (!ok) return;
+      const list = DB.get('messages', []);
+      list.unshift({ id: DB.genId(), from: to, subject: sub, body, date: new Date().toISOString(), read: true, sent: true });
+      DB.set('messages', list);
+      Utils.closeModal('msgModal');
+      notyf.success('Message sent');
+      render();
+    }
+
+    function deleteMsg(id) {
+      Utils.showConfirm('Delete Message', 'Are you sure you want to delete this message?', () => {
+        DB.set('messages', DB.get('messages', []).filter(m => m.id !== id));
+        notyf.success('Message deleted');
+        render();
+      });
+    }
+
+    function markMsgRead(id) {
+      const list = DB.get('messages', []);
+      const m = list.find(x => x.id === id);
+      if (m && !m.read) { m.read = true; DB.set('messages', list); updateMsgBadge(); render(); }
+    }
+
+    // ---- Records CRUD ----
+    function openRecModal() {
+      document.getElementById('recForm').reset();
+      ['recTypeErr', 'recTitleErr', 'recDocErr'].forEach(e => {
+        document.getElementById(e).classList.remove('show');
+        document.getElementById(e).textContent = '';
+      });
+      Utils.openModal('recModal');
+    }
+
+    function saveRec() {
+      const type = document.getElementById('recType').value;
+      const title = document.getElementById('recTitle').value.trim();
+      const doc = document.getElementById('recDoctor').value;
+      let ok = true;
+      ['recTypeErr', 'recTitleErr', 'recDocErr'].forEach(e => {
+        document.getElementById(e).classList.remove('show');
+        document.getElementById(e).textContent = '';
+      });
+      if (!type) { document.getElementById('recTypeErr').textContent = 'Select a type'; document.getElementById('recTypeErr').classList.add('show'); ok = false; }
+      if (!title) { document.getElementById('recTitleErr').textContent = 'Enter a title'; document.getElementById('recTitleErr').classList.add('show'); ok = false; }
+      if (!doc) { document.getElementById('recDocErr').textContent = 'Select a doctor'; document.getElementById('recDocErr').classList.add('show'); ok = false; }
+      if (!ok) return;
+      const list = DB.get('records', []);
+      list.unshift({ id: DB.genId(), type, title, doctor: doc, date: new Date().toISOString().split('T')[0], notes: document.getElementById('recNotes').value });
+      DB.set('records', list);
+      Utils.closeModal('recModal');
+      notyf.success('Document uploaded');
+      addNotification('New Document', `"${title}" has been added to your records`);
+      render();
+    }
+
+    function deleteRec(id) {
+      Utils.showConfirm('Delete Record', 'Are you sure you want to delete this record?', () => {
+        DB.set('records', DB.get('records', []).filter(r => r.id !== id));
+        notyf.success('Record deleted');
+        render();
+      });
+    }
+
+    function updateMsgBadge() {
+      const unread = DB.get('messages', []).filter(m => !m.read && !m.sent).length;
+      const b = document.getElementById('msgBadge');
+      b.textContent = unread;
+      b.style.display = unread ? '' : 'none';
+    }
+
+    // ---- Quick Actions ----
+    function submitRefill(e) {
+      e.preventDefault();
+      const med = document.getElementById('refillMed').value;
+      const pharm = document.getElementById('refillPharmacy').value;
+      if (!med || !pharm) {
+        notyf.error('Please select medication and pharmacy');
+        return;
+      }
+      Utils.closeModal('refillModal');
+      notyf.success(`Refill request for ${med} sent to ${pharm}`);
+      addNotification('Refill Requested', `${med} refill sent to ${pharm}`);
+    }
+
+    function payBill() {
+      const amt = document.getElementById('billAmount').value;
+      const method = document.getElementById('billMethod');
+      const label = method.options[method.selectedIndex].text;
+      Utils.closeModal('billModal');
+      notyf.success(`Payment of $${amt} via ${label} successful`);
+      addNotification('Payment Made', `$${amt} paid via ${label}`);
+    }
+
+    // ---- VIEWS ----
+    const V = {};
+
+    V['/'] = () => {
+      const u = DB.get('user', {});
+      const appts = DB.get('appointments', []).filter(a => a.status !== 'cancelled').sort((a, b) => a.date.localeCompare(b.date));
+      const next = appts[0];
+      const hr = new Date().getHours();
+      const greet = hr < 12 ? 'Good Morning' : hr < 18 ? 'Good Afternoon' : 'Good Evening';
+      return `<div class="page-header">
+        <div><h1 class="page-title">${greet}, ${u.firstName || 'User'}</h1>
+        <p class="page-sub"><span class="material-symbols-outlined" style="font-size:18px" aria-hidden="true">calendar_today</span>${new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}</p></div>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap"><button class="btn btn-secondary" onclick="Utils.openModal('refillModal')"><span class="material-symbols-outlined" aria-hidden="true">medication</span>Request Refill</button><button class="btn btn-primary" onclick="openApptModal()"><span class="material-symbols-outlined" aria-hidden="true">add</span>Book Appointment</button></div>
+      </div>
+      <div class="dash-grid"><div class="dash-main">
+        <section><div class="sec-header"><h2 class="sec-title">Next Appointment</h2><a class="sec-link" href="#/appointments">View all</a></div>
+        ${next ? `<div class="card card-hover"><div class="card-body"><div class="appt-card"><div class="appt-doc"><div class="avatar avatar-xl" style="background-image:url('${docAvatars[next.doctor] || ''}')" role="img" aria-label="${next.doctor}"></div><div class="appt-vid"><span class="material-symbols-outlined" aria-hidden="true">videocam</span></div></div><div class="appt-info"><div><h3 class="appt-name">${next.doctor}</h3><p class="appt-spec">${next.specialty}</p></div><div class="appt-meta"><div class="appt-meta-item"><span class="material-symbols-outlined" aria-hidden="true">schedule</span>${Utils.fmtTime(next.time)}</div><div class="appt-meta-item"><span class="material-symbols-outlined" aria-hidden="true">calendar_month</span>${Utils.fmtDate(next.date)}</div></div></div><div style="width:100%"><button class="btn btn-secondary btn-full" onclick="notyf.success('Joining call...')"><span class="material-symbols-outlined" aria-hidden="true">videocam</span>Join Call</button></div></div></div></div>` : '<div class="card card-body" style="text-align:center;color:var(--t3)">No upcoming appointments</div>'}
+        </section>
+        <section><h2 class="sec-title">Vitals</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+          <div class="card vital-card"><div class="vital-head"><div class="vital-icon" style="background:var(--c-err-l);color:var(--c-err)"><span class="material-symbols-outlined" aria-hidden="true">favorite</span></div><span class="vital-label">Heart Rate</span></div><div class="vital-val">72 <span class="vital-unit">bpm</span></div><svg viewBox="0 0 100 20" style="width:100%;height:30px;margin-top:.5rem" aria-hidden="true"><polyline fill="none" stroke="var(--c-err)" stroke-width="1.5" points="0,15 10,15 15,5 20,18 25,10 35,15 45,15 50,5 55,18 60,10 70,15 80,15 85,5 90,18 95,10 100,15" /></svg></div>
+          <div class="card vital-card"><div class="vital-head"><div class="vital-icon" style="background:var(--c-info-l);color:var(--c-pri)"><span class="material-symbols-outlined" aria-hidden="true">monitor_heart</span></div><span class="vital-label">Blood Pressure</span></div><div class="vital-val">120/80 <span class="vital-unit">mmHg</span></div><div class="vital-status" style="margin-top:1.4rem"><span class="vital-dot"></span><span class="vital-status-txt">Normal</span></div></div>
+        </div></section>
+      </div></div>`;
+    };
+
+    V['/appointments'] = () => {
+      const list = DB.get('appointments', []).filter(a => a.status !== 'cancelled');
+      return `<div class="page-header"><div><h1 class="page-title">Appointments</h1><p class="page-sub">Manage your scheduled visits.</p></div><div style="display:flex;gap:.5rem"><button class="btn btn-secondary btn-sm" onclick="toggleCalView()" aria-label="Calendar view"><span class="material-symbols-outlined" style="font-size:18px" aria-hidden="true">calendar_month</span>Calendar</button><button class="btn btn-primary" onclick="openApptModal()"><span class="material-symbols-outlined" aria-hidden="true">add</span>New</button></div></div>
+      <div class="card"><div class="table-wrap"><table class="dtable" aria-label="Appointments table"><thead><tr><th scope="col">Doctor</th><th scope="col">Type</th><th scope="col">Date</th><th scope="col">Status</th><th scope="col" style="text-align:right">Actions</th></tr></thead><tbody>
+      ${list.map(a => `<tr><td><div class="tbl-doc"><div class="avatar" style="background-image:url('${docAvatars[a.doctor] || ''}')" role="img" aria-label=""></div><div><span class="tbl-doc-name">${a.doctor}</span><span class="tbl-doc-spec-m">${a.specialty}</span></div></div></td><td><span class="material-symbols-outlined" style="color:var(--c-pri);vertical-align:middle" aria-hidden="true">videocam</span> Video</td><td><div class="tbl-date"><span class="tbl-date-time">${Utils.fmtDate(a.date)}</span><span class="tbl-date-date">${Utils.fmtTime(a.time)}</span></div></td><td><span class="badge ${a.status === 'confirmed' ? 'badge-primary' : 'badge-warning'}">${a.status}</span></td><td class="tbl-actions"><button class="tbl-act-btn" onclick="openApptModal('${a.id}')" title="Edit" aria-label="Edit appointment"><span class="material-symbols-outlined" style="font-size:20px" aria-hidden="true">edit</span></button><button class="tbl-act-btn" onclick="deleteAppt('${a.id}')" title="Cancel" aria-label="Cancel appointment"><span class="material-symbols-outlined" style="font-size:20px" aria-hidden="true">cancel</span></button></td></tr>`).join('')}
+      </tbody></table></div></div>
+      <div id="calViewModal" class="modal-overlay" role="dialog" aria-labelledby="calViewTitle" aria-hidden="true"><div class="modal modal-lg"><div class="modal-head"><span class="modal-title" id="calViewTitle">Calendar View</span><button class="modal-close" onclick="Utils.closeModal('calViewModal')" aria-label="Close calendar"><span class="material-symbols-outlined" aria-hidden="true">close</span></button></div><div class="modal-body"><div class="cal-grid"><div class="cal-day-head">Sun</div><div class="cal-day-head">Mon</div><div class="cal-day-head">Tue</div><div class="cal-day-head">Wed</div><div class="cal-day-head">Thu</div><div class="cal-day-head">Fri</div><div class="cal-day-head">Sat</div>${generateCalendarDays(list)}</div></div></div></div>`;
+    };
+
+    function toggleCalView() { Utils.openModal('calViewModal'); }
+
+    function generateCalendarDays(appts) {
+      const today = new Date();
+      const y = today.getFullYear();
+      const m = today.getMonth();
+      const firstDay = new Date(y, m, 1).getDay();
+      const daysInMonth = new Date(y, m + 1, 0).getDate();
+      let html = '';
+      for (let i = 0; i < firstDay; i++) html += '<div class="cal-day empty"></div>';
+      for (let d = 1; d <= daysInMonth; d++) {
+        const dateStr = `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        const dayAppts = appts.filter(a => a.date === dateStr);
+        html += `<div class="cal-day ${d === today.getDate() ? 'today' : ''}" aria-label="${dateStr}">${d}${dayAppts.map(a => `<div class="cal-event">${Utils.fmtTime(a.time)} ${a.doctor.split(' ').pop()}</div>`).join('')}</div>`;
+      }
+      return html;
+    }
+
+    V['/records'] = () => {
+      const list = DB.get('records', []);
+      const typeIcons = { 'Lab Results': 'biotech', 'Prescription': 'prescriptions', 'Imaging': 'image', 'Clinical Note': 'description', 'Other': 'folder' };
+      const typeColors = { 'Lab Results': 'act-icon-blue', 'Prescription': 'act-icon-green', 'Imaging': 'act-icon-orange', 'Clinical Note': 'act-icon-blue', 'Other': 'act-icon-orange' };
+      return `<div class="page-header"><div><h1 class="page-title">Records</h1></div><button class="btn btn-primary" onclick="openRecModal()"><span class="material-symbols-outlined" aria-hidden="true">upload</span>Upload</button></div>
+      <div class="chips-bar" role="tablist" aria-label="Filter records"><button class="chip active" role="tab" aria-selected="true" onclick="filterRecs(this,'')">All</button><button class="chip" role="tab" aria-selected="false" onclick="filterRecs(this,'Lab Results')">Labs</button><button class="chip" role="tab" aria-selected="false" onclick="filterRecs(this,'Prescription')">Rx</button><button class="chip" role="tab" aria-selected="false" onclick="filterRecs(this,'Imaging')">Imaging</button></div>
+      <div class="card"><div class="act-list" id="recList">
+      ${list.map(r => `<div class="act-item" data-type="${r.type}" onclick="previewRec('${r.id}')" tabindex="0" role="button"><div class="act-icon ${typeColors[r.type] || 'act-icon-blue'}"><span class="material-symbols-outlined" aria-hidden="true">${typeIcons[r.type] || 'description'}</span></div><div class="act-content"><div class="act-header"><span class="act-title">${r.title}</span><span class="act-time">${Utils.fmtDate(r.date)}</span></div><p class="act-desc">${r.type} • ${r.doctor}</p></div><button class="tbl-act-btn" onclick="event.stopPropagation();deleteRec('${r.id}')" aria-label="Delete record"><span class="material-symbols-outlined" style="font-size:20px" aria-hidden="true">delete</span></button></div>`).join('')}
+      </div></div>
+      <div id="recPreviewModal" class="modal-overlay" role="dialog" aria-labelledby="prevTitle" aria-hidden="true"><div class="modal modal-lg"><div class="modal-head"><span class="modal-title" id="prevTitle">Preview</span><button class="modal-close" onclick="Utils.closeModal('recPreviewModal')" aria-label="Close preview"><span class="material-symbols-outlined" aria-hidden="true">close</span></button></div><div class="modal-body" id="prevBody" style="min-height:300px;display:flex;align-items:center;justify-content:center;background:var(--bg3);color:var(--t3);flex-direction:column;gap:1rem"><span class="material-symbols-outlined" style="font-size:48px" aria-hidden="true">description</span><p>Select a record to preview.</p></div></div></div>`;
+    };
+
+    function filterRecs(btn, type) {
+      document.querySelectorAll('.chip').forEach(c => {
+        c.classList.remove('active');
+        c.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      document.querySelectorAll('#recList .act-item').forEach(item => {
+        item.style.display = (!type || item.dataset.type === type) ? '' : 'none';
+      });
+    }
+
+    function previewRec(id) {
+      const r = DB.get('records', []).find(x => x.id === id);
+      if (!r) return;
+      document.getElementById('prevTitle').textContent = r.title;
+      document.getElementById('prevBody').innerHTML = `<span class="material-symbols-outlined" style="font-size:48px;color:var(--c-pri)" aria-hidden="true">description</span><h3>${r.title}</h3><p>${r.type} • ${r.doctor}</p><p style="font-size:.875rem;max-width:400px;text-align:center">${r.notes || 'No additional notes.'}</p>`;
+      Utils.openModal('recPreviewModal');
+    }
+
+    V['/messages'] = () => {
+      const list = DB.get('messages', []);
+      return `<div class="page-header"><div><h1 class="page-title">Messages</h1></div><button class="btn btn-primary" onclick="openMsgModal()"><span class="material-symbols-outlined" aria-hidden="true">edit</span>New</button></div>
+      <div class="chat-layout" id="chatLayout">
+        <div class="chat-sidebar" id="chatSidebar">
+          <div style="padding:1rem;border-bottom:1px solid var(--b1)"><div class="filter-input" style="margin:0"><span class="material-symbols-outlined" aria-hidden="true">search</span><input type="text" placeholder="Search chats..." oninput="filterChats(this.value)" aria-label="Search messages"></div></div>
+          <div id="chatList">${list.map(m => `<div class="act-item" style="cursor:pointer" onclick="openChat('${m.id}')" tabindex="0" role="button"><div class="avatar" style="background-image:url('${docAvatars[m.from] || ''}')" role="img" aria-label=""></div><div class="act-content"><div class="act-header"><span class="act-title" style="font-size:.8125rem">${m.from}</span><span class="act-time">${Utils.timeAgo(m.date)}</span></div><p class="act-desc" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${m.subject}</p></div></div>`).join('')}</div>
+        </div>
+        <div class="chat-main" id="chatMain">
+          <div class="chat-header"><span class="chat-back-btn" id="chatBackBtn" onclick="closeChatMobile()" aria-label="Back to chat list"><span class="material-symbols-outlined" aria-hidden="true">arrow_back</span></span><p style="color:var(--t3);width:100%;text-align:center">Select a conversation</p></div>
+        </div>
+      </div>`;
+    };
+
+    function filterChats(q) {
+      document.querySelectorAll('#chatList .act-item').forEach(item => {
+        item.style.display = item.textContent.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
+      });
+    }
+
+    function openChat(id) {
+      const m = DB.get('messages', []).find(x => x.id === id);
+      if (!m) return;
+      if (!m.read) { m.read = true; DB.set('messages', DB.get('messages', [])); updateMsgBadge(); }
+      const layout = document.getElementById('chatLayout');
+      if (window.innerWidth <= 768) layout.classList.add('mobile-view');
+      document.getElementById('chatMain').innerHTML = `
+        <div class="chat-header">
+          <span class="chat-back-btn" onclick="closeChatMobile()" aria-label="Back to chat list"><span class="material-symbols-outlined" aria-hidden="true">arrow_back</span></span>
+          <div class="avatar" style="background-image:url('${docAvatars[m.from] || ''}')" role="img" aria-label=""></div>
+          <div><div style="font-weight:600;color:var(--t1)">${m.from}</div><div style="font-size:.75rem;color:var(--t3)">${m.subject}</div></div>
+        </div>
+        <div class="chat-messages"><div class="chat-bubble them">${m.body}</div><div class="chat-bubble me">Thank you, I'll review this shortly.</div></div>
+        <div class="chat-input-area"><input type="text" class="form-input" placeholder="Type a message..." style="flex:1" onkeydown="if(event.key==='Enter')sendMockReply()" aria-label="Message input"><button class="btn btn-primary" onclick="sendMockReply()" aria-label="Send message"><span class="material-symbols-outlined" aria-hidden="true">send</span></button></div>`;
+    }
+
+    function closeChatMobile() {
+      const layout = document.getElementById('chatLayout');
+      layout.classList.remove('mobile-view');
+    }
+
+    function sendMockReply() { notyf.success('Message sent (mock)'); }
+
+    V['/settings'] = () => {
+      const u = DB.get('user', {});
+      const avatar = u.avatar || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&fit=crop&crop=face';
+      return `<div class="page-header"><div><h1 class="page-title">Settings</h1></div></div>
+      <div class="settings-layout">
+        <div class="settings-nav" role="tablist" aria-label="Settings tabs">
+          <div class="settings-nav-item active" role="tab" aria-selected="true" onclick="switchTab(this,'tab-profile')">Profile</div>
+          <div class="settings-nav-item" role="tab" aria-selected="false" onclick="switchTab(this,'tab-security')">Security</div>
+          <div class="settings-nav-item" role="tab" aria-selected="false" onclick="switchTab(this,'tab-notif')">Notifications</div>
+        </div>
+        <div class="settings-content">
+          <div id="tab-profile" class="settings-tab" role="tabpanel">
+            <div class="card card-body" style="margin-bottom:1.5rem">
+              <div style="display:flex;align-items:center;gap:1.5rem;margin-bottom:1.5rem">
+                <div class="avatar-xl" id="setAvatar" style="background-image:url('${avatar}')" role="img" aria-label="Profile photo"></div>
+                <div><label class="btn btn-secondary btn-sm"><span class="material-symbols-outlined" style="font-size:18px" aria-hidden="true">photo_camera</span>Change<input type="file" accept="image/*" onchange="previewAvatar(event)" style="display:none" aria-label="Upload new photo"></label><p class="form-hint" style="margin-top:.5rem">JPG or PNG.</p></div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+                <div class="form-group"><label class="form-label" for="setFirst">First Name</label><input class="form-input" id="setFirst" value="${u.firstName || ''}"></div>
+                <div class="form-group"><label class="form-label" for="setLast">Last Name</label><input class="form-input" id="setLast" value="${u.lastName || ''}"></div>
+              </div>
+              <button class="btn btn-primary" style="margin-top:1rem" onclick="saveSettingsProfile()">Save Profile</button>
+            </div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem"><div class="form-group"><label class="form-label">First Name</label><input class="form-input" value="${u.firstName || ''}"></div><div class="form-group"><label class="form-label">Last Name</label><input class="form-input" value="${u.lastName || ''}"></div></div>
+          <div id="tab-security" class="settings-tab" style="display:none" role="tabpanel">
+            <div class="card card-body">
+              <h3 style="margin-bottom:1rem">Change Password</h3>
+              <div class="form-group" style="margin-bottom:1rem"><label class="form-label" for="setNewPass">New Password</label><input type="password" class="form-input" id="setNewPass" placeholder="Min 8 characters"></div>
+              <button class="btn btn-primary" onclick="changeSettingsPassword()">Update Password</button>
+            </div>
+          </div>
+          <div id="tab-notif" class="settings-tab" style="display:none" role="tabpanel">
+            <div class="card card-body">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:1rem 0;border-bottom:1px solid var(--b1)"><div><p style="font-weight:500">Email Alerts</p><p class="form-hint">Appointment reminders</p></div><label class="switch"><input type="checkbox" checked aria-label="Enable email alerts"><span class="slider"></span></label></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:1rem 0"><div><p style="font-weight:500">SMS Alerts</p><p class="form-hint">Urgent notifications</p></div><label class="switch"><input type="checkbox" aria-label="Enable SMS alerts"><span class="slider"></span></label></div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div id="tab-security" class="settings-tab" style="display:none">
-        <div class="card card-body">
-          <h3 style="margin-bottom:1rem">Password</h3>
-          <div class="form-group" style="margin-bottom:1rem"><label class="form-label">New Password</label><input type="password" class="form-input"></div>
-          <button class="btn btn-primary" onclick="notyf.success('Password updated')">Update Password</button>
-        </div>
-      </div>
-      <div id="tab-notif" class="settings-tab" style="display:none">
-        <div class="card card-body">
-          <div style="display:flex;justify-content:space-between;align-items:center;padding:1rem 0;border-bottom:1px solid var(--b1)"><div><p style="font-weight:500">Email Alerts</p><p class="form-hint">Appointment reminders</p></div><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-          <div style="display:flex;justify-content:space-between;align-items:center;padding:1rem 0"><div><p style="font-weight:500">SMS Alerts</p><p class="form-hint">Urgent notifications</p></div><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        </div>
-      </div>
-    </div>
-  </div>`;
-};
-function switchTab(el, tabId) {
-  document.querySelectorAll('.settings-nav-item').forEach(i => i.classList.remove('active')); el.classList.add('active');
-  document.querySelectorAll('.settings-tab').forEach(t => t.style.display = 'none'); document.getElementById(tabId).style.display = 'block';
-}
-function previewAvatar(e) {
-  const file = e.target.files[0]; if(!file) return;
-  const reader = new FileReader(); reader.onload = (ev) => { document.getElementById('setAvatar').style.backgroundImage = `url(${ev.target.result})`; notyf.success('Avatar preview updated'); }; reader.readAsDataURL(file);
-}
+      </div>`;
+    };
 
-// ================= HELPERS ACTUALIZADOS =================
-function render() {
-  const hash = window.location.hash.slice(1) || '/';
-  if (!V[hash]) { go('/'); return; }
-  if (curRoute === hash) return;
-  curRoute = hash;
-  document.querySelectorAll('.nav-item[data-route]').forEach(n => n.classList.toggle('active', n.dataset.route === hash));
-  
-  // Skeleton Loader simulado
-  app.innerHTML = `<div style="padding:2rem 0;"><div class="skeleton" style="width:200px;height:28px;margin-bottom:1rem"></div><div class="skeleton" style="width:100px;height:16px;margin-bottom:2rem"></div><div class="skeleton" style="height:200px;border-radius:12px;margin-bottom:1.5rem"></div><div class="skeleton" style="height:300px;border-radius:12px"></div></div>`;
-  
-  setTimeout(() => {
-    app.innerHTML = '<div class="view-container">' + V[hash]() + '</div>';
-    if (hash === '/messages' && window.currentMsgId) openChat(window.currentMsgId);
-  }, 300); // Retraso de 300ms para apreciar el skeleton
-}
+    function switchTab(el, tabId) {
+      document.querySelectorAll('.settings-nav-item').forEach(i => {
+        i.classList.remove('active');
+        i.setAttribute('aria-selected', 'false');
+      });
+      el.classList.add('active');
+      el.setAttribute('aria-selected', 'true');
+      document.querySelectorAll('.settings-tab').forEach(t => t.style.display = 'none');
+      document.getElementById(tabId).style.display = 'block';
+    }
 
+    function previewAvatar(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        document.getElementById('setAvatar').style.backgroundImage = `url(${ev.target.result})`;
+        const u = DB.get('user', {});
+        u.avatar = ev.target.result;
+        DB.set('user', u);
+        updateUserUI();
+        notyf.success('Avatar preview updated');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function saveSettingsProfile() {
+      const u = DB.get('user', {});
+      u.firstName = document.getElementById('setFirst').value.trim();
+      u.lastName = document.getElementById('setLast').value.trim();
+      DB.set('user', u);
+      updateUserUI();
+      notyf.success('Profile saved');
+    }
+
+    function changeSettingsPassword() {
+      const p = document.getElementById('setNewPass').value;
+      if (p.length < 8) { notyf.error('Password must be at least 8 characters'); return; }
+      DB.set('password', p);
+      document.getElementById('setNewPass').value = '';
+      notyf.success('Password updated');
+    }
+
+    // ---- Router & Render ----
     let curRoute = null;
     const app = document.getElementById('app');
+
     function go(path) { window.location.hash = path; }
+
     function render() {
       const hash = window.location.hash.slice(1) || '/';
       if (!V[hash]) { go('/'); return; }
       if (curRoute === hash) return;
       curRoute = hash;
       const titles = { '/': 'Dashboard', '/appointments': 'Appointments', '/records': 'Records', '/messages': 'Messages', '/settings': 'Settings' };
-      document.title = (titles[hash] || 'Dashboard') + ' - PlannerTime';
-      document.querySelectorAll('.nav-item[data-route]').forEach(n => n.classList.toggle('active', n.dataset.route === hash));
-      app.innerHTML = '<div class="view-container">' + V[hash]() + '</div>';
-      initPageJS(hash);
-    }
-    function initPageJS(h) {
-      if (h === '/appointments') { const s = document.getElementById('apptSearch'); if (s) s.addEventListener('input', debounce(e => { const q = e.target.value.toLowerCase(); document.querySelectorAll('#apptTable tbody tr').forEach(r => { r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none'; }); })); }
-      if (h === '/records') { const s = document.getElementById('recSearch'); if (s) s.addEventListener('input', debounce(e => { const q = e.target.value.toLowerCase(); document.querySelectorAll('#recList .act-item').forEach(r => { r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none'; }); })); }
+      document.title = (titles[hash] || 'Dashboard') + ' - PlannerTime Portal';
+
+      document.querySelectorAll('.nav-item[data-route]').forEach(n => {
+        n.classList.toggle('active', n.dataset.route === hash);
+        n.setAttribute('aria-current', n.dataset.route === hash ? 'page' : 'false');
+      });
+
+      // Skeleton loader
+      app.innerHTML = '<div style="padding:2rem 0;"><div class="skeleton" style="width:200px;height:28px;margin-bottom:1rem"></div><div class="skeleton" style="width:100px;height:16px;margin-bottom:2rem"></div><div class="skeleton" style="height:200px;border-radius:12px;margin-bottom:1.5rem"></div><div class="skeleton" style="height:300px;border-radius:12px"></div></div>';
+
+      setTimeout(() => {
+        app.innerHTML = '<div class="view-container">' + V[hash]() + '</div>';
+        initPageEvents(hash);
+      }, 300);
     }
 
-    function doLogout() { showConfirm('Log Out', 'Are you sure you want to log out?', () => { notyf.success('Logged out successfully'); setTimeout(() => window.location.href = '../index.html', 800); }); }
+    function initPageEvents(h) {
+      if (h === '/appointments') {
+        const s = document.getElementById('apptSearch');
+        if (s) s.addEventListener('input', Utils.debounce(e => {
+          const q = e.target.value.toLowerCase();
+          document.querySelectorAll('#apptTable tbody tr').forEach(r => {
+            r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none';
+          });
+        }));
+      }
+      if (h === '/records') {
+        const s = document.getElementById('recSearch');
+        if (s) s.addEventListener('input', Utils.debounce(e => {
+          const q = e.target.value.toLowerCase();
+          document.querySelectorAll('#recList .act-item').forEach(r => {
+            r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none';
+          });
+        }));
+      }
+    }
 
+    function doLogout() {
+      Utils.showConfirm('Log Out', 'Are you sure you want to log out?', () => {
+        sessionStorage.removeItem('pt_logged_in');
+        notyf.success('Logged out successfully');
+        setTimeout(() => window.location.href = '../index.html', 800);
+      });
+    }
+
+    // ---- Global hotkeys ----
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        document.getElementById('cmdPalette').classList.toggle('open');
+        if (document.getElementById('cmdPalette').classList.contains('open')) {
+          document.getElementById('cmdInput').focus();
+        }
+      }
+      if (e.key === 'Escape') {
+        document.getElementById('cmdPalette').classList.remove('open');
+      }
+    });
+
+    // ---- Populate doctor selects ----
+    function populateDoctors() {
+      const selects = ['apptDoctor', 'msgTo', 'recDoctor'];
+      selects.forEach(id => {
+        const sel = document.getElementById(id);
+        if (!sel) return;
+        DATA.doctors.forEach(d => {
+          const opt = document.createElement('option');
+          opt.value = d.name;
+          opt.textContent = id === 'apptDoctor' ? `${d.name} - ${d.specialty}` : d.name;
+          sel.appendChild(opt);
+        });
+      });
+    }
+
+    // ---- DOM Ready ----
     document.addEventListener('DOMContentLoaded', () => {
-      initDefaults();
-      Theme.init();
+      DATA.initDefaults();
+      populateDoctors();
       updateUserUI();
       updateNotifDot();
       updateMsgBadge();
 
-      /* ===== MOBILE MENU - CORREGIDO ===== */
+      // Sidebar mobile
       const sb = document.getElementById('sidebar');
       const ov = document.getElementById('overlay');
 
-      function openSb() {
-        sb.classList.add('open');
-        ov.classList.add('active');
-        document.body.style.overflow = 'hidden';
-      }
-
-      function closeSb() {
-        sb.classList.remove('open');
-        ov.classList.remove('active');
-        document.body.style.overflow = '';
-      }
+      function openSb() { sb.classList.add('open'); ov.classList.add('active'); ov.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; document.getElementById('menuBtn').setAttribute('aria-expanded', 'true'); }
+      function closeSb() { sb.classList.remove('open'); ov.classList.remove('active'); ov.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; document.getElementById('menuBtn').setAttribute('aria-expanded', 'false'); }
 
       document.getElementById('menuBtn').addEventListener('click', openSb);
       ov.addEventListener('click', closeSb);
-
-      // Cerrar al hacer clic en cualquier nav item en mobile
       sb.querySelectorAll('.nav-item, .nav-logout').forEach(item => {
-        item.addEventListener('click', () => {
-          if (window.innerWidth < 768) {
-            closeSb();
-          }
-        });
+        item.addEventListener('click', () => { if (window.innerWidth < 768) closeSb(); });
       });
+      window.addEventListener('hashchange', () => { if (window.innerWidth < 768) closeSb(); render(); });
 
-      // Cerrar sidebar al cambiar hash (navegación)
-      window.addEventListener('hashchange', () => {
-        if (window.innerWidth < 768) {
-          closeSb();
-        }
-      });
+      // Theme
+      document.getElementById('themeBtn').onclick = () => ThemeManager.toggle();
 
-      document.getElementById('themeBtn').onclick = () => Theme.toggle();
-      document.getElementById('notifBtn').onclick = () => openModal('notifModal');
+      // Notifications
+      document.getElementById('notifBtn').onclick = () => {
+        Utils.openModal('notifModal');
+        renderNotifications();
+      };
+
+      // User dropdown
       document.getElementById('userTrigger').onclick = (e) => { e.stopPropagation(); toggleDd(); };
+
+      // Logout
       document.getElementById('logoutBtn').onclick = doLogout;
       document.getElementById('logoutBtn2').onclick = () => { toggleDd(); doLogout(); };
-      document.getElementById('apptDoctor').addEventListener('change', function () { document.getElementById('apptSpec').value = specMap[this.value] || ''; });
-      document.getElementById('apptSaveBtn').onclick = saveAppt;
-      document.getElementById('msgSaveBtn').onclick = saveMsg;
-      document.getElementById('recSaveBtn').onclick = saveRec;
-      document.getElementById('globalSearch').onkeydown = e => { if (e.key === 'Enter' && e.target.value.trim()) notyf.info('Search: "' + e.target.value.trim() + '"'); };
-      document.querySelectorAll('.nav-item[data-route]').forEach(n => n.addEventListener('click', e => { e.preventDefault(); go(n.dataset.route); }));
-      window.addEventListener('hashchange', render);
+
+      // Doctor specialty auto-fill
+      const apptDoctor = document.getElementById('apptDoctor');
+      if (apptDoctor) {
+        apptDoctor.addEventListener('change', function () {
+          document.getElementById('apptSpec').value = specMap[this.value] || '';
+        });
+      }
+
+      // Save handlers
+      const apptSaveBtn = document.getElementById('apptSaveBtn');
+      if (apptSaveBtn) apptSaveBtn.onclick = saveAppt;
+      const msgSaveBtn = document.getElementById('msgSaveBtn');
+      if (msgSaveBtn) msgSaveBtn.onclick = saveMsg;
+      const recSaveBtn = document.getElementById('recSaveBtn');
+      if (recSaveBtn) recSaveBtn.onclick = saveRec;
+
+      // Global search
+      document.getElementById('globalSearch').onkeydown = e => {
+        if (e.key === 'Enter' && e.target.value.trim()) {
+          notyf.info('Search: "' + e.target.value.trim() + '"');
+        }
+      };
+
+      // Nav click
+      document.querySelectorAll('.nav-item[data-route]').forEach(n => {
+        n.addEventListener('click', e => { e.preventDefault(); go(n.dataset.route); });
+      });
+
+      // Initial render
       render();
     });
   </script>
 </body>
-
 </html>

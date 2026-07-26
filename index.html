@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
+<script>
+(function() {
+  const t = localStorage.getItem('pt-theme') || (window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
 
 <head>
   <meta charset="UTF-8">
@@ -8,6 +14,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
     rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="assets/css/variables.css">
   <link rel="stylesheet" href="assets/css/base.css">
   <link rel="stylesheet" href="assets/css/components.css">
@@ -147,10 +154,20 @@
     </div>
   </div>
 
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    }
+  </script>
   <script src="assets/js/theme.js"></script>
   <script src="assets/js/utils.js"></script>
   <script src="assets/js/auth.js"></script>
   <script>
+    // Redirect if already logged in
+    if (sessionStorage.getItem('pt_logged_in')) {
+      window.location.href = 'dashboard/index.html';
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       const form = document.getElementById('login-form');
       const btn = document.getElementById('login-btn');
@@ -181,13 +198,24 @@
           valid = false;
         }
 
-        if (!password.value) {
+                if (!password.value) {
           passwordError.textContent = 'Password is required';
           passwordError.style.display = 'block';
           passwordError.classList.add('form-error');
           valid = false;
         } else if (password.value.length < 6) {
           passwordError.textContent = 'Password must be at least 6 characters';
+          passwordError.style.display = 'block';
+          passwordError.classList.add('form-error');
+          valid = false;
+        }
+
+        // Mock credentials
+        const mockEmail = 'sarah.connor@email.com';
+        const mockPass = 'password123';
+
+        if (valid && (email.value.trim() !== mockEmail || password.value !== mockPass)) {
+          passwordError.textContent = 'Invalid email or password. Try sarah.connor@email.com / password123';
           passwordError.style.display = 'block';
           passwordError.classList.add('form-error');
           valid = false;
@@ -200,6 +228,7 @@
         btn.querySelector('.material-symbols-outlined').style.display = 'none';
 
         setTimeout(() => {
+          sessionStorage.setItem('pt_logged_in', '1');
           window.location.href = 'dashboard/index.html';
         }, 1500);
       });

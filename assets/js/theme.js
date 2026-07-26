@@ -1,46 +1,34 @@
-/**
- * Theme Manager - Dark/Light Mode Toggle
- * PlannerTime Portal
- * Default theme: dark
- */
-
 const ThemeManager = {
-  STORAGE_KEY: 'plannertime-theme',
-  DARK: 'dark',
-  LIGHT: 'light',
-
+  KEY: 'pt-theme',
   init() {
-    const saved = localStorage.getItem(this.STORAGE_KEY);
-    // Dark mode is the default; only switch to light if explicitly saved.
-    this.set(saved === this.LIGHT ? this.LIGHT : this.DARK);
+    const saved = localStorage.getItem(this.KEY);
+    const preferred = saved || (window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light');
+    this.set(preferred);
     this.bindToggles();
   },
-
   set(theme) {
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem(this.STORAGE_KEY, theme);
+    localStorage.setItem(this.KEY, theme);
     this.updateToggleIcons();
   },
-
   toggle() {
-    this.set(this.current === this.DARK ? this.LIGHT : this.DARK);
+    this.set(this.current === 'dark' ? 'light' : 'dark');
   },
-
   bindToggles() {
     document.querySelectorAll('[data-theme-toggle]').forEach(btn => {
-      btn.addEventListener('click', () => this.toggle());
+      btn.removeEventListener('click', this._toggleBound);
+      this._toggleBound = () => this.toggle();
+      btn.addEventListener('click', this._toggleBound);
     });
   },
-
   updateToggleIcons() {
     document.querySelectorAll('[data-theme-toggle] .material-symbols-outlined').forEach(icon => {
       icon.textContent = this.current === 'dark' ? 'light_mode' : 'dark_mode';
     });
   },
-
   get current() {
-    return document.documentElement.getAttribute('data-theme') || this.DARK;
+    return document.documentElement.getAttribute('data-theme') || 'dark';
   }
 };
 
-ThemeManager.init();
+document.addEventListener('DOMContentLoaded', () => ThemeManager.init());

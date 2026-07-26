@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
+<script>
+(function() {
+  const t = localStorage.getItem('pt-theme') || (window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
 
 <head>
   <meta charset="UTF-8">
@@ -8,6 +14,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
     rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="assets/css/variables.css">
   <link rel="stylesheet" href="assets/css/base.css">
   <link rel="stylesheet" href="assets/css/components.css">
@@ -203,6 +210,7 @@
         btn.textContent = 'Creating account...';
 
         setTimeout(() => {
+          sessionStorage.setItem('pt_logged_in', '1');
           window.location.href = 'dashboard/index.html';
         }, 1500);
       });
