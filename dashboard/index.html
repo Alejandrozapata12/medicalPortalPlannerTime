@@ -623,6 +623,7 @@
       const next = appts[0];
       const hr = new Date().getHours();
       const greet = hr < 12 ? 'Good Morning' : hr < 18 ? 'Good Afternoon' : 'Good Evening';
+      const recs = DB.get('records', []).slice(0, 3);
       return `<div class="page-header">
         <div><h1 class="page-title">${greet}, ${u.firstName || 'User'}</h1>
         <p class="page-sub"><span class="material-symbols-outlined" style="font-size:18px" aria-hidden="true">calendar_today</span>${new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}</p></div>
@@ -632,23 +633,52 @@
         <section><div class="sec-header"><h2 class="sec-title">Next Appointment</h2><a class="sec-link" href="#/appointments">View all</a></div>
         ${next ? `<div class="card card-hover"><div class="card-body"><div class="appt-card"><div class="appt-doc"><div class="avatar avatar-xl" style="background-image:url('${docAvatars[next.doctor] || ''}')" role="img" aria-label="${next.doctor}"></div><div class="appt-vid"><span class="material-symbols-outlined" aria-hidden="true">videocam</span></div></div><div class="appt-info"><div><h3 class="appt-name">${next.doctor}</h3><p class="appt-spec">${next.specialty}</p></div><div class="appt-meta"><div class="appt-meta-item"><span class="material-symbols-outlined" aria-hidden="true">schedule</span>${Utils.fmtTime(next.time)}</div><div class="appt-meta-item"><span class="material-symbols-outlined" aria-hidden="true">calendar_month</span>${Utils.fmtDate(next.date)}</div></div></div><div style="width:100%"><button class="btn btn-secondary btn-full" onclick="notyf.success('Joining call...')"><span class="material-symbols-outlined" aria-hidden="true">videocam</span>Join Call</button></div></div></div></div>` : '<div class="card card-body" style="text-align:center;color:var(--t3)">No upcoming appointments</div>'}
         </section>
-        <section><h2 class="sec-title">Vitals</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+        <section><h2 class="sec-title">Vitals</h2><div class="vitals-grid">
           <div class="card vital-card"><div class="vital-head"><div class="vital-icon" style="background:var(--c-err-l);color:var(--c-err)"><span class="material-symbols-outlined" aria-hidden="true">favorite</span></div><span class="vital-label">Heart Rate</span></div><div class="vital-val">72 <span class="vital-unit">bpm</span></div><svg viewBox="0 0 100 20" style="width:100%;height:30px;margin-top:.5rem" aria-hidden="true"><polyline fill="none" stroke="var(--c-err)" stroke-width="1.5" points="0,15 10,15 15,5 20,18 25,10 35,15 45,15 50,5 55,18 60,10 70,15 80,15 85,5 90,18 95,10 100,15" /></svg></div>
           <div class="card vital-card"><div class="vital-head"><div class="vital-icon" style="background:var(--c-info-l);color:var(--c-pri)"><span class="material-symbols-outlined" aria-hidden="true">monitor_heart</span></div><span class="vital-label">Blood Pressure</span></div><div class="vital-val">120/80 <span class="vital-unit">mmHg</span></div><div class="vital-status" style="margin-top:1.4rem"><span class="vital-dot"></span><span class="vital-status-txt">Normal</span></div></div>
         </div></section>
+      </div>
+      <div class="dash-side">
+        <section><h2 class="sec-title">Quick Actions</h2><div class="qa-list">
+          <button class="qa" onclick="Utils.openModal('refillModal')"><div class="qa-left"><span class="material-symbols-outlined" aria-hidden="true">medication</span><span class="qa-text">Request Refill</span></div><span class="material-symbols-outlined chevron" aria-hidden="true">chevron_right</span></button>
+          <button class="qa" onclick="Utils.openModal('billModal')"><div class="qa-left"><span class="material-symbols-outlined" aria-hidden="true">payments</span><span class="qa-text">Pay Bill</span></div><span class="material-symbols-outlined chevron" aria-hidden="true">chevron_right</span></button>
+          <button class="qa" onclick="openMsgModal()"><div class="qa-left"><span class="material-symbols-outlined" aria-hidden="true">chat_bubble</span><span class="qa-text">New Message</span></div><span class="material-symbols-outlined chevron" aria-hidden="true">chevron_right</span></button>
+          <button class="qa" onclick="go('/records')"><div class="qa-left"><span class="material-symbols-outlined" aria-hidden="true">folder_open</span><span class="qa-text">View Records</span></div><span class="material-symbols-outlined chevron" aria-hidden="true">chevron_right</span></button>
+        </div></section>
+        <section><div class="sec-header"><h2 class="sec-title">Recent Records</h2><a class="sec-link" href="#/records">View all</a></div>
+        ${recs.length ? recs.map(r => `<div class="act-item" style="cursor:pointer;border:1px solid var(--b1);border-radius:var(--r-md);margin-bottom:.25rem;padding:.75rem" onclick="go('/records')" tabindex="0" role="button"><div class="act-icon act-icon-blue" style="width:32px;height:32px"><span class="material-symbols-outlined" style="font-size:16px" aria-hidden="true">description</span></div><div class="act-content"><div class="act-header"><span class="act-title" style="font-size:.8125rem">${r.title}</span><span class="act-time">${Utils.fmtDate(r.date)}</span></div><p class="act-desc" style="font-size:.75rem">${r.type}</p></div></div>`).join('') : '<div style="color:var(--t3);font-size:.875rem;padding:.5rem 0">No records yet</div>'}
+        </section>
       </div></div>`;
     };
 
     V['/appointments'] = () => {
       const list = DB.get('appointments', []).filter(a => a.status !== 'cancelled');
-      return `<div class="page-header"><div><h1 class="page-title">Appointments</h1><p class="page-sub">Manage your scheduled visits.</p></div><div style="display:flex;gap:.5rem"><button class="btn btn-secondary btn-sm" onclick="toggleCalView()" aria-label="Calendar view"><span class="material-symbols-outlined" style="font-size:18px" aria-hidden="true">calendar_month</span>Calendar</button><button class="btn btn-primary" onclick="openApptModal()"><span class="material-symbols-outlined" aria-hidden="true">add</span>New</button></div></div>
-      <div class="card"><div class="table-wrap"><table class="dtable" aria-label="Appointments table"><thead><tr><th scope="col">Doctor</th><th scope="col">Type</th><th scope="col">Date</th><th scope="col">Status</th><th scope="col" style="text-align:right">Actions</th></tr></thead><tbody>
+      return `<div class="page-header"><div><h1 class="page-title">Appointments</h1><p class="page-sub">Manage your scheduled visits.</p></div><div style="display:flex;gap:.5rem;flex-wrap:wrap"><button class="btn btn-secondary btn-sm" onclick="toggleCalView()" aria-label="Calendar view"><span class="material-symbols-outlined" style="font-size:18px" aria-hidden="true">calendar_month</span>Calendar</button><button class="btn btn-primary" onclick="openApptModal()"><span class="material-symbols-outlined" aria-hidden="true">add</span>New</button></div></div>
+      <div class="filter-bar" style="margin-bottom:1.5rem"><div class="filter-input" style="flex:1"><span class="material-symbols-outlined" aria-hidden="true">search</span><input type="text" id="apptSearch" placeholder="Search appointments..." aria-label="Search appointments"></div></div>
+      <div class="tabs" role="tablist" aria-label="Appointment view"><div class="tab active" role="tab" aria-selected="true" onclick="switchApptTab(this,'upcoming')">Upcoming</div><div class="tab" role="tab" aria-selected="false" onclick="switchApptTab(this,'history')">History</div></div>
+      <div class="card"><div class="table-wrap"><table class="dtable" id="apptTable" aria-label="Appointments table"><thead><tr><th scope="col">Doctor</th><th scope="col">Type</th><th scope="col">Date</th><th scope="col">Status</th><th scope="col" style="text-align:right">Actions</th></tr></thead><tbody>
       ${list.map(a => `<tr><td><div class="tbl-doc"><div class="avatar" style="background-image:url('${docAvatars[a.doctor] || ''}')" role="img" aria-label=""></div><div><span class="tbl-doc-name">${a.doctor}</span><span class="tbl-doc-spec-m">${a.specialty}</span></div></div></td><td><span class="material-symbols-outlined" style="color:var(--c-pri);vertical-align:middle" aria-hidden="true">videocam</span> Video</td><td><div class="tbl-date"><span class="tbl-date-time">${Utils.fmtDate(a.date)}</span><span class="tbl-date-date">${Utils.fmtTime(a.time)}</span></div></td><td><span class="badge ${a.status === 'confirmed' ? 'badge-primary' : 'badge-warning'}">${a.status}</span></td><td class="tbl-actions"><button class="tbl-act-btn" onclick="openApptModal('${a.id}')" title="Edit" aria-label="Edit appointment"><span class="material-symbols-outlined" style="font-size:20px" aria-hidden="true">edit</span></button><button class="tbl-act-btn" onclick="deleteAppt('${a.id}')" title="Cancel" aria-label="Cancel appointment"><span class="material-symbols-outlined" style="font-size:20px" aria-hidden="true">cancel</span></button></td></tr>`).join('')}
       </tbody></table></div></div>
       <div id="calViewModal" class="modal-overlay" role="dialog" aria-labelledby="calViewTitle" aria-hidden="true"><div class="modal modal-lg"><div class="modal-head"><span class="modal-title" id="calViewTitle">Calendar View</span><button class="modal-close" onclick="Utils.closeModal('calViewModal')" aria-label="Close calendar"><span class="material-symbols-outlined" aria-hidden="true">close</span></button></div><div class="modal-body"><div class="cal-grid"><div class="cal-day-head">Sun</div><div class="cal-day-head">Mon</div><div class="cal-day-head">Tue</div><div class="cal-day-head">Wed</div><div class="cal-day-head">Thu</div><div class="cal-day-head">Fri</div><div class="cal-day-head">Sat</div>${generateCalendarDays(list)}</div></div></div></div>`;
     };
 
     function toggleCalView() { Utils.openModal('calViewModal'); }
+
+    function switchApptTab(el, view) {
+      document.querySelectorAll('.tabs .tab').forEach(t => {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      el.classList.add('active');
+      el.setAttribute('aria-selected', 'true');
+      const today = new Date().toISOString().split('T')[0];
+      document.querySelectorAll('#apptTable tbody tr').forEach(r => {
+        const dateTxt = r.querySelector('.tbl-date-time')?.textContent || '';
+        const d = new Date(dateTxt);
+        const isFuture = !isNaN(d.getTime()) ? d >= new Date(today) : true;
+        r.style.display = (view === 'history' ? !isFuture : isFuture) ? '' : 'none';
+      });
+    }
 
     function generateCalendarDays(appts) {
       const today = new Date();
@@ -671,6 +701,7 @@
       const typeIcons = { 'Lab Results': 'biotech', 'Prescription': 'prescriptions', 'Imaging': 'image', 'Clinical Note': 'description', 'Other': 'folder' };
       const typeColors = { 'Lab Results': 'act-icon-blue', 'Prescription': 'act-icon-green', 'Imaging': 'act-icon-orange', 'Clinical Note': 'act-icon-blue', 'Other': 'act-icon-orange' };
       return `<div class="page-header"><div><h1 class="page-title">Records</h1></div><button class="btn btn-primary" onclick="openRecModal()"><span class="material-symbols-outlined" aria-hidden="true">upload</span>Upload</button></div>
+      <div class="filter-bar" style="margin-bottom:1.5rem"><div class="filter-input" style="flex:1"><span class="material-symbols-outlined" aria-hidden="true">search</span><input type="text" id="recSearch" placeholder="Search records..." aria-label="Search records"></div></div>
       <div class="chips-bar" role="tablist" aria-label="Filter records"><button class="chip active" role="tab" aria-selected="true" onclick="filterRecs(this,'')">All</button><button class="chip" role="tab" aria-selected="false" onclick="filterRecs(this,'Lab Results')">Labs</button><button class="chip" role="tab" aria-selected="false" onclick="filterRecs(this,'Prescription')">Rx</button><button class="chip" role="tab" aria-selected="false" onclick="filterRecs(this,'Imaging')">Imaging</button></div>
       <div class="card"><div class="act-list" id="recList">
       ${list.map(r => `<div class="act-item" data-type="${r.type}" onclick="previewRec('${r.id}')" tabindex="0" role="button"><div class="act-icon ${typeColors[r.type] || 'act-icon-blue'}"><span class="material-symbols-outlined" aria-hidden="true">${typeIcons[r.type] || 'description'}</span></div><div class="act-content"><div class="act-header"><span class="act-title">${r.title}</span><span class="act-time">${Utils.fmtDate(r.date)}</span></div><p class="act-desc">${r.type} • ${r.doctor}</p></div><button class="tbl-act-btn" onclick="event.stopPropagation();deleteRec('${r.id}')" aria-label="Delete record"><span class="material-symbols-outlined" style="font-size:20px" aria-hidden="true">delete</span></button></div>`).join('')}
@@ -704,7 +735,7 @@
       <div class="chat-layout" id="chatLayout">
         <div class="chat-sidebar" id="chatSidebar">
           <div style="padding:1rem;border-bottom:1px solid var(--b1)"><div class="filter-input" style="margin:0"><span class="material-symbols-outlined" aria-hidden="true">search</span><input type="text" placeholder="Search chats..." oninput="filterChats(this.value)" aria-label="Search messages"></div></div>
-          <div id="chatList">${list.map(m => `<div class="act-item" style="cursor:pointer" onclick="openChat('${m.id}')" tabindex="0" role="button"><div class="avatar" style="background-image:url('${docAvatars[m.from] || ''}')" role="img" aria-label=""></div><div class="act-content"><div class="act-header"><span class="act-title" style="font-size:.8125rem">${m.from}</span><span class="act-time">${Utils.timeAgo(m.date)}</span></div><p class="act-desc" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${m.subject}</p></div></div>`).join('')}</div>
+          <div id="chatList">${list.length ? list.map(m => `<div class="act-item" style="cursor:pointer" onclick="openChat('${m.id}')" tabindex="0" role="button"><div class="avatar" style="background-image:url('${docAvatars[m.from] || ''}')" role="img" aria-label=""></div><div class="act-content"><div class="act-header"><span class="act-title" style="font-size:.8125rem">${m.from}</span><span class="act-time">${Utils.timeAgo(m.date)}</span></div><p class="act-desc" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${m.subject}</p></div></div>`).join('') : '<div class="empty-state" style="padding:2rem"><p style="color:var(--t3)">No messages yet</p></div>'}</div>
         </div>
         <div class="chat-main" id="chatMain">
           <div class="chat-header"><span class="chat-back-btn" id="chatBackBtn" onclick="closeChatMobile()" aria-label="Back to chat list"><span class="material-symbols-outlined" aria-hidden="true">arrow_back</span></span><p style="color:var(--t3);width:100%;text-align:center">Select a conversation</p></div>
@@ -768,6 +799,7 @@
           <div id="tab-security" class="settings-tab" style="display:none" role="tabpanel">
             <div class="card card-body">
               <h3 style="margin-bottom:1rem">Change Password</h3>
+              <div class="form-group" style="margin-bottom:1rem"><label class="form-label" for="setCurPass">Current Password</label><input type="password" class="form-input" id="setCurPass" placeholder="Enter current password"></div>
               <div class="form-group" style="margin-bottom:1rem"><label class="form-label" for="setNewPass">New Password</label><input type="password" class="form-input" id="setNewPass" placeholder="Min 8 characters"></div>
               <button class="btn btn-primary" onclick="changeSettingsPassword()">Update Password</button>
             </div>
@@ -818,9 +850,13 @@
     }
 
     function changeSettingsPassword() {
-      const p = document.getElementById('setNewPass').value;
-      if (p.length < 8) { notyf.error('Password must be at least 8 characters'); return; }
-      DB.set('password', p);
+      const cur = document.getElementById('setCurPass').value;
+      const nw = document.getElementById('setNewPass').value;
+      const stored = DB.get('password', 'password123');
+      if (cur !== stored) { notyf.error('Current password is incorrect'); return; }
+      if (nw.length < 8) { notyf.error('Password must be at least 8 characters'); return; }
+      DB.set('password', nw);
+      document.getElementById('setCurPass').value = '';
       document.getElementById('setNewPass').value = '';
       notyf.success('Password updated');
     }
