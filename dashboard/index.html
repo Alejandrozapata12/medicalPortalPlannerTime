@@ -670,6 +670,7 @@
         </section>
       </div></div>
       <div class="health-insight card card-body" style="margin-top:1.5rem"><div style="display:flex;align-items:center;gap:.75rem"><div class="stat-icon" style="background:var(--c-ok-l);color:var(--c-ok);width:36px;height:36px;border-radius:var(--r-f);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span class="material-symbols-outlined" style="font-size:20px" aria-hidden="true">lightbulb</span></div><div><p style="font-weight:600;color:var(--t1);font-size:.875rem">Health Insight</p><p style="font-size:.8125rem;color:var(--t2);margin-top:2px">Your blood pressure is in the normal range. Keep up with your medication schedule.</p></div></div></div>`;
+    };
 
     V['/appointments'] = () => {
       const list = DB.get('appointments', []).filter(a => a.status !== 'cancelled');
@@ -1110,6 +1111,7 @@
       // Initial render
       render();
     });
+    
   </script>
 </body>
 </html>

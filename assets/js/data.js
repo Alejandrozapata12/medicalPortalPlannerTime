@@ -1,7 +1,7 @@
 const DATA = {};
 
 DATA.doctors = [
-  { name: 'Dr. Richard Lee', specialty: 'Cardiologist', avatar: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=80&h=80&fit=crop&crop=face' },
+  { name: 'Dr. Richard Lee', specialty: 'Cardiologist', avatar: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=80&h=80&fit=crop&crop=face' }, 
   { name: 'Dr. Sarah Jenkins', specialty: 'Cardiologist', avatar: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=80&h=80&fit=crop&crop=face' },
   { name: 'Dr. Mark Lee', specialty: 'Dermatologist', avatar: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=80&h=80&fit=crop&crop=face' },
   { name: 'Dr. Emily Chen', specialty: 'Pediatrician', avatar: 'https://images.unsplash.com/photo-1594824476967-48c8b964ac31?w=80&h=80&fit=crop&crop=face' },
@@ -30,8 +30,8 @@ DATA.initDefaults = () => {
   const addDays = (d, n) => { const r = new Date(d); r.setDate(r.getDate() + n); return r; };
 
   DATA.set('user', {
-    firstName: 'Sarah', lastName: 'Connor',
-    email: 'sarah.connor@email.com', phone: '(555) 123-4567',
+    firstName: 'Alejandro', lastName: 'Zapata',
+    email: 'alejo.zapata@gmail.com', phone: '(555) 123-4567',
     dob: '1985-06-15',
     avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face'
   });
