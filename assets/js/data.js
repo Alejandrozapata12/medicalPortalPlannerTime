@@ -1,10 +1,10 @@
 const DATA = {};
 
 DATA.doctors = [
-  { name: 'Dr. Richard Lee', specialty: 'Cardiologist', avatar: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=80&h=80&fit=crop&crop=face' }, 
+  { name: 'Dr. Richard Lee', specialty: 'Cardiologist', avatar: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=80&h=80&fit=crop&crop=face' },
   { name: 'Dr. Sarah Jenkins', specialty: 'Cardiologist', avatar: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=80&h=80&fit=crop&crop=face' },
   { name: 'Dr. Mark Lee', specialty: 'Dermatologist', avatar: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=80&h=80&fit=crop&crop=face' },
-  { name: 'Dr. Emily Chen', specialty: 'Pediatrician', avatar: 'https://images.unsplash.com/photo-1594824476967-48c8b964ac31?w=80&h=80&fit=crop&crop=face' },
+  { name: 'Dr. Emily Chen', specialty: 'Pediatrician', avatar: 'https://unsplash.com/es/fotos/mujer-sonriente-con-chaqueta-vaquera-SiMv5X7jnTw' },
   { name: 'Dr. James Wilson', specialty: 'Orthopedist', avatar: 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=80&h=80&fit=crop&crop=face' }
 ];
 
@@ -53,8 +53,7 @@ DATA.initDefaults = () => {
   DATA.set('messages', [
     { id: 'm1', from: 'Dr. Richard Lee', subject: 'Lab Results Ready', body: 'Your lab results look great! Let\'s discuss them during our appointment tomorrow.', date: new Date(Date.now() - 7200000).toISOString(), read: false },
     { id: 'm2', from: 'Dr. Emily Chen', subject: 'Vaccination Schedule', body: 'I\'ve reviewed the vaccination schedule. Here are my recommendations.', date: new Date(Date.now() - 86400000).toISOString(), read: false },
-    { id: 'm3', from: 'Dr. Sarah Jenkins', subject: 'Prescription Refill', body: 'The prescription refill has been processed and sent to your pharmacy.', date: new Date(Date.now() - 172800000).toISOString(), read: true },
-    { id: 'm4', from: 'Support Team', subject: 'Welcome to PlannerTime', body: 'Your account has been verified successfully. Welcome!', date: new Date(Date.now() - 604800000).toISOString(), read: true }
+    { id: 'm3', from: 'Dr. Sarah Jenkins', subject: 'Prescription Refill', body: 'The prescription refill has been processed and sent to your pharmacy.', date: new Date(Date.now() - 172800000).toISOString(), read: true }
   ]);
 
   DATA.set('medications', [
